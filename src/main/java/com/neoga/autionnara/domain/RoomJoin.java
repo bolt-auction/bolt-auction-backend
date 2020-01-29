@@ -20,5 +20,5 @@ public class RoomJoin {
     private Room room;
     @ManyToOne
     @JoinColumn(name = "member_id")
-    private Member member;
+    private Members members;
 }

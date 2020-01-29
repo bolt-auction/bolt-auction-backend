@@ -8,14 +8,14 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-public class Order {
+public class Orders {
     @Column(name="order_id")
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member member;
+    private Members members;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private Item item;

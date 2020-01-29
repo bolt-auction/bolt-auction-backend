@@ -14,5 +14,5 @@ public class Store {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
     @OneToOne(mappedBy="store", fetch = FetchType.LAZY)
-    private Member member;
+    private Members members;
 }

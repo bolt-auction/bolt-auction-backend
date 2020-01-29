@@ -18,5 +18,5 @@ public class MemberImage {
     private Image image;
     @OneToOne()
     @JoinColumn(name = "member_id")
-    private Member member;
+    private Members members;
 }

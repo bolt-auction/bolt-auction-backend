@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter @Setter
 @Entity
-public class Member {
+public class Members {
     @Column(name="member_id")
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)

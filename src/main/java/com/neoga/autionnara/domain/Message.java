@@ -24,5 +24,5 @@ public class Message {
     private Room room;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
-    private Member sender;
+    private Members sender;
 }
