@@ -1,5 +1,6 @@
-package com.neoga.autionnara.domain;
+package com.neoga.autionnara.chat.domain;
 
+import com.neoga.autionnara.memberstore.member.domain.Members;
 import lombok.Getter;
 import lombok.Setter;
 

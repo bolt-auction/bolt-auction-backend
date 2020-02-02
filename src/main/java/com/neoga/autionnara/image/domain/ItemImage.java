@@ -1,5 +1,6 @@
-package com.neoga.autionnara.domain;
+package com.neoga.autionnara.image.domain;
 
+import com.neoga.autionnara.item.domain.Item;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,8 +9,8 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-public class MemberImage {
-    @Column(name="member_image_id")
+public class ItemImage {
+    @Column(name="item_image_id")
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
@@ -17,6 +18,6 @@ public class MemberImage {
     @JoinColumn(name = "image_id")
     private Image image;
     @OneToOne()
-    @JoinColumn(name = "member_id")
-    private Members members;
+    @JoinColumn(name = "item_id")
+    private Item item;
 }

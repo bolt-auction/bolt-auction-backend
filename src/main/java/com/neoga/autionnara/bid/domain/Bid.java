@@ -1,5 +1,7 @@
-package com.neoga.autionnara.domain;
+package com.neoga.autionnara.bid.domain;
 
+import com.neoga.autionnara.item.domain.Item;
+import com.neoga.autionnara.memberstore.member.domain.Members;
 import lombok.Getter;
 import lombok.Setter;
 

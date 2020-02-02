@@ -1,4 +1,4 @@
-package com.neoga.autionnara.domain;
+package com.neoga.autionnara.category.domain;
 
 import lombok.Getter;
 import lombok.Setter;

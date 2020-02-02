@@ -1,4 +1,4 @@
-package com.neoga.autionnara.domain;
+package com.neoga.autionnara.chat.domain;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,11 +9,10 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-public class Image {
-    @Column(name="image_id")
+public class Room {
+    @Column(name="chat_id")
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
-    private String image_path;
     private LocalDateTime create_date;
 }
