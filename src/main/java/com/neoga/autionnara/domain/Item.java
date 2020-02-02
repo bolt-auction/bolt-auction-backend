@@ -17,7 +17,7 @@ public class Item {
     private String name;
     private String description;
     private int quick_price;
-    private int start_pirce;
+    private int start_price;
     private int min_bid_price;
     private boolean is_sell;
     private LocalDateTime create_date;
