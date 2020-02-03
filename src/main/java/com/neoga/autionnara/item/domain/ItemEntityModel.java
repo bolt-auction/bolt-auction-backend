@@ -1,0 +1,15 @@
+package com.neoga.autionnara.item.domain;
+
+import com.neoga.autionnara.item.controller.ItemController;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+
+public class ItemEntityModel extends EntityModel {
+
+    public ItemEntityModel(Item item, Link... links) {
+        super(item, links);
+        add(linkTo(ItemController.class).slash(item.getId()).withSelfRel());
+    }
+}
