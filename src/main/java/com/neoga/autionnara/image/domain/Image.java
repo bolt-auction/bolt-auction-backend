@@ -14,6 +14,6 @@ public class Image {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
-    private String image_path;
-    private LocalDateTime create_date;
+    private String imagePath;
+    private LocalDateTime createDate;
 }

@@ -14,5 +14,5 @@ public class Room {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
-    private LocalDateTime create_date;
+    private LocalDateTime createDate;
 }
