@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/oauth")
 public class KakaoLoginController {
     @Autowired
     KakaoLoginService kakaoLoginService;
 
-    @GetMapping("/kakao")
+    @GetMapping("/kakao/login")
     public String loginKakao(@RequestParam("code") String code){
         String token = kakaoLoginService.getAccessToken(code);
         return token;

@@ -24,26 +24,20 @@ public class KakaoLoginService {
     @Autowired
     Environment env;
 
+    @Autowired
+    RestTemplate restTemplate;
 
     public String getAccessToken (String code) {
-        // RestTemplate 에 MessageConverter 세팅
-        List<HttpMessageConverter<?>> converters = new ArrayList<HttpMessageConverter<?>>();
-        converters.add(new FormHttpMessageConverter());
-        converters.add(new StringHttpMessageConverter());
-
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setMessageConverters(converters);
-
-        // parameter 세팅
         MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
         map.add("grant_type", "authorization_code");
         map.add("client_id", env.getProperty("kakao.clientId"));
         map.add("redirect_uri", env.getProperty("kakao.redirectURI"));
         map.add("code", code);
 
-        // REST API 호출
         String result = restTemplate.postForObject(env.getProperty("kakao.tokenURL"), map, String.class);
 
         return result;
     }
 }
+
+
