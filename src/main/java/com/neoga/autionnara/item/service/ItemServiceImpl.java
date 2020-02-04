@@ -2,6 +2,7 @@ package com.neoga.autionnara.item.service;
 
 import com.neoga.autionnara.item.domain.Item;
 import com.neoga.autionnara.item.repository.ItemRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,10 +12,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
 
-    @Autowired
-    private ItemRepository itemRepository;
+    private final ItemRepository itemRepository;
 
     @Override
     public List<Item> getItemList() {
@@ -23,7 +24,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void insertItem(Item item) {
-
+        itemRepository.save(item);
     }
 
     @Override
@@ -33,12 +34,12 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void updateItem(Item item) {
-
+        itemRepository.save(item);
     }
 
     @Override
     public void deleteItem(Item item) {
-
+        itemRepository.deleteById(item.getId());
     }
 
     @Override

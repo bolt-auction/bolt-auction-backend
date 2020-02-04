@@ -102,6 +102,7 @@ public class ItemController {
 
         Item findItem = optionalItem.get();
         modelMapper.map(itemDto, findItem);
+        itemService.updateItem(findItem);
         ItemEntityModel itemEntityModel = new ItemEntityModel(itemDto);
         itemEntityModel.add(new Link("/").withRel("profile"));
 

@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@RequiredArgsConstructor
 public class Item {
     @Id
     @Column(name="item_id")
