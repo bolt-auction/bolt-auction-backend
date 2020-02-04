@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
-//https://daddyprogrammer.org/post/636/springboot2-springsecurity-authentication-authorization/
+
 @RequiredArgsConstructor
 @Component
 public class JwtTokenProvider {
@@ -39,10 +39,10 @@ public class JwtTokenProvider {
         claims.put("roles", roles);
         Date now = new Date();
         return Jwts.builder()
-                .setClaims(claims) // 데이터
-                .setIssuedAt(now) // 토큰 발행일자
+                .setClaims(claims)
+                .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + tokenValidMilisecond))
-                .signWith(SignatureAlgorithm.RS256, secretKey) // 암호화 알고리즘, secret값 세팅
+                .signWith(SignatureAlgorithm.RS256, secretKey)
                 .compact();
     }
 
