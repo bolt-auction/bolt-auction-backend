@@ -3,7 +3,6 @@ package com.neoga.autionnara.item;
 import com.neoga.autionnara.item.domain.Item;
 import com.neoga.autionnara.item.repository.ItemRepository;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
