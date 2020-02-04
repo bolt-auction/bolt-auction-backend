@@ -17,30 +17,19 @@ public class RestTemplateConfig {
     @Autowired
     Environment env;
 
-    /*
-    @Value("${rest.connPool.MaxConnPerRoute}")
-    private int maxConnPerRoute;
-    @Value("${rest.connPool.MaxConnTotal}")
-    private  int maxConnTotal;
-    @Value("${rest.connPool.MaxConnPerRoute}")
-    private int connectTimeout;
-    @Value("${rest.factory.setReadTimeout}")
-    private int readTimeout;
-*/
-
     @Bean
     public RestTemplate restTemplate() {
 
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
 
         CloseableHttpClient client = HttpClientBuilder.create()
-                .setMaxConnTotal(50)
-                .setMaxConnPerRoute(20)
+                .setMaxConnTotal(env.getProperty("rest.connPool.MaxConnTotal",Integer.class))
+                .setMaxConnPerRoute(env.getProperty("rest.connPool.MaxConnPerRoute",Integer.class))
                 .build();
 
         factory.setHttpClient(client);
-        factory.setConnectTimeout(2000);
-        factory.setReadTimeout(5000);
+        factory.setConnectTimeout(env.getProperty("rest.factory.setConnectTimeout",Integer.class));
+        factory.setReadTimeout(env.getProperty("rest.factory.setReadTimeout",Integer.class));
 
         return new RestTemplate(factory);
     }
