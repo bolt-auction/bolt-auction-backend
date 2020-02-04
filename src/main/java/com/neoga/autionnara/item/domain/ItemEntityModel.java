@@ -8,8 +8,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 public class ItemEntityModel extends EntityModel {
 
-    public ItemEntityModel(Item item, Link... links) {
-        super(item, links);
-        add(linkTo(ItemController.class).slash(item.getId()).withSelfRel());
+    public ItemEntityModel(ItemDto itemDto, Link... links) {
+        super(itemDto, links);
+        add(linkTo(ItemController.class).slash(itemDto.getItemId()).withSelfRel());
     }
 }
