@@ -1,11 +1,12 @@
 package com.neoga.autionnara.item.domain;
 
 import lombok.Data;
-
+import javax.persistence.Column;
 import java.time.LocalDateTime;
 
 @Data
 public class ItemDto {
+
     private Long itemId;
     private String itemName;
     private String description;
