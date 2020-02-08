@@ -22,8 +22,8 @@ public class Item {
     private int startPrice;
     private int minBidPrice;
     private boolean isSell = false;
-    private LocalDateTime createDate;
-    private LocalDateTime endDate;
+    private LocalDateTime createDt;
+    private LocalDateTime endDt;
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;

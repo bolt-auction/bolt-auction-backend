@@ -12,15 +12,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface ItemService {
-    List<Item> getItemList();
-
-    void insertItem(Item item);
 
     ResponseEntity getItem(Long id);
 
     ResponseEntity<Object> deleteItem(Long id);
-
-    Page<Item> findAll(Pageable pageable);
 
     ResponseEntity getItems(Long categoryId, Pageable pageable, PagedResourcesAssembler<ItemDto> assembler);
 

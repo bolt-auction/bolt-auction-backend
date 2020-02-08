@@ -38,18 +38,6 @@ public class ItemServiceImpl implements ItemService {
     private final ModelMapper modelMapper;
 
     @Override
-    public List<Item> getItemList() {
-        return itemRepository.findAll();
-    }
-
-    @Override
-    public void insertItem(Item item) {
-        item.setSell(false);
-        item.setCreateDate(LocalDateTime.now());
-        itemRepository.save(item);
-    }
-
-    @Override
     public ResponseEntity getItem(Long id) {
         Optional<Item> optionalItem = itemRepository.findById(id);
         if (!optionalItem.isPresent()) {
@@ -96,11 +84,6 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Page<Item> findAll(Pageable pageable) {
-        return itemRepository.findAll(pageable);
-    }
-
-    @Override
     public ResponseEntity getItems(Long categoryId, Pageable pageable, PagedResourcesAssembler<ItemDto> assembler) {
         Page<Item> findItems = itemRepository.findAllByOrderByCreateDateAsc(pageable);
 
@@ -126,7 +109,7 @@ public class ItemServiceImpl implements ItemService {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         item = modelMapper.map(itemDto, Item.class);
         item.setName(itemDto.getItemName());
-        item.setCreateDate(LocalDateTime.now());
+        item.setCreateDt(LocalDateTime.now());
         Optional<Category> optionalCategory = categoryRepository.findById(itemDto.getCategoryId());
         if (!optionalCategory.isPresent()) {
             return ResponseEntity.notFound().build();

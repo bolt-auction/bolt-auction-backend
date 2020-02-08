@@ -20,9 +20,9 @@ public class Members {
     private String passwd;
     private String name;
     @Column(name="create_date")
-    private LocalDateTime createDate;
+    private LocalDateTime createDt;
     @Column(name="change_date")
-    private LocalDateTime changeDate;
+    private LocalDateTime changeDt;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;

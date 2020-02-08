@@ -13,8 +13,8 @@ public class ItemDto {
     private int quickPrice;
     private int startPrice;
     private int minBidPrice;
-    private LocalDateTime createDate;
-    private LocalDateTime endDate;
+    private LocalDateTime createDt;
+    private LocalDateTime endDt;
     private Long categoryId;
     //private Long memberId;
 }

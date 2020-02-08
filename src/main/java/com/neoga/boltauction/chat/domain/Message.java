@@ -17,7 +17,7 @@ public class Message {
     private Long id;
     private String content;
     @Column(name="create_date")
-    private LocalDateTime createTime;
+    private LocalDateTime createDt;
     @Column(name="is_read")
     private boolean isRead;
     @ManyToOne(fetch = FetchType.LAZY)
