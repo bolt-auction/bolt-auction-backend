@@ -85,7 +85,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ResponseEntity getItems(Long categoryId, Pageable pageable, PagedResourcesAssembler<ItemDto> assembler) {
-        Page<Item> findItems = itemRepository.findAllByOrderByCreateDateAsc(pageable);
+        Page<Item> findItems = itemRepository.findAllByOrderByCreateDtAsc(pageable);
 
         Page<ItemDto> itemDtoPage = findItems.map(item -> {
                 ItemDto itemDto = modelMapper.map(item, ItemDto.class);

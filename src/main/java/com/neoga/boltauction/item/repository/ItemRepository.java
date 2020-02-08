@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
-    Page<Item> findAllByOrderByCreateDateAsc(Pageable pageable);
+    Page<Item> findAllByOrderByCreateDtAsc(Pageable pageable);
 }
