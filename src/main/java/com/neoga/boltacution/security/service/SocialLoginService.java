@@ -11,7 +11,6 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 @Service
 public class SocialLoginService {
-
     @Autowired
     Environment env;
 
