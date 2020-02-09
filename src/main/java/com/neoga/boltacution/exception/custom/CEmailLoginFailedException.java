@@ -1,4 +1,4 @@
-package com.neoga.boltacution.exception;
+package com.neoga.boltacution.exception.custom;
 
 public class CEmailLoginFailedException extends RuntimeException{
     public CEmailLoginFailedException(String msg, Throwable t) {

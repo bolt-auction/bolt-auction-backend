@@ -1,4 +1,4 @@
-package com.neoga.boltacution.exception;
+package com.neoga.boltacution.exception.custom;
 
 public class CAuthEntryPointException extends RuntimeException {
     public CAuthEntryPointException(String msg, Throwable t) {

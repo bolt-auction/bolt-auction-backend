@@ -17,7 +17,7 @@ import java.util.Set;
 public class Members {
     @Column(name="member_id")
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
@@ -27,10 +27,10 @@ public class Members {
     @Column(nullable = false)
     private String passwd;
     private String name;
-    @Column(name="create_date")
-    private LocalDateTime createDate;
+    @Column(name="create_date", updatable = false)
+    private LocalDateTime createDate = LocalDateTime.now();
     @Column(name="change_date")
-    private LocalDateTime changeDate;
+    private LocalDateTime changeDate = LocalDateTime.now();
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;

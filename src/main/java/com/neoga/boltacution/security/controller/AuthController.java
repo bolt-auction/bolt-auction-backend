@@ -1,11 +1,10 @@
 package com.neoga.boltacution.security.controller;
 
-import com.neoga.boltacution.exception.CEmailLoginFailedException;
+import com.neoga.boltacution.exception.custom.CEmailLoginFailedException;
 import com.neoga.boltacution.memberstore.member.domain.Members;
 import com.neoga.boltacution.memberstore.member.domain.Role;
 import com.neoga.boltacution.memberstore.member.repository.MemberRepository;
 import com.neoga.boltacution.security.service.AuthService;
-import com.neoga.boltacution.security.service.JwtTokenService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -31,13 +30,7 @@ public class AuthController {
     @PostMapping(value = "/login")
     public ResponseEntity login(@ApiParam(value = "회원아이디", required = true)@RequestParam String email,
                                 @ApiParam(value = "비밀번호", required = true) @RequestParam String passwd) {
-        String token;
-        try {
-            token = authService.login(email, passwd);
-        }catch(CEmailLoginFailedException e){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
+        String token = authService.login(email, passwd);
         return ResponseEntity.ok().body(token);
     }
 
