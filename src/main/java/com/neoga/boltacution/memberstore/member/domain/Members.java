@@ -20,8 +20,7 @@ public class Members {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     @ElementCollection(fetch = FetchType.EAGER)
-    @Enumerated(EnumType.STRING)
-    private List<Role> role;
+    private List<String> role;
     @Column(nullable = false, unique = true)
     private String email;
     @Column(nullable = false)

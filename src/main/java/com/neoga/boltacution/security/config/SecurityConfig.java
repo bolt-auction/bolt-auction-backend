@@ -34,9 +34,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .authorizeRequests()
                         .antMatchers("/api/login", "/api/signup").permitAll()
                         .antMatchers(HttpMethod.GET, "/exception/**").permitAll()
-                        .antMatchers("/*").permitAll() // 나중에 꼭 수정할 것.
-                .anyRequest().permitAll()
-                    //.anyRequest().hasRole("USER")
+                        //.antMatchers("/*").permitAll() // 나중에 꼭 수정할 것.
+                //.anyRequest().permitAll()
+                    .anyRequest().hasRole("USER")
                 .and()
                     .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())
                 .and()

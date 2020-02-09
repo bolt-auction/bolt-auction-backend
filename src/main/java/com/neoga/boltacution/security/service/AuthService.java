@@ -21,7 +21,7 @@ public class AuthService{
         if (!passwordEncoder.matches(passwd, member.getPasswd()))
             throw new CEmailLoginFailedException();
 
-        String token = jwtTokenService.createToken(member.getEmail(), member.getRole());
+        String token = jwtTokenService.createToken(String.valueOf(member.getId()), member.getRole());
         return token;
     }
 }

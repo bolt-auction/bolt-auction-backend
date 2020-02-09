@@ -43,7 +43,7 @@ public class AuthController {
                 .email(email)
                 .passwd(passwordEncoder.encode(passwd))
                 .name(name)
-                .role(Collections.singletonList(Role.USER))
+                .role(Collections.singletonList("USER"))
                 .build();
         memberRepo.save(newMember);
         return ResponseEntity.ok().build();

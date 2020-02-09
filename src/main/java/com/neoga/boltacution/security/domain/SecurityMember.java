@@ -4,6 +4,7 @@ package com.neoga.boltacution.security.domain;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.neoga.boltacution.memberstore.member.domain.Members;
 import com.neoga.boltacution.memberstore.member.domain.Role;
+import com.neoga.boltacution.security.util.SecurityUtil;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -16,18 +17,12 @@ public class SecurityMember extends User {
     private Members member;
 
     public SecurityMember(Members member) {
-        super(member.getEmail(), member.getPasswd(), authorities(member.getRole()));
+        super(member.getEmail(), member.getPasswd(), SecurityUtil.authorities(member.getRole()));
         this.member = member;
     }
 
     public Members getMember() {
         return member;
-    }
-
-    private static Collection<? extends GrantedAuthority> authorities(List<Role> roles) {
-        return roles.stream()
-                .map(r -> new SimpleGrantedAuthority("ROLE_" + r.name()))
-                .collect(Collectors.toSet());
     }
 
     @Override

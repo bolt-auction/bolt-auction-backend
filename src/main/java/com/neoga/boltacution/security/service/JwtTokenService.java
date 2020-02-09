@@ -1,6 +1,9 @@
 package com.neoga.boltacution.security.service;
 
+import com.neoga.boltacution.memberstore.member.domain.Members;
 import com.neoga.boltacution.memberstore.member.domain.Role;
+import com.neoga.boltacution.security.domain.SecurityMember;
+import com.neoga.boltacution.security.util.SecurityUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -9,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
@@ -16,9 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -34,7 +37,7 @@ public class JwtTokenService {
     }
 
     // Jwt 토큰 생성
-    public String createToken(String userPk, List<Role> roles) {
+    public String createToken(String userPk, List<String> roles) {
         Claims claims = Jwts.claims().setSubject(userPk);
         claims.put("roles", roles);
         Date now = new Date();
@@ -48,13 +51,20 @@ public class JwtTokenService {
 
     // Jwt 토큰으로 인증 정보를 조회
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPk(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+        Map<String, Object> parseInfo = getUserInfo(token);
+        Long id = Long.parseLong((String)parseInfo.get("id"));
+        Collection<? extends GrantedAuthority> roleList = SecurityUtil.authorities((List)parseInfo.get("authorities"));
+
+        return new UsernamePasswordAuthenticationToken(id, "", roleList);
     }
 
     // Jwt 토큰에서 회원 구별 정보 추출
-    public String getUserPk(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+    public Map<String, Object> getUserInfo(String token) {
+        Jws<Claims> parseInfo = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+        Map<String, Object> result = new HashMap<>();
+        result.put("id", parseInfo.getBody().getSubject());
+        result.put("authorities", parseInfo.getBody().get("roles", List.class));
+        return result;
     }
 
     // Request의 Header에서 token 파싱 : "X-AUTH-TOKEN: jwt토큰"
