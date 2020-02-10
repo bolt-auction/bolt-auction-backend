@@ -1,5 +1,6 @@
 package com.neoga.boltacution.memberstore.member.service;
 
+import com.neoga.boltacution.exception.custom.CExistEmailSignUpException;
 import com.neoga.boltacution.memberstore.member.domain.Members;
 import com.neoga.boltacution.memberstore.member.dto.SignupDto;
 import com.neoga.boltacution.memberstore.member.repository.MemberRepository;
@@ -8,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -19,7 +21,12 @@ public class MemberService {
         return memberRepository.findById(member_id).get();
     }
 
-    public Members saveMember(SignupDto signupDto){
+    public Members saveMember(SignupDto signupDto) throws CExistEmailSignUpException {
+        Optional<Members> existsMember = memberRepository.findByEmail(signupDto.getEmail());
+        if(existsMember.isPresent()){
+            throw new CExistEmailSignUpException();
+        }
+
         Members newMember = Members.builder()
                 .email(signupDto.getEmail())
                 .passwd(passwordEncoder.encode(signupDto.getPasswd()))
