@@ -3,11 +3,13 @@ package com.neoga.boltauction.category;
 import com.neoga.boltauction.category.domain.Category;
 import com.neoga.boltauction.category.repository.CategoryRepository;
 import com.neoga.boltauction.category.service.CategoryService;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -35,7 +37,18 @@ public class CategoryServiceTest {
 
         //then
         System.out.println(categoryRepository.findAll().toString());
-
     }
+
+    @Test
+    public void getCategoryListTest() throws Exception {
+        //given
+        List<Category> categoryList = categoryService.getCategoryList();
+
+        //when
+
+        //then
+        categoryList.forEach(category -> System.out.println(category.getName()));
+    }
+
 
 }

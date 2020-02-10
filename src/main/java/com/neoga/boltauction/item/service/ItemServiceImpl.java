@@ -4,8 +4,6 @@ import com.neoga.boltauction.category.domain.Category;
 import com.neoga.boltauction.category.repository.CategoryRepository;
 import com.neoga.boltauction.item.controller.ItemController;
 import com.neoga.boltauction.item.domain.Item;
-import com.neoga.boltauction.item.domain.ItemDto;
-import com.neoga.boltauction.item.domain.ItemEntityModel;
 import com.neoga.boltauction.item.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -38,100 +36,61 @@ public class ItemServiceImpl implements ItemService {
     private final ModelMapper modelMapper;
 
     @Override
-    public ResponseEntity getItem(Long id) {
+    public Item getItem(Long id) {
         Optional<Item> optionalItem = itemRepository.findById(id);
+
         if (!optionalItem.isPresent()) {
-            return ResponseEntity.notFound().build();
+            return null;
         }
 
         Item findItem = optionalItem.get();
-        ItemDto itemDto = modelMapper.map(findItem, ItemDto.class);
-        ItemEntityModel itemEntityModel = new ItemEntityModel(itemDto);
-        itemEntityModel.add(new Link("/").withRel("profile"));
 
-        return ResponseEntity.ok(itemEntityModel);
+        return findItem;
     }
 
     @Override
-    public ResponseEntity updateItem(Long id, ItemDto itemDto) {
+    public Item updateItem(Long id, Item item) {
+
         Optional<Item> optionalItem = itemRepository.findById(id);
         if (!optionalItem.isPresent()) {
-            return ResponseEntity.notFound().build();
+            return null;
         }
 
         Item findItem = optionalItem.get();
-
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        modelMapper.map(itemDto, findItem);
         itemRepository.save(findItem);
-        modelMapper.map(findItem, itemDto);
-        ItemEntityModel itemEntityModel = new ItemEntityModel(itemDto);
-        itemEntityModel.add(new Link("/").withRel("profile"));
 
-        return ResponseEntity.ok(itemEntityModel);
+        return findItem;
     }
 
     @Override
-    public ResponseEntity<Object> deleteItem(Long id) {
+    public Item deleteItem(Long id) {
         Optional<Item> optionalItem = itemRepository.findById(id);
         if (!optionalItem.isPresent()) {
-            return ResponseEntity.notFound().build();
+            return null;
         }
+
+        Item item = optionalItem.get();
 
         itemRepository.delete(optionalItem.get());
 
-        return null;
+        return item;
     }
 
     @Override
-    public ResponseEntity getItems(Long categoryId, Pageable pageable, PagedResourcesAssembler<ItemDto> assembler) {
-        Page<Item> findItems = itemRepository.findAllByOrderByCreateDtAsc(pageable);
+    public Page<Item> getItems(Long categoryId, Pageable pageable) {
 
-        Page<ItemDto> itemDtoPage = findItems.map(item -> {
-                ItemDto itemDto = modelMapper.map(item, ItemDto.class);
-                itemDto.setItemName(item.getName());
-                itemDto.setCategoryId(item.getCategory().getId());
-                return itemDto;
-            }
-        );
-
-        PagedModel<EntityModel<ItemDto>> entityModels = assembler.toModel(itemDtoPage, i -> new EntityModel(i));
-        entityModels.forEach(entityModel -> entityModel.add(linkTo(methodOn(ItemController.class).getItem(entityModel.getContent().getItemId())).withRel("item-detail")));
-        entityModels.add(new Link("/").withRel("profile"));
-
-        return ResponseEntity.ok(entityModels);
-    }
-
-    @Override
-    public ResponseEntity insertItem(ItemDto itemDto, Errors errors/*, MultipartFile[] images*/) {
-        Item item = new Item();
-
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        item = modelMapper.map(itemDto, Item.class);
-        item.setName(itemDto.getItemName());
-        item.setCreateDt(LocalDateTime.now());
-        Optional<Category> optionalCategory = categoryRepository.findById(itemDto.getCategoryId());
-        if (!optionalCategory.isPresent()) {
-            return ResponseEntity.notFound().build();
+        if (categoryId == 0) {
+            return itemRepository.findAllByOrderByCreateDtAsc(pageable);
+        } else if (categoryId >= 1 && categoryId <=6) {
+            Category findCategory = categoryRepository.findById(categoryId).get();
+            return itemRepository.findAllByCategoryEquals(pageable, findCategory);
+        } else {
+            return null;
         }
+    }
 
-
-        item.setCategory(optionalCategory.get());
-
-        Item saveItem = itemRepository.save(item);
-
-        ItemDto mappedItemDto = modelMapper.map(saveItem, ItemDto.class);
-        mappedItemDto.setItemId(saveItem.getId());
-        mappedItemDto.setItemName(saveItem.getName());
-        mappedItemDto.setCategoryId(saveItem.getCategory().getId());
-
-        WebMvcLinkBuilder selfLinkBuilder =linkTo(ItemController.class).slash(itemDto.getItemId());
-        URI createdUri = selfLinkBuilder.toUri();
-        ItemEntityModel itemEntityModel = new ItemEntityModel(mappedItemDto);
-        itemEntityModel.add(linkTo(ItemController.class).withRel("query-events"));
-        itemEntityModel.add(selfLinkBuilder.withRel("update-event"));
-        itemEntityModel.add(new Link("/docs/index.html#resources-events-create").withRel("profile"));
-
-        return ResponseEntity.created(createdUri).body(itemEntityModel);
+    @Override
+    public Item insertItem(Item item) {
+        return itemRepository.save(item);
     }
 }

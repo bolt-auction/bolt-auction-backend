@@ -1,7 +1,6 @@
 package com.neoga.boltauction.item;
 
 import com.neoga.boltauction.category.repository.CategoryRepository;
-import com.neoga.boltauction.category.service.CategoryService;
 import com.neoga.boltauction.item.domain.Item;
 import com.neoga.boltauction.item.repository.ItemRepository;
 import com.neoga.boltauction.item.service.ItemService;
@@ -9,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class ItemServiceTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
-/*    @Test
+    /*@Test
     public void initItemTest(){
         List<Item> itemList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
@@ -49,6 +49,8 @@ public class ItemServiceTest {
 
     @Test
     public void getItemTest(){
+        //given
+
     }
 
     @Test
