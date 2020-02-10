@@ -2,12 +2,12 @@ package com.neoga.boltacution.exception.custom;
 
 import org.springframework.security.core.AuthenticationException;
 
-public class CJwTokenMissingException extends AuthenticationException {
-    public CJwTokenMissingException(String msg, Throwable t) {
+public class CJwtTokenMissingException extends AuthenticationException {
+    public CJwtTokenMissingException(String msg, Throwable t) {
         super(msg, t);
     }
 
-    public CJwTokenMissingException(String msg) {
+    public CJwtTokenMissingException(String msg) {
         super(msg);
     }
 

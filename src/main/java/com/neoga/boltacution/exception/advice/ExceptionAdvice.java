@@ -2,6 +2,7 @@ package com.neoga.boltacution.exception.advice;
 
 import com.neoga.boltacution.exception.custom.CAuthEntryPointException;
 import com.neoga.boltacution.exception.custom.CEmailLoginFailedException;
+import com.neoga.boltacution.exception.custom.CExistEmailSignUpException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,11 @@ public class ExceptionAdvice {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity AccessDeniedException() {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+
+    @ExceptionHandler(CExistEmailSignUpException.class)
+    public ResponseEntity CExistEmailSignUpException() {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 }

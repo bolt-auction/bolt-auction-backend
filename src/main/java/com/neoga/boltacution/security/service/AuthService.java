@@ -28,7 +28,7 @@ public class AuthService{
                 .member_id(findMember.getId())
                 .email(findMember.getEmail())
                 .name(findMember.getName())
-                .tokenType("X-AUTH-TOKEN")
+                .tokenType("Bearer")
                 .accessToken(accessToken).build();
 
         return loginUserDetailDto;
