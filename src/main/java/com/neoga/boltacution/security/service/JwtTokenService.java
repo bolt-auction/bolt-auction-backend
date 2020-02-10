@@ -1,9 +1,7 @@
 package com.neoga.boltacution.security.service;
 
 import com.neoga.boltacution.memberstore.member.domain.Members;
-import com.neoga.boltacution.memberstore.member.domain.Role;
-import com.neoga.boltacution.security.domain.LoginUserDetail;
-import com.neoga.boltacution.security.domain.SecurityMember;
+import com.neoga.boltacution.security.dto.LoginUserDetailDto;
 import com.neoga.boltacution.security.util.SecurityUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -15,10 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -56,11 +50,11 @@ public class JwtTokenService {
     public Authentication getAuthentication(String token) {
         Map<String, Object> parseInfo = getUserInfo(token);
 
-        String email = (String)parseInfo.get("email");
-        String name = (String)parseInfo.get("name");
-        LoginUserDetail loginUserDetail = new LoginUserDetail(email,name);
         Long id = Long.parseLong((String)parseInfo.get("id"));
         Collection<? extends GrantedAuthority> roleList = SecurityUtil.authorities((List)parseInfo.get("authorities"));
+        LoginUserDetailDto loginUserDetail = LoginUserDetailDto.builder()
+                .email((String)parseInfo.get("email"))
+                .name((String)parseInfo.get("name")).build();
 
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(id, "", roleList);
         authToken.setDetails(loginUserDetail);
@@ -99,10 +93,10 @@ public class JwtTokenService {
         return member_id;
     }
 
-    // 저장된 인증정보에서 현재 로그인 사용자정보(name, email)g 조회
-    public LoginUserDetail getLoginDetail() {
+    // 저장된 인증정보에서 현재 로그인 사용자정보(name, email) 조회
+    public LoginUserDetailDto getLoginDetail() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return (LoginUserDetail)authentication.getDetails();
+        return (LoginUserDetailDto)authentication.getDetails();
     }
 
 }

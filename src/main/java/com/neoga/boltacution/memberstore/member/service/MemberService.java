@@ -1,16 +1,33 @@
 package com.neoga.boltacution.memberstore.member.service;
 
 import com.neoga.boltacution.memberstore.member.domain.Members;
+import com.neoga.boltacution.memberstore.member.dto.SignupDto;
 import com.neoga.boltacution.memberstore.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
 
 @RequiredArgsConstructor
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public Members findMemberById(Long member_id){
         return memberRepository.findById(member_id).get();
+    }
+
+    public Members saveMember(SignupDto signupDto){
+        Members newMember = Members.builder()
+                .email(signupDto.getEmail())
+                .passwd(passwordEncoder.encode(signupDto.getPasswd()))
+                .name(signupDto.getName())
+                .role(Collections.singletonList("USER"))
+                .build();
+
+        memberRepository.save(newMember);
+        return newMember;
     }
 }
