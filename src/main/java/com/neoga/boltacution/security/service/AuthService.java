@@ -25,9 +25,10 @@ public class AuthService{
 
         String accessToken = jwtTokenService.createToken(findMember);
         LoginUserDetailDto loginUserDetailDto = LoginUserDetailDto.builder()
+                .member_id(findMember.getId())
                 .email(findMember.getEmail())
                 .name(findMember.getName())
-                .tokenType("")
+                .tokenType("X-AUTH-TOKEN")
                 .accessToken(accessToken).build();
 
         return loginUserDetailDto;

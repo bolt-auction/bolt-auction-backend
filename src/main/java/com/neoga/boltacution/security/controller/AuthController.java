@@ -7,8 +7,13 @@ import com.neoga.boltacution.security.service.SocialLoginService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 
 @RequiredArgsConstructor
@@ -24,10 +29,10 @@ public class AuthController {
     public ResponseEntity login(@RequestBody LoginDto loginDto) {
         LoginUserDetailDto loginUserDetail = authService.login(loginDto.getEmail(), loginDto.getPasswd());
 
-//        LoginEntityModel entityModel = new LoginEntityModel(loginUserDetail);
-//        entityModel.add(linkTo(methodOn(AuthController.class).login(loginDto)).withSelfRel());
-//        entityModel.add(linkTo("http://localhost:8010/swagger-ui.html#/auth%20API/loginUsingPOST").withRel("profile"));
-        return ResponseEntity.ok().body(loginUserDetail);
+        EntityModel<LoginUserDetailDto> entityModel = new EntityModel(loginUserDetail);
+        entityModel.add(linkTo(methodOn(AuthController.class).login(loginDto)).withSelfRel());
+        entityModel.add(new Link("/swagger-ui.html#/auth%20API/loginUsingPOST").withRel("profile"));
+        return ResponseEntity.ok().body(entityModel);
     }
 
     @ApiOperation(value = "카카오 로그인", notes = "미완성")
