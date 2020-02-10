@@ -11,5 +11,5 @@ public class LoginUserDetailDto {
     private String email;
     private String name;
     private String accessToken;
-    private String AccessTokenHeaderType;
+    private String tokenType;
 }

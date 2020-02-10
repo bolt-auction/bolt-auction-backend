@@ -27,6 +27,7 @@ public class AuthService{
         LoginUserDetailDto loginUserDetailDto = LoginUserDetailDto.builder()
                 .email(findMember.getEmail())
                 .name(findMember.getName())
+                .tokenType("")
                 .accessToken(accessToken).build();
 
         return loginUserDetailDto;

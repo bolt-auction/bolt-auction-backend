@@ -2,6 +2,10 @@ package com.neoga.boltacution.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.hateoas.client.LinkDiscoverer;
+import org.springframework.http.MediaType;
+import org.springframework.plugin.core.OrderAwarePluginRegistry;
+import org.springframework.plugin.core.PluginRegistry;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -25,5 +29,11 @@ public class SwaggerConfiguration {
     private ApiInfo swaggerInfo() {
         return new ApiInfoBuilder().title("Spring API Documentation")
                 .description("번개옥션에서 사용되는 API에 대한 연동 문서입니다").build();
+    }
+
+    @Bean
+    public PluginRegistry<LinkDiscoverer, MediaType> discoverers(
+            OrderAwarePluginRegistry<LinkDiscoverer, MediaType> relProviderPluginRegistry) {
+        return relProviderPluginRegistry;
     }
 }
