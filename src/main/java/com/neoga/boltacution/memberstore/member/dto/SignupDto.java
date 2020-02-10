@@ -1,4 +1,4 @@
-package com.neoga.boltacution.security.dto;
+package com.neoga.boltacution.memberstore.member.dto;
 
 import lombok.*;
 

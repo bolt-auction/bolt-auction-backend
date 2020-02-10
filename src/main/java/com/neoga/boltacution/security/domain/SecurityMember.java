@@ -3,7 +3,6 @@ package com.neoga.boltacution.security.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.neoga.boltacution.memberstore.member.domain.Members;
-import com.neoga.boltacution.memberstore.member.domain.Role;
 import com.neoga.boltacution.security.util.SecurityUtil;
 import org.springframework.security.core.userdetails.User;
 
