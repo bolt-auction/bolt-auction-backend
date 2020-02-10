@@ -2,6 +2,7 @@ package com.neoga.boltacution.security.service;
 
 import com.neoga.boltacution.memberstore.member.domain.Members;
 import com.neoga.boltacution.memberstore.member.domain.Role;
+import com.neoga.boltacution.security.domain.LoginUserDetail;
 import com.neoga.boltacution.security.domain.SecurityMember;
 import com.neoga.boltacution.security.util.SecurityUtil;
 import io.jsonwebtoken.Claims;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -53,10 +55,16 @@ public class JwtTokenService {
     // Jwt 토큰으로 인증 정보를 조회
     public Authentication getAuthentication(String token) {
         Map<String, Object> parseInfo = getUserInfo(token);
+
+        String email = (String)parseInfo.get("email");
+        String name = (String)parseInfo.get("name");
+        LoginUserDetail loginUserDetail = new LoginUserDetail(email,name);
         Long id = Long.parseLong((String)parseInfo.get("id"));
         Collection<? extends GrantedAuthority> roleList = SecurityUtil.authorities((List)parseInfo.get("authorities"));
 
-        return new UsernamePasswordAuthenticationToken(id, "", roleList);
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(id, "", roleList);
+        authToken.setDetails(loginUserDetail);
+        return authToken;
     }
 
     // Jwt 토큰에서 회원 구별 정보 추출
@@ -84,4 +92,17 @@ public class JwtTokenService {
             return false;
         }
     }
+    // 저장된 인증정보에서 현재 로그인 사용자 id 조회
+    public Long getLoginId(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long member_id = Long.valueOf(authentication.getName());
+        return member_id;
+    }
+
+    // 저장된 인증정보에서 현재 로그인 사용자정보(name, email)g 조회
+    public LoginUserDetail getLoginDetail() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (LoginUserDetail)authentication.getDetails();
+    }
+
 }
