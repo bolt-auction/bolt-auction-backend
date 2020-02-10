@@ -1,4 +1,4 @@
-package com.neoga.boltacution.security.service;
+package com.neoga.boltacution.security.util;
 
 import com.neoga.boltacution.memberstore.member.domain.Members;
 import com.neoga.boltacution.security.dto.LoginUserDetailDto;
@@ -13,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -20,8 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @RequiredArgsConstructor
-@Service
-public class JwtTokenService {
+@Component
+public class JwtTokenUtil {
     @Value("spring.jwt.secret")
     private String secretKey;
     private long tokenValidMilisecond = 1000L * 60 * 60;
