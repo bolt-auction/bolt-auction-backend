@@ -5,13 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.neoga.boltacution.memberstore.member.domain.Members;
 import com.neoga.boltacution.memberstore.member.domain.Role;
 import com.neoga.boltacution.security.util.SecurityUtil;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class SecurityMember extends User {
     private Members member;

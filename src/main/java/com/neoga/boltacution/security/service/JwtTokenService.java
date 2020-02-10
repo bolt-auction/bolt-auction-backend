@@ -29,7 +29,6 @@ public class JwtTokenService {
     @Value("spring.jwt.secret")
     private String secretKey;
     private long tokenValidMilisecond = 1000L * 60 * 60;
-    private final UserDetailsService userDetailsService;
 
     @PostConstruct
     protected void init() {
@@ -37,9 +36,11 @@ public class JwtTokenService {
     }
 
     // Jwt 토큰 생성
-    public String createToken(String userPk, List<String> roles) {
-        Claims claims = Jwts.claims().setSubject(userPk);
-        claims.put("roles", roles);
+    public String createToken(Members member) {
+        Claims claims = Jwts.claims().setSubject(String.valueOf(member.getId()));
+        claims.put("name", member.getName());
+        claims.put("email", member.getEmail());
+        claims.put("roles", member.getRole());
         Date now = new Date();
         return Jwts.builder()
                 .setClaims(claims)
@@ -63,6 +64,8 @@ public class JwtTokenService {
         Jws<Claims> parseInfo = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
         Map<String, Object> result = new HashMap<>();
         result.put("id", parseInfo.getBody().getSubject());
+        result.put("name", parseInfo.getBody().get("name"));
+        result.put("email", parseInfo.getBody().get("email"));
         result.put("authorities", parseInfo.getBody().get("roles", List.class));
         return result;
     }
