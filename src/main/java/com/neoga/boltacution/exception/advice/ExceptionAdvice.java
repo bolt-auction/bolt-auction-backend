@@ -1,6 +1,7 @@
 package com.neoga.boltacution.exception.advice;
 
 import com.neoga.boltacution.exception.custom.CAuthEntryPointException;
+import com.neoga.boltacution.exception.custom.CCommunicationException;
 import com.neoga.boltacution.exception.custom.CEmailLoginFailedException;
 import com.neoga.boltacution.exception.custom.CExistEmailSignUpException;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,8 @@ public class ExceptionAdvice {
     }
 
     @ExceptionHandler(CExistEmailSignUpException.class)
-    public ResponseEntity CExistEmailSignUpException() {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-    }
+    public ResponseEntity CExistEmailSignUpException() { return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); }
+
+    @ExceptionHandler(CCommunicationException.class)
+    public ResponseEntity CCommunicationException() { return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR ).build(); }
 }

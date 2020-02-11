@@ -1,6 +1,7 @@
 package com.neoga.boltacution.security.controller;
 
 
+import com.neoga.boltacution.security.dto.RetKakaoAuth;
 import com.neoga.boltacution.security.service.SocialService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +26,7 @@ public class SocialContoller {
     @Value("${kakao.redirectURI}")
     private String kakaoRedirectURI;
 
+    //카카오 로그인 페이지 주소 반환
     @GetMapping("/kakao/login")
     public String socialLogin() {
         StringBuilder loginUrl = new StringBuilder()
@@ -35,9 +37,10 @@ public class SocialContoller {
         return loginUrl.toString();
     }
 
+    //카카오 인증 후 리다이렉션 경로 토큰 반환
     @GetMapping(value = "/kakao")
-    public String redirectKakao(@RequestParam String code) {
-        String token = socialLoginService.getKakaoToken(code);
+    public RetKakaoAuth redirectKakao(@RequestParam String code) {
+        RetKakaoAuth token = socialLoginService.getKakaoToken(code);
         return token;
     }
 }

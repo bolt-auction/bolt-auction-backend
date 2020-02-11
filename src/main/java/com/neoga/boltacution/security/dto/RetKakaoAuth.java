@@ -1,4 +1,4 @@
-package com.neoga.boltacution.security.domain;
+package com.neoga.boltacution.security.dto;
 
 import lombok.Getter;
 import lombok.Setter;

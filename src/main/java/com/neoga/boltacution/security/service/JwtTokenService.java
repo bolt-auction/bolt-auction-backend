@@ -1,8 +1,8 @@
 package com.neoga.boltacution.security.service;
 
-import com.neoga.boltacution.exception.custom.CJwtTokenMissingException;
 import com.neoga.boltacution.memberstore.member.domain.Members;
-import com.neoga.boltacution.security.dto.LoginUserDetailDto;
+import com.neoga.boltacution.security.dto.LoginInfo;
+import com.neoga.boltacution.security.dto.LoginUserDto;
 import com.neoga.boltacution.security.util.SecurityUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -14,8 +14,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -25,7 +23,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @Service
 public class JwtTokenService {
-    @Value("spring.jwt.secret")
+    @Value("${spring.jwt.secret}")
     private String secretKey;
     private long tokenValidMilisecond = 1000L * 60 * 60;
 
@@ -55,13 +53,10 @@ public class JwtTokenService {
 
         Long id = Long.parseLong((String)parseInfo.get("id"));
         Collection<? extends GrantedAuthority> roleList = SecurityUtil.authorities((List)parseInfo.get("authorities"));
-        LoginUserDetailDto loginUserDetail = LoginUserDetailDto.builder()
-                .email((String)parseInfo.get("email"))
-                .name((String)parseInfo.get("name")).build();
 
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(id, "", roleList);
-        authToken.setDetails(loginUserDetail);
-        return authToken;
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(id, "", roleList);
+        authentication.setDetails(parseInfo);
+        return authentication;
     }
 
     // Jwt 토큰에서 회원 구별 정보 추출
@@ -79,10 +74,8 @@ public class JwtTokenService {
     public String resolveToken(HttpServletRequest req) {
         String header = req.getHeader("Authorization");
 
-        if (header == null || !header.startsWith("Bearer ")) {
+        if (header == null || !header.startsWith("Bearer "))
             return null;
-        }
-
         String authToken = header.substring(7);
 
         return authToken;
@@ -97,17 +90,4 @@ public class JwtTokenService {
             return false;
         }
     }
-    // 저장된 인증정보에서 현재 로그인 사용자 id 조회
-    public Long getLoginId(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long member_id = Long.valueOf(authentication.getName());
-        return member_id;
-    }
-
-    // 저장된 인증정보에서 현재 로그인 사용자정보(name, email) 조회
-    public LoginUserDetailDto getLoginDetail() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return (LoginUserDetailDto)authentication.getDetails();
-    }
-
 }
