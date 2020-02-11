@@ -32,10 +32,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeRequests()
-                        .antMatchers("/api/auth/login", "/api/member/signup").permitAll()
-                        .antMatchers("/api/social/**","/favicon.ico").permitAll()
-                        .antMatchers(HttpMethod.GET, "/exception/**").permitAll()
-                        //.antMatchers("/*").permitAll() // 나중에 꼭 수정할 것.
+                       // .antMatchers("/api/auth/login", "/api/member/signup").permitAll()
+                       // .antMatchers("/api/social/**","/favicon.ico").permitAll()
+                       // .antMatchers(HttpMethod.GET, "/exception/**").permitAll()
+                        .antMatchers("/*").permitAll() // 나중에 꼭 수정할 것.
                         //.anyRequest().permitAll()
                     .anyRequest().hasRole("USER")
                 .and()

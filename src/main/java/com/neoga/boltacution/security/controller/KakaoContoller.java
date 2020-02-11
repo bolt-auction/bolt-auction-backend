@@ -1,22 +1,26 @@
 package com.neoga.boltacution.security.controller;
 
 
+import com.neoga.boltacution.exception.custom.CMemberNotFoundException;
+import com.neoga.boltacution.memberstore.member.domain.Members;
+import com.neoga.boltacution.memberstore.member.repository.MemberRepository;
+import com.neoga.boltacution.security.dto.KakaoProfile;
 import com.neoga.boltacution.security.dto.RetKakaoAuth;
-import com.neoga.boltacution.security.service.SocialService;
+import com.neoga.boltacution.security.service.JwtTokenService;
+import com.neoga.boltacution.security.service.KakaoService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/social")
-public class SocialContoller {
-    private final Environment env;
-    private final SocialService socialLoginService;
+public class KakaoContoller {
+    private final KakaoService kakaoService;
     @Value("${kakao.loginURL}")
     private String kakaoLoginURL;
     @Value("${base.URL}")
@@ -26,7 +30,7 @@ public class SocialContoller {
     @Value("${kakao.redirectURI}")
     private String kakaoRedirectURI;
 
-    //카카오 로그인 페이지 주소 반환
+    @ApiOperation(value = "카카오 로그인페이지 주소", notes = "카카오 로그인 페이지 주소 반환합니다. 이 주소를 이용하여 요청하면 토큰 발행")
     @GetMapping("/kakao/login")
     public String socialLogin() {
         StringBuilder loginUrl = new StringBuilder()
@@ -37,10 +41,10 @@ public class SocialContoller {
         return loginUrl.toString();
     }
 
-    //카카오 인증 후 리다이렉션 경로 토큰 반환
+    @ApiOperation(value = "카카오 리다이렉션", notes = "프론트분들 신경안쓰셔도 됩니다.(카카오 로그인 성공시 리다이렉션)")
     @GetMapping(value = "/kakao")
     public RetKakaoAuth redirectKakao(@RequestParam String code) {
-        RetKakaoAuth token = socialLoginService.getKakaoToken(code);
+        RetKakaoAuth token = kakaoService.getKakaoToken(code);
         return token;
     }
 }

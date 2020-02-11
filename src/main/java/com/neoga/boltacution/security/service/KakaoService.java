@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 @RequiredArgsConstructor
 @Service
-public class SocialService {
+public class KakaoService {
     @Value("${kakao.clientId}")
     private String kakaoClientId;
     @Value("${kakao.redirectURI}")
