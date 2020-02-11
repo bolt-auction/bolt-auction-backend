@@ -21,7 +21,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @RequestMapping(value = "/api/auth")
 public class AuthController {
-
     private final AuthService authService;
     private final SocialLoginService kakaoLoginService;
     @ApiOperation(value = "로그인", notes = "로그인을 하며 jwt 토큰 발행")
@@ -33,11 +32,5 @@ public class AuthController {
         entityModel.add(linkTo(methodOn(AuthController.class).login(loginDto)).withSelfRel());
         entityModel.add(new Link("/swagger-ui.html#/auth%20API/loginUsingPOST").withRel("profile"));
         return ResponseEntity.ok().body(entityModel);
-    }
-
-    @ApiOperation(value = "카카오 로그인", notes = "미완성")
-    @GetMapping("/kakao/login")
-    public String loginKakao(@RequestParam("code") String code){
-        return kakaoLoginService.getAccessToken(code);
     }
 }

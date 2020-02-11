@@ -2,6 +2,7 @@ package com.neoga.boltacution.security.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -11,22 +12,27 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 @Service
 public class SocialLoginService {
-    @Autowired
-    Environment env;
+    @Value("${kakao.clientId}")
+    private String kakaoClientId;
+    @Value("${kakao.redirectURI}")
+    private String kakaoRedirectURI;
+    @Value("${kakao.tokenURL}")
+    private String kakaoTokenURL;
+    @Value("${base.URL}")
+    private String baseUrl;
 
-    @Autowired
-    RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
-    public String getAccessToken (String code) {
+    public String getKakaoToken(String code) {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
         map.add("grant_type", "authorization_code");
-        map.add("client_id", env.getProperty("kakao.clientId"));
-        map.add("redirect_uri", env.getProperty("kakao.redirectURI"));
+        map.add("client_id", kakaoClientId);
+        map.add("redirect_uri", baseUrl+kakaoRedirectURI);
         map.add("code", code);
 
-        String result = restTemplate.postForObject(env.getProperty("kakao.tokenURL"), map, String.class);
+        String token = restTemplate.postForObject(kakaoTokenURL, map, String.class);
 
-        return result;
+        return token;
     }
 }
 
