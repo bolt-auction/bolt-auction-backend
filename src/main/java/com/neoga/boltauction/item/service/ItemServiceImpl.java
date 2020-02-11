@@ -2,30 +2,16 @@ package com.neoga.boltauction.item.service;
 
 import com.neoga.boltauction.category.domain.Category;
 import com.neoga.boltauction.category.repository.CategoryRepository;
-import com.neoga.boltauction.item.controller.ItemController;
 import com.neoga.boltauction.item.domain.Item;
+import com.neoga.boltauction.item.dto.UpdateItemDto;
 import com.neoga.boltauction.item.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.PagedModel;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.Errors;
 
-import java.net.URI;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +19,6 @@ public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
     private final CategoryRepository categoryRepository;
-    private final ModelMapper modelMapper;
 
     @Override
     public Item getItem(Long id) {
@@ -44,20 +29,6 @@ public class ItemServiceImpl implements ItemService {
         }
 
         Item findItem = optionalItem.get();
-
-        return findItem;
-    }
-
-    @Override
-    public Item updateItem(Long id, Item item) {
-
-        Optional<Item> optionalItem = itemRepository.findById(id);
-        if (!optionalItem.isPresent()) {
-            return null;
-        }
-
-        Item findItem = optionalItem.get();
-        itemRepository.save(findItem);
 
         return findItem;
     }
@@ -81,7 +52,7 @@ public class ItemServiceImpl implements ItemService {
 
         if (categoryId == 0) {
             return itemRepository.findAllByOrderByCreateDtAsc(pageable);
-        } else if (categoryId >= 1 && categoryId <=6) {
+        } else if (categoryId >= 1 && categoryId <= 6) {
             Category findCategory = categoryRepository.findById(categoryId).get();
             return itemRepository.findAllByCategoryEquals(pageable, findCategory);
         } else {
@@ -90,7 +61,27 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item insertItem(Item item) {
+    public Item saveItem(Item item) {
+        return itemRepository.save(item);
+    }
+
+    @Override
+    public Item updateItem(Item item, UpdateItemDto updateItemDto) {
+        if (updateItemDto.getItemName() != null)
+            item.setName(updateItemDto.getItemName());
+        else if (updateItemDto.getDescription() != null)
+            item.setDescription(updateItemDto.getDescription());
+        else if (updateItemDto.getQuickPrice() != 0)
+            item.setQuickPrice(updateItemDto.getQuickPrice());
+        else if (updateItemDto.getStartPrice() != 0)
+            item.setStartPrice(updateItemDto.getStartPrice());
+        else if (updateItemDto.getMinBidPrice() != 0)
+            item.setMinBidPrice(updateItemDto.getMinBidPrice());
+        else if (updateItemDto.getEndDt() != null)
+            item.setEndDt(updateItemDto.getEndDt());
+        else if (updateItemDto.getCategoryId() != null)
+            item.setCategory(categoryRepository.findById(updateItemDto.getCategoryId()).get());
+
         return itemRepository.save(item);
     }
 }

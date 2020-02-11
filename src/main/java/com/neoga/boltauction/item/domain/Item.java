@@ -1,12 +1,9 @@
 package com.neoga.boltauction.item.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.neoga.boltauction.category.domain.Category;
 import com.neoga.boltauction.memberstore.store.domain.Store;
 import lombok.Getter;
 import lombok.Setter;
-import net.minidev.json.JSONObject;
-import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -25,9 +22,9 @@ public class Item {
     private int startPrice;
     private int minBidPrice;
     private boolean isSell = false;
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'hh:mm:ss")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime createDt;
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'hh:mm:ss")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime endDt;
     @ManyToOne
     @JoinColumn(name = "category_id")
