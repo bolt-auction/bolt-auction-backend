@@ -3,7 +3,7 @@ package com.neoga.boltacution.memberstore.member.controller;
 import com.neoga.boltacution.memberstore.member.domain.Members;
 import com.neoga.boltacution.memberstore.member.dto.SignupDto;
 import com.neoga.boltacution.memberstore.member.service.MemberService;
-import com.neoga.boltacution.security.dto.LoginUserDetailDto;
+import com.neoga.boltacution.security.dto.LoginUserDto;
 import com.neoga.boltacution.security.service.JwtTokenService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -27,10 +27,10 @@ public class MemberController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
-    @ApiOperation(value = "자신 정보조회", notes = "아직 미완성")
-    @PutMapping()
+    @ApiOperation(value = "자신 정보조회", notes = "아직 미완성 (반환 메시지는 수정계획)")
+    @GetMapping()
     public ResponseEntity findMemberById(){
-        Long member_id = jwtTokenService.getLoginId();
+        Long member_id = jwtTokenService.getLoginInfo().getMember_id();
         Members findMember = memberService.findMemberById(member_id);
 
         EntityModel<Members> entityModel = new EntityModel(findMember);
@@ -40,12 +40,12 @@ public class MemberController {
         return ResponseEntity.ok().body(entityModel);
     }
 
-    @ApiOperation(value = "회원가입", notes = "정보를 입력받아 회원가입")
+    @ApiOperation(value = "회원가입", notes = "정보를 입력받아 회원가입 (반환 메시지는 수정계획)")
     @PostMapping(value = "/signup")
     public ResponseEntity signin(@RequestBody SignupDto signupDto) {
         Members newMember = memberService.saveMember(signupDto);
 
-        EntityModel<LoginUserDetailDto> entityModel = new EntityModel(newMember);
+        EntityModel<LoginUserDto> entityModel = new EntityModel(newMember);
         entityModel.add(linkTo(methodOn(MemberController.class).signin(signupDto)).withSelfRel());
         entityModel.add(new Link("/swagger-ui.html#/auth%20API/loginUsingPOST").withRel("profile"));
 

@@ -1,9 +1,9 @@
 package com.neoga.boltacution.security.controller;
 
 import com.neoga.boltacution.security.dto.LoginDto;
-import com.neoga.boltacution.security.dto.LoginUserDetailDto;
+import com.neoga.boltacution.security.dto.LoginUserDto;
 import com.neoga.boltacution.security.service.AuthService;
-import com.neoga.boltacution.security.service.SocialLoginService;
+import com.neoga.boltacution.security.service.SocialService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +22,13 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping(value = "/api/auth")
 public class AuthController {
     private final AuthService authService;
-    private final SocialLoginService kakaoLoginService;
+    private final SocialService kakaoLoginService;
     @ApiOperation(value = "로그인", notes = "로그인을 하며 jwt 토큰 발행")
     @PostMapping(value = "/login")
     public ResponseEntity login(@RequestBody LoginDto loginDto) {
-        LoginUserDetailDto loginUserDetail = authService.login(loginDto.getEmail(), loginDto.getPasswd());
+        LoginUserDto loginUserDetail = authService.login(loginDto);
 
-        EntityModel<LoginUserDetailDto> entityModel = new EntityModel(loginUserDetail);
+        EntityModel<LoginUserDto> entityModel = new EntityModel(loginUserDetail);
         entityModel.add(linkTo(methodOn(AuthController.class).login(loginDto)).withSelfRel());
         entityModel.add(new Link("/swagger-ui.html#/auth%20API/loginUsingPOST").withRel("profile"));
         return ResponseEntity.ok().body(entityModel);

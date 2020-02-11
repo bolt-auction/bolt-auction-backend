@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Setter
 @AllArgsConstructor
 @Builder
-public class LoginUserDetailDto {
+public class LoginUserDto {
     private Long member_id;
     private String email;
     private String name;
