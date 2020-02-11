@@ -1,12 +1,9 @@
 package com.neoga.boltauction.bid.controller;
 
-import com.neoga.boltauction.bid.domain.Bid;
 import com.neoga.boltauction.bid.service.BidService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

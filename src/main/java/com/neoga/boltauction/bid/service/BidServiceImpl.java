@@ -1,19 +1,15 @@
 package com.neoga.boltauction.bid.service;
 
 import com.neoga.boltauction.bid.domain.Bid;
-import com.neoga.boltauction.bid.domain.BidDto;
-import com.neoga.boltauction.bid.domain.BidEntityModel;
+import com.neoga.boltauction.bid.dto.BidDto;
 import com.neoga.boltauction.bid.repository.BidRepository;
 import com.neoga.boltauction.item.domain.Item;
 import com.neoga.boltauction.item.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
