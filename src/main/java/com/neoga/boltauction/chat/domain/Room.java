@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 public class Room {
-    @Column(name="id")
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;

@@ -12,7 +12,6 @@ import javax.persistence.*;
 @Entity
 @Table(name="room_join")
 public class RoomJoin {
-    @Column(name="id")
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;

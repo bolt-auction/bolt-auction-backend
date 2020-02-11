@@ -10,7 +10,6 @@ import javax.persistence.*;
 @Setter
 @Entity
 public class Store {
-    @Column(name="id")
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;

@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Setter
 @Entity
 public class Bid {
-    @Column(name="id")
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;

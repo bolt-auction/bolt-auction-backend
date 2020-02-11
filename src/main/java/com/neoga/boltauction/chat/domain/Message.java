@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 public class Message {
-    @Column(name="id")
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
