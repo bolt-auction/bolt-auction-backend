@@ -2,17 +2,16 @@ package com.neoga.boltauction.category.service;
 
 import com.neoga.boltauction.category.domain.Category;
 import com.neoga.boltauction.category.repository.CategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
     public List<Category> getCategoryList() {
@@ -21,7 +20,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Optional<Category> getCategory(Long categoryId) {
-        return categoryRepository.findById(categoryId);
+        return categoryRepository.findById(categoryId)/*.orElseThrow()*/;
     }
 
 
