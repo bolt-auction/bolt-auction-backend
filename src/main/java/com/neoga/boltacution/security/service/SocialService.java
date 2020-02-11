@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 @RequiredArgsConstructor
 @Service
-public class SocialLoginService {
+public class SocialService {
     @Value("${kakao.clientId}")
     private String kakaoClientId;
     @Value("${kakao.redirectURI}")
@@ -34,6 +34,7 @@ public class SocialLoginService {
 
         return token;
     }
+
 }
 
 

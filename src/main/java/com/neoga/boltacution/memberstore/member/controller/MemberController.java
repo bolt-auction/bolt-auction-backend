@@ -4,6 +4,7 @@ import com.neoga.boltacution.memberstore.member.domain.Members;
 import com.neoga.boltacution.memberstore.member.dto.SignupDto;
 import com.neoga.boltacution.memberstore.member.service.MemberService;
 import com.neoga.boltacution.security.dto.LoginUserDto;
+import com.neoga.boltacution.security.service.AuthService;
 import com.neoga.boltacution.security.service.JwtTokenService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -22,7 +23,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping("/api/member")
 public class MemberController {
     private final MemberService memberService;
-    private final JwtTokenService jwtTokenService;
+    private final AuthService authService;
 
     @ApiImplicitParams({
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
@@ -30,7 +31,7 @@ public class MemberController {
     @ApiOperation(value = "자신 정보조회", notes = "아직 미완성 (반환 메시지는 수정계획)")
     @GetMapping()
     public ResponseEntity findMemberById(){
-        Long member_id = jwtTokenService.getLoginInfo().getMember_id();
+        Long member_id = authService.getLoginInfo().getMember_id();
         Members findMember = memberService.findMemberById(member_id);
 
         EntityModel<Members> entityModel = new EntityModel(findMember);

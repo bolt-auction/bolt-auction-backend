@@ -4,10 +4,16 @@ import com.neoga.boltacution.exception.custom.CEmailLoginFailedException;
 import com.neoga.boltacution.memberstore.member.domain.Members;
 import com.neoga.boltacution.memberstore.member.repository.MemberRepository;
 import com.neoga.boltacution.security.dto.LoginDto;
+import com.neoga.boltacution.security.dto.LoginInfo;
 import com.neoga.boltacution.security.dto.LoginUserDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -35,5 +41,17 @@ public class AuthService{
                 .accessToken(accessToken).build();
 
         return loginUserDto;
+    }
+
+    // 저장된 인증정보에서 현재 로그인 사용자정보 조회
+    public LoginInfo getLoginInfo(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Map<String, Object> detail = ((Map)authentication.getDetails());
+        LoginInfo logininfo = LoginInfo.builder()
+                .member_id(Long.valueOf((String)detail.get("id")))
+                .email((String)detail.get("email"))
+                .name((String)detail.get("name"))
+                .role((List)detail.get("authorities")).build();
+        return logininfo;
     }
 }
