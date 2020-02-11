@@ -4,23 +4,20 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Future;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 
 @Data
-public class ItemDto {
+public class UpdateItemDto {
 
-    private Long itemId;
     private String itemName;
     private String description;
-    @Positive
+    @PositiveOrZero
     private int quickPrice;
-    @Positive
+    @PositiveOrZero
     private int startPrice;
-    @Positive
+    @PositiveOrZero
     private int minBidPrice;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime createDt;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @Future
     private LocalDateTime endDt;
