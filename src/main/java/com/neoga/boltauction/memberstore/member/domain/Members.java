@@ -1,19 +1,16 @@
 package com.neoga.boltauction.memberstore.member.domain;
 
 import com.neoga.boltauction.memberstore.store.domain.Store;
-import lombok.*;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter @Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class Members {
-    @Column(name="member_id")
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
@@ -25,11 +22,12 @@ public class Members {
     private String passwd;
     private String name;
     @Column(name="create_date", updatable = false)
-    private LocalDateTime createDate = LocalDateTime.now();
+    private LocalDateTime createDt;
     @Column(name="change_date")
-    private LocalDateTime changeDate = LocalDateTime.now();
+    private LocalDateTime changeDt;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
     private String provider;
+
 }

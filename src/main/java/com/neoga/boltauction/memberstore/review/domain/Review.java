@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 public class Review {
-    @Column(name="review_id")
+
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;

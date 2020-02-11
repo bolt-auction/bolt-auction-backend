@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Setter
 @Entity
 public class Bid {
-    @Column(name="bid_id")
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
@@ -21,4 +20,5 @@ public class Bid {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private Item item;
+    private int price;
 }

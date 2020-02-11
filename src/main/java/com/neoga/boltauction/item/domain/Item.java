@@ -4,6 +4,7 @@ import com.neoga.boltauction.category.domain.Category;
 import com.neoga.boltauction.memberstore.store.domain.Store;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,21 +14,24 @@ import java.time.LocalDateTime;
 @Entity
 public class Item {
     @Id
-    @Column(name="item_id")
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
     private String name;
     private String description;
-    private int quick_price;
-    private int start_price;
-    private int min_bid_price;
-    private boolean is_sell;
-    private LocalDateTime create_date;
-    private LocalDateTime end_date;
+    private int quickPrice;
+    private int startPrice;
+    private int minBidPrice;
+    private boolean isSell = false;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime createDt;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime endDt;
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
     @ManyToOne
     @JoinColumn(name = "store_id")
     private Store store;
+    @Column(columnDefinition = "json")
+    private String imagePath;
 }

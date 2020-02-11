@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Setter
 @Entity
 public class Orders {
-    @Column(name="order_id")
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;

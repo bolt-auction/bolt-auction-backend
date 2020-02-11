@@ -3,17 +3,19 @@ package com.neoga.boltauction.image.domain;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
+import org.hibernate.annotations.GeneratorType;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Getter
 @Setter
 @Entity
 public class Image {
-    @Column(name="image_id")
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
-    private String image_path;
-    private LocalDateTime create_date;
+    private String path;
 }

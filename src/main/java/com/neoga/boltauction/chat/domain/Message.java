@@ -11,13 +11,12 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 public class Message {
-    @Column(name="message_id")
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
     private String content;
     @Column(name="create_date")
-    private LocalDateTime createTime;
+    private LocalDateTime createDt;
     @Column(name="is_read")
     private boolean isRead;
     @ManyToOne(fetch = FetchType.LAZY)
