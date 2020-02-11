@@ -2,6 +2,7 @@ package com.neoga.boltauction.image.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+
 import org.hibernate.annotations.GeneratorType;
 
 import javax.persistence.Entity;
@@ -13,7 +14,6 @@ import javax.persistence.Id;
 @Setter
 @Entity
 public class Image {
-
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
