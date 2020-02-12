@@ -45,7 +45,7 @@ public class AuthService{
     public LoginUserDto socialLogin(String socialAccessToken, String provider) throws CMemberNotFoundException{
         KakaoProfile profile = kakaoService.getKakaoProfile(socialAccessToken);
         Members findMember = memberRepository.findByEmailAndProvider(String.valueOf(profile.getId()), provider)
-                .orElseThrow(CMemberNotFoundException::new);
+                .orElseThrow(()->new CMemberNotFoundException("member not found : you need signup"));
 
         String accessToken = jwtTokenService.createToken(findMember);
 

@@ -2,6 +2,7 @@ package com.neoga.boltauction.security.controller;
 
 import com.neoga.boltauction.exception.custom.CEmailLoginFailedException;
 import com.neoga.boltauction.exception.custom.CMemberNotFoundException;
+import com.neoga.boltauction.memberstore.member.controller.MemberController;
 import com.neoga.boltauction.memberstore.member.domain.Members;
 import com.neoga.boltauction.memberstore.member.repository.MemberRepository;
 import com.neoga.boltauction.security.dto.KakaoProfile;
@@ -51,9 +52,18 @@ public class AuthController {
     public ResponseEntity loginByProvider(
             @ApiParam(value = "서비스 제공자 provider", required = true, defaultValue = "kakao") @PathVariable String provider,
             @ApiParam(value = "소셜 access_token", required = true) @RequestParam String accessToken) {
-        LoginUserDto loginUserDetail = authService.socialLogin(accessToken, provider);
+        LoginUserDto loginUserDetail;
+        EntityModel entityModel = null;
 
-        EntityModel<LoginUserDto> entityModel = new EntityModel(loginUserDetail);
+        try {
+            loginUserDetail = authService.socialLogin(accessToken, provider);
+        }catch(CMemberNotFoundException e){
+            entityModel = new EntityModel(e.getMessage());
+            entityModel.add(linkTo(MemberController.class).slash("/social").withRel("socialSignup"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(entityModel);
+        }
+
+        entityModel = new EntityModel(loginUserDetail);
         entityModel.add(linkTo(methodOn(AuthController.class).loginByProvider(provider, accessToken)).withSelfRel());
         entityModel.add(new Link("/swagger-ui.html#/kakao-contoller/socialLoginUsingGET").withRel("profile"));
 
