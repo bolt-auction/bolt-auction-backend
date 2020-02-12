@@ -13,6 +13,9 @@ public class Store {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
+    private String description;
     @OneToOne(mappedBy="store", fetch = FetchType.LAZY)
     private Members members;
+    @Column(columnDefinition = "json", name = "image_path")
+    private String imagePath;
 }

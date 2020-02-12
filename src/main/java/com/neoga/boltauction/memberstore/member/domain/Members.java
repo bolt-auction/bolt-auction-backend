@@ -32,6 +32,4 @@ public class Members {
     @JoinColumn(name = "store_id")
     private Store store;
     private String provider;
-    @Column(columnDefinition = "json", name = "image_path")
-    private String imagePath;
 }
