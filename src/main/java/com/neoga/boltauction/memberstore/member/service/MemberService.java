@@ -30,6 +30,7 @@ public class MemberService {
 
         Members newMember = Members.builder()
                 .email(signupDto.getEmail())
+                .passwd(passwordEncoder.encode(signupDto.getPasswd()))
                 .name(signupDto.getName())
                 .role(Collections.singletonList("USER"))
                 .build();
