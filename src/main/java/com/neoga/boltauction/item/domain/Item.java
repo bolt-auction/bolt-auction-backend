@@ -32,6 +32,6 @@ public class Item {
     @ManyToOne
     @JoinColumn(name = "store_id")
     private Store store;
-    @Column(columnDefinition = "json")
+    @Column(columnDefinition = "json", name = "image_path")
     private String imagePath;
 }

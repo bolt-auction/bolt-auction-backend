@@ -3,6 +3,7 @@ package com.neoga.boltauction.memberstore.member.domain;
 import com.neoga.boltauction.memberstore.store.domain.Store;
 
 import lombok.*;
+import net.minidev.json.JSONObject;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -32,5 +33,6 @@ public class Members {
     @JoinColumn(name = "store_id")
     private Store store;
     private String provider;
-
+    @Column(columnDefinition = "json", name = "image_path")
+    private String imagePath;
 }
