@@ -62,4 +62,9 @@ public class ImageServiceImpl implements ImageService {
     public String updateItemImages(Long itemId, MultipartFile... images) throws IOException {
         return null;
     }
+
+    @Override
+    public String saveStoreImage(Long storeId, MultipartFile image) throws IOException {
+        return null;
+    }
 }
