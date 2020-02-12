@@ -4,6 +4,7 @@ import com.neoga.boltauction.security.service.JwtTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -31,11 +32,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeRequests()
-                       // .antMatchers("/api/auth/login", "/api/member/signup").permitAll()
-                       // .antMatchers("/api/social/**","/favicon.ico").permitAll()
-                       // .antMatchers(HttpMethod.GET, "/exception/**").permitAll()
-                        .antMatchers("/*").permitAll() // 나중에 꼭 수정할 것.
-                        //.anyRequest().permitAll()
+                        .antMatchers("/api/auth/**","/api/social/**","/favicon.ico").permitAll()
+                        .antMatchers(HttpMethod.GET, "/api/**","/exception/**","/*").permitAll()
+                        .antMatchers(HttpMethod.POST, "/api/member/**").permitAll()
                     .anyRequest().hasRole("USER")
                 .and()
                     .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())
