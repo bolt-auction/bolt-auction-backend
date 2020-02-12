@@ -1,5 +1,6 @@
 package com.neoga.boltauction.image.service;
 
+import com.neoga.boltauction.exception.custom.CNotImageException;
 import com.neoga.boltauction.item.domain.Item;
 import com.neoga.boltauction.item.service.ItemService;
 import lombok.RequiredArgsConstructor;
@@ -24,27 +25,30 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public String saveItemImages(Long itemId, MultipartFile... images) throws IOException {
 
+        // get item entity
         Item findItem = itemService.getItem(itemId);
 
+        // field for json
         JSONObject pathJson = new JSONObject();
         ArrayList pathList = new ArrayList();
 
-        //폴더 생성
+        // make directory
         File folder = new File("src/main/resources/image/item/" + itemId);
         if (!folder.exists()){
             folder.mkdir();
         }
 
+        // save images
         for (MultipartFile file : images) {
             BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
 
-            if (bufferedImage == null) {
+            if (bufferedImage != null) { // when image
                 byte[] bytes = file.getBytes();
                 Path path = Paths.get("src/main/resources/image/" + itemId + "/" + file.getOriginalFilename());
                 Files.write(path, bytes);
                 pathList.add(path.toString());
             } else {
-                return null;
+                throw new CNotImageException();
             }
         }
 

@@ -3,6 +3,7 @@ package com.neoga.boltauction.item.controller;
 import com.neoga.boltauction.category.domain.Category;
 import com.neoga.boltauction.category.service.CategoryService;
 import com.neoga.boltauction.exception.custom.CItemNotFoundException;
+import com.neoga.boltauction.exception.custom.CNotImageException;
 import com.neoga.boltauction.image.service.ImageService;
 import com.neoga.boltauction.item.domain.Item;
 import com.neoga.boltauction.item.dto.InsertItemDto;
@@ -52,12 +53,14 @@ public class ItemController {
 
         Page<Item> itemPage;
 
+        // get item entity
         try {
             itemPage = itemService.getItems(categoryId, pageable);
         } catch (CItemNotFoundException e) {
             return ResponseEntity.noContent().build();
         }
 
+        // map item -> itemDto
         Page<ItemDto> itemDtoPage = itemPage.map(item -> {
             ItemDto itemDto = modelMapper.map(item, ItemDto.class);
             itemDto.setItemId(item.getId());
@@ -65,6 +68,7 @@ public class ItemController {
             itemDto.setCategoryId(item.getCategory().getId());
             return itemDto;
         });
+
 
         PagedModel<EntityModel<ItemDto>> entityModels = assembler.toModel(itemDtoPage, i -> new EntityModel(i));
         entityModels.forEach(entityModel -> entityModel.add(linkTo(methodOn(ItemController.class).getItem(entityModel.getContent().getItemId())).withRel("item-detail")));
@@ -77,23 +81,24 @@ public class ItemController {
     public ResponseEntity insertItem(@Valid InsertItemDto insertItemDto,
                                      MultipartFile... images) throws IOException {
 
+        // map insertItemDto -> item
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         Item item = modelMapper.map(insertItemDto, Item.class);
         item.setName(insertItemDto.getItemName());
         item.setCreateDt(LocalDateTime.now());
-
         Category findCategory = categoryService.getCategory(insertItemDto.getCategoryId());
         item.setCategory(findCategory);
 
+        // save item
         Item saveItem = itemService.saveItem(item);
+        // save image
         String pathList = imageService.saveItemImages(saveItem.getId(), images);
 
+        // map saveItem -> itemDto
         ItemDto saveItemDto = modelMapper.map(saveItem, ItemDto.class);
         saveItemDto.setItemId(saveItem.getId());
         saveItemDto.setItemName(saveItem.getName());
         saveItemDto.setCategoryId(saveItem.getCategory().getId());
-
-
         try {
             JSONParser parser = new JSONParser();
             saveItemDto.setImagePath((JSONObject) parser.parse(pathList));
@@ -118,12 +123,14 @@ public class ItemController {
 
         Item findItem;
 
+        // get item entity
         try {
             findItem = itemService.getItem(id);
         } catch (CItemNotFoundException e) {
             return ResponseEntity.noContent().build();
         }
 
+        // map findItem -> itemDto
         ItemDto itemDto = modelMapper.map(findItem, ItemDto.class);
         itemDto.setItemId(findItem.getId());
         itemDto.setItemName(findItem.getName());
@@ -134,12 +141,12 @@ public class ItemController {
         entityModel.add(new Link("/").withRel("profile"));
 
         return ResponseEntity.ok(entityModel);
-
     }
 
     @DeleteMapping("/{item-id}")
     public ResponseEntity deleteItem(@PathVariable(name = "item-id") Long id) {
 
+        // delete item entity
         try {
             itemService.deleteItem(id);
         } catch (CItemNotFoundException e) {
@@ -162,7 +169,12 @@ public class ItemController {
         }
 
         Item updateItem = itemService.updateItem(findItem, updateItemDto);
-        imageService.updateItemImages(id, images);
+        try {
+            imageService.updateItemImages(id, images);
+        } catch (CNotImageException e) {
+            
+        }
+
 
         ItemDto itemDto = modelMapper.map(updateItem, ItemDto.class);
         EntityModel entityModel = new EntityModel(itemDto);
