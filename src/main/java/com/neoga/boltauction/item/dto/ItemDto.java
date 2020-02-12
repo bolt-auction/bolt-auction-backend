@@ -1,6 +1,7 @@
 package com.neoga.boltauction.item.dto;
 
 import lombok.Data;
+import net.minidev.json.JSONObject;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Future;
@@ -25,5 +26,6 @@ public class ItemDto {
     @Future
     private LocalDateTime endDt;
     private Long categoryId;
+    private JSONObject imagePath;
     //private Long memberId;
 }

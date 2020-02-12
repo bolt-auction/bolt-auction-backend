@@ -10,8 +10,12 @@ import com.neoga.boltauction.item.dto.ItemDto;
 import com.neoga.boltauction.item.dto.UpdateItemDto;
 import com.neoga.boltauction.item.service.ItemService;
 import lombok.RequiredArgsConstructor;
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
+import net.minidev.json.parser.ParseException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.boot.json.JsonParser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -71,7 +75,7 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity insertItem(@Valid InsertItemDto insertItemDto,
-                                     MultipartFile... files) throws IOException {
+                                     MultipartFile... images) throws IOException {
 
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         Item item = modelMapper.map(insertItemDto, Item.class);
@@ -82,13 +86,20 @@ public class ItemController {
         item.setCategory(findCategory);
 
         Item saveItem = itemService.saveItem(item);
-        imageService.saveItemImages(saveItem.getId(), files);
+        String pathList = imageService.saveItemImages(saveItem.getId(), images);
 
         ItemDto saveItemDto = modelMapper.map(saveItem, ItemDto.class);
         saveItemDto.setItemId(saveItem.getId());
         saveItemDto.setItemName(saveItem.getName());
         saveItemDto.setCategoryId(saveItem.getCategory().getId());
 
+
+        try {
+            JSONParser parser = new JSONParser();
+            saveItemDto.setImagePath((JSONObject) parser.parse(pathList));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         WebMvcLinkBuilder selfLinkBuilder =linkTo(ItemController.class).slash(saveItemDto.getItemId());
         URI createdUri = selfLinkBuilder.toUri();
@@ -141,7 +152,7 @@ public class ItemController {
     @PutMapping("/{item-id}")
     public ResponseEntity updateItem(@PathVariable(name = "item-id") Long id,
                                      @Valid UpdateItemDto updateItemDto,
-                                     MultipartFile... files) throws IOException {
+                                     MultipartFile... images) throws IOException {
         Item findItem;
 
         try {
@@ -151,7 +162,7 @@ public class ItemController {
         }
 
         Item updateItem = itemService.updateItem(findItem, updateItemDto);
-        imageService.updateItemImages(id, files);
+        imageService.updateItemImages(id, images);
 
         ItemDto itemDto = modelMapper.map(updateItem, ItemDto.class);
         EntityModel entityModel = new EntityModel(itemDto);
