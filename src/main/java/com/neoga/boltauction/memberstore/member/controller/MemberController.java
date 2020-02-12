@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -31,6 +32,7 @@ public class MemberController {
     private final AuthService authService;
     private final KakaoService kakaoService;
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @ApiOperation(value = "자신 정보조회", notes = "아직 미완성 (반환 메시지는 수정계획)")
     @GetMapping()
@@ -61,7 +63,7 @@ public class MemberController {
     @PostMapping(value = "/{provider}")
     public ResponseEntity signupProvider(@ApiParam(value = "서비스 제공자 provider", required = true, defaultValue = "kakao") @PathVariable String provider,
                                          @ApiParam(value = "소셜 access_token", required = true) @RequestParam String accessToken,
-                                         @ApiParam(value = "이름", required = true) @RequestParam String name) {
+                                         @ApiParam(value = "닉네임", required = true) @RequestParam String name) {
 
         KakaoProfile profile = kakaoService.getKakaoProfile(accessToken);
         Optional<Members> member = memberRepository.findByEmailAndProvider(String.valueOf(profile.getId()), provider);
@@ -72,7 +74,7 @@ public class MemberController {
                 .email(String.valueOf(profile.getId()))
                 .provider(provider)
                 .name(name)
-                .role(Collections.singletonList("ROLE_USER"))
+                .role(Collections.singletonList("USER"))
                 .build());
 
         return ResponseEntity.ok().build();

@@ -22,6 +22,7 @@ public class MemberService {
     }
 
     public Members saveMember(SignupDto signupDto) throws CExistEmailSignUpException {
+        //이메일 중복확인
         Optional<Members> existsMember = memberRepository.findByEmail(signupDto.getEmail());
         if(existsMember.isPresent()){
             throw new CExistEmailSignUpException();
@@ -29,7 +30,6 @@ public class MemberService {
 
         Members newMember = Members.builder()
                 .email(signupDto.getEmail())
-                .passwd(passwordEncoder.encode(signupDto.getPasswd()))
                 .name(signupDto.getName())
                 .role(Collections.singletonList("USER"))
                 .build();

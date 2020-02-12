@@ -1,6 +1,7 @@
 package com.neoga.boltauction.bid.domain;
 
 import com.neoga.boltauction.bid.controller.BidController;
+import com.neoga.boltauction.bid.dto.BidDto;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 
