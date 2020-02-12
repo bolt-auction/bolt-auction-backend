@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,6 +15,12 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public String saveItemImages(Long itemId, MultipartFile... files) throws IOException {
+
+        //폴더 생성
+        File folder = new File("src/main/resources/image/item/" + itemId);
+        if (!folder.exists()){
+            folder.mkdir();
+        }
 
         for (MultipartFile file : files) {
             BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
