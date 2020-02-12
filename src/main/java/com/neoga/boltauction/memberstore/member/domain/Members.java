@@ -2,8 +2,7 @@ package com.neoga.boltauction.memberstore.member.domain;
 
 import com.neoga.boltauction.memberstore.store.domain.Store;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,6 +10,9 @@ import java.util.List;
 
 @Getter @Setter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Members {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
