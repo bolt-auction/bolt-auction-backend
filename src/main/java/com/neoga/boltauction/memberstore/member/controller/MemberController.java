@@ -49,11 +49,11 @@ public class MemberController {
 
     @ApiOperation(value = "회원가입", notes = "정보를 입력받아 회원가입 (반환 메시지는 수정계획)")
     @PostMapping()
-    public ResponseEntity signin(@RequestBody SignupDto signupDto) {
+    public ResponseEntity signup(@RequestBody SignupDto signupDto) {
         Members newMember = memberService.saveMember(signupDto);
 
         EntityModel<LoginUserDto> entityModel = new EntityModel(newMember);
-        entityModel.add(linkTo(methodOn(MemberController.class).signin(signupDto)).withSelfRel());
+        entityModel.add(linkTo(methodOn(MemberController.class).signup(signupDto)).withSelfRel());
         entityModel.add(new Link("/swagger-ui.html#/auth%20API/loginUsingPOST").withRel("profile"));
 
         return ResponseEntity.ok().body(entityModel);
@@ -61,9 +61,9 @@ public class MemberController {
 
     @ApiOperation(value = "소셜 회원가입", notes = "소셜 계정 회원가입을 한다.")
     @PostMapping(value = "/social/{provider}")
-    public ResponseEntity signupProvider(@ApiParam(value = "서비스 제공자 provider", required = true, defaultValue = "kakao") @PathVariable String provider,
-                                         @ApiParam(value = "소셜 access_token", required = true) @RequestParam String accessToken,
-                                         @ApiParam(value = "닉네임", required = true) @RequestParam String name) {
+    public ResponseEntity signupSocial(@ApiParam(value = "서비스 제공자 provider", required = true, defaultValue = "kakao") @PathVariable String provider,
+                                       @ApiParam(value = "소셜 access_token", required = true) @RequestParam String accessToken,
+                                       @ApiParam(value = "닉네임", required = true) @RequestParam String name) {
 
         KakaoProfile profile = kakaoService.getKakaoProfile(accessToken);
         Optional<Members> member = memberRepository.findByEmailAndProvider(String.valueOf(profile.getId()), provider);

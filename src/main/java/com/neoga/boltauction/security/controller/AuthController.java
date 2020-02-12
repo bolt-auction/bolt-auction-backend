@@ -55,7 +55,7 @@ public class AuthController {
 
         EntityModel<LoginUserDto> entityModel = new EntityModel(loginUserDetail);
         entityModel.add(linkTo(methodOn(AuthController.class).loginByProvider(provider, accessToken)).withSelfRel());
-        entityModel.add(new Link("/swagger-ui.html#/auth%20API/signinByProviderUsingPOST").withRel("profile"));
+        entityModel.add(new Link("/swagger-ui.html#/kakao-contoller/socialLoginUsingGET").withRel("profile"));
 
         return ResponseEntity.ok().body(entityModel);
     }
