@@ -11,7 +11,7 @@ public class KakaoProfile {
 
     @Getter
     @Setter
-    private static class Properties {
+    public static class Properties {
         private String nickname;
         private String thumbnail_image;
         private String profile_image;

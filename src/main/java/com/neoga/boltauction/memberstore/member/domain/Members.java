@@ -22,7 +22,6 @@ public class Members {
     private List<String> role;
     @Column(nullable = false, unique = true)
     private String email;
-    @Column(nullable = false)
     private String passwd;
     private String name;
     @Column(name="create_date", updatable = false)
