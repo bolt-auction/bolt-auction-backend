@@ -44,7 +44,7 @@ public class ImageServiceImpl implements ImageService {
 
             if (bufferedImage != null) { // when image
                 byte[] bytes = file.getBytes();
-                Path path = Paths.get("src/main/resources/image/" + itemId + "/" + file.getOriginalFilename());
+                Path path = Paths.get("src/main/resources/image/item/" + itemId + "/" + file.getOriginalFilename());
                 Files.write(path, bytes);
                 pathList.add(path.toString());
             } else {

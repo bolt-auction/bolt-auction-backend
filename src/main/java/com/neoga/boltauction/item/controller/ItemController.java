@@ -16,7 +16,6 @@ import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.boot.json.JsonParser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -52,6 +51,7 @@ public class ItemController {
                                    PagedResourcesAssembler<ItemDto> assembler) {
 
         Page<Item> itemPage;
+        JSONParser parser = new JSONParser();
 
         // get item entity
         try {
@@ -66,9 +66,9 @@ public class ItemController {
             itemDto.setItemId(item.getId());
             itemDto.setItemName(item.getName());
             itemDto.setCategoryId(item.getCategory().getId());
+            itemDto.setImagePath(null);
             return itemDto;
         });
-
 
         PagedModel<EntityModel<ItemDto>> entityModels = assembler.toModel(itemDtoPage, i -> new EntityModel(i));
         entityModels.forEach(entityModel -> entityModel.add(linkTo(methodOn(ItemController.class).getItem(entityModel.getContent().getItemId())).withRel("item-detail")));
@@ -79,7 +79,7 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity insertItem(@Valid InsertItemDto insertItemDto,
-                                     MultipartFile... images) throws IOException {
+                                             MultipartFile... images) throws IOException {
 
         // map insertItemDto -> item
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
