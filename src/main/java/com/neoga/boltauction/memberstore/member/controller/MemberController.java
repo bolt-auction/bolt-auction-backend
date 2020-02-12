@@ -60,7 +60,7 @@ public class MemberController {
     }
 
     @ApiOperation(value = "소셜 회원가입", notes = "소셜 계정 회원가입을 한다.")
-    @PostMapping(value = "/{provider}")
+    @PostMapping(value = "/social/{provider}")
     public ResponseEntity signupProvider(@ApiParam(value = "서비스 제공자 provider", required = true, defaultValue = "kakao") @PathVariable String provider,
                                          @ApiParam(value = "소셜 access_token", required = true) @RequestParam String accessToken,
                                          @ApiParam(value = "닉네임", required = true) @RequestParam String name) {

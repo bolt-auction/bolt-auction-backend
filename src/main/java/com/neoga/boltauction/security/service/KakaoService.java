@@ -28,6 +28,7 @@ public class KakaoService {
     private final Gson gson;
     private final RestTemplate restTemplate;
 
+    //authorization code를 이용하여 kakao toekn 요청
     public RetKakaoAuth getKakaoToken(String code) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -46,6 +47,7 @@ public class KakaoService {
         return null;
     }
 
+    //kakao access token 이용하여 사용자 프로필정보 요청
     public KakaoProfile getKakaoProfile(String accessToken) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);

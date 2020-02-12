@@ -1,9 +1,6 @@
 package com.neoga.boltauction.exception.advice;
 
-import com.neoga.boltauction.exception.custom.CAuthEntryPointException;
-import com.neoga.boltauction.exception.custom.CCommunicationException;
-import com.neoga.boltauction.exception.custom.CEmailLoginFailedException;
-import com.neoga.boltauction.exception.custom.CExistEmailSignUpException;
+import com.neoga.boltauction.exception.custom.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +27,12 @@ public class ExceptionAdvice {
     }
 
     @ExceptionHandler(CExistEmailSignUpException.class)
-    public ResponseEntity CExistEmailSignUpException() { return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); }
+    public ResponseEntity CExistEmailSignUpException() {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
 
-    @ExceptionHandler(CCommunicationException.class)
-    public ResponseEntity CCommunicationException() { return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR ).build(); }
+    @ExceptionHandler(CMemberNotFoundException.class)
+    public ResponseEntity CMemberNotFoundException() {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
 }
