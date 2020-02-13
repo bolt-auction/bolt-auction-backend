@@ -57,7 +57,7 @@ public class AuthService{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Map<String, Object> detail = ((Map)authentication.getDetails());
         LoginInfo logininfo = LoginInfo.builder()
-                .member_id(Long.valueOf((String)detail.get("id")))
+                .memberId(Long.valueOf((String)detail.get("id")))
                 .uid((String)detail.get("uid"))
                 .name((String)detail.get("name"))
                 .role((List)detail.get("authorities")).build();

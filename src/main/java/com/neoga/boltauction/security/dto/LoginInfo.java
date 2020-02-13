@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 public class LoginInfo {
-    private Long member_id;
+    private Long memberId;
     private String uid;
     private String name;
     private List<String> role;
