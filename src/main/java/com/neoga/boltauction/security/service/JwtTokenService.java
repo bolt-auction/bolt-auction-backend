@@ -33,7 +33,7 @@ public class JwtTokenService {
     public String createToken(Members member) {
         Claims claims = Jwts.claims().setSubject(String.valueOf(member.getId()));
         claims.put("name", member.getName());
-        claims.put("email", member.getEmail());
+        claims.put("uid", member.getUid());
         claims.put("roles", member.getRole());
         Date now = new Date();
         return Jwts.builder()
@@ -62,7 +62,7 @@ public class JwtTokenService {
         Map<String, Object> result = new HashMap<>();
         result.put("id", parseInfo.getBody().getSubject());
         result.put("name", parseInfo.getBody().get("name"));
-        result.put("email", parseInfo.getBody().get("email"));
+        result.put("uid", parseInfo.getBody().get("uid"));
         result.put("authorities", parseInfo.getBody().get("roles", List.class));
         return result;
     }

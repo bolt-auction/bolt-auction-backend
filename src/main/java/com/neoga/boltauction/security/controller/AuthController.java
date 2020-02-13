@@ -31,9 +31,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping(value = "/api/auth")
 public class AuthController {
     private final AuthService authService;
-    private final KakaoService kakaoService;
-    private final MemberRepository memberRepository;
-    private final JwtTokenService jwtTokenService;
 
     @ApiOperation(value = "일반 로그인", notes = "로그인을 하며 jwt 토큰 발행")
     @PostMapping(value = "/login")

@@ -66,12 +66,12 @@ public class MemberController {
                                        @ApiParam(value = "닉네임", required = true) @RequestParam String name) {
 
         KakaoProfile profile = kakaoService.getKakaoProfile(accessToken);
-        Optional<Members> member = memberRepository.findByEmailAndProvider(String.valueOf(profile.getId()), provider);
+        Optional<Members> member = memberRepository.findByUidAndProvider(String.valueOf(profile.getId()), provider);
         if(member.isPresent())
             throw new CMemberExistException();
 
         memberRepository.save(Members.builder()
-                .email(String.valueOf(profile.getId()))
+                .uid(String.valueOf(profile.getId()))
                 .provider(provider)
                 .name(name)
                 .role(Collections.singletonList("USER"))

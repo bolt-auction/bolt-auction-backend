@@ -21,7 +21,7 @@ public class Members {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> role;
     @Column(nullable = false, unique = true)
-    private String email;
+    private String uid;
     private String passwd;
     private String name;
     @Column(name="create_date", updatable = false)

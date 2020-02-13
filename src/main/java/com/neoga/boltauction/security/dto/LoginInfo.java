@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 public class LoginInfo {
     private Long member_id;
-    private String email;
+    private String uid;
     private String name;
     private List<String> role;
 }

@@ -28,9 +28,9 @@ public class AuthService{
 
     //로그인 정보를 받아 검증 후 jwt 토큰 생성 후 로그인 정보 반환
     public LoginUserDto login(LoginDto loginDto) throws CEmailLoginFailedException{
-        String email = loginDto.getEmail();
+        String uid = loginDto.getUid();
         String passwd = loginDto.getPasswd();
-        Members findMember = memberRepository.findByEmail(email)
+        Members findMember = memberRepository.findByUid(uid)
                 .orElseThrow(CEmailLoginFailedException::new);
 
         if (!passwordEncoder.matches(passwd, findMember.getPasswd()))
@@ -44,7 +44,7 @@ public class AuthService{
     //소셜 accessToken이용하여 jwt 토큰 생성 후 로그인 정보 반환
     public LoginUserDto socialLogin(String socialAccessToken, String provider) throws CMemberNotFoundException{
         KakaoProfile profile = kakaoService.getKakaoProfile(socialAccessToken);
-        Members findMember = memberRepository.findByEmailAndProvider(String.valueOf(profile.getId()), provider)
+        Members findMember = memberRepository.findByUidAndProvider(String.valueOf(profile.getId()), provider)
                 .orElseThrow(()->new CMemberNotFoundException("member not found : you need signup"));
 
         String accessToken = jwtTokenService.createToken(findMember);
@@ -58,7 +58,7 @@ public class AuthService{
         Map<String, Object> detail = ((Map)authentication.getDetails());
         LoginInfo logininfo = LoginInfo.builder()
                 .member_id(Long.valueOf((String)detail.get("id")))
-                .email((String)detail.get("email"))
+                .uid((String)detail.get("uid"))
                 .name((String)detail.get("name"))
                 .role((List)detail.get("authorities")).build();
         return logininfo;
@@ -67,7 +67,7 @@ public class AuthService{
     public LoginUserDto loginUserDtoBuilder(String accessToken, Members findMember){
         LoginUserDto loginUserDto = LoginUserDto.builder()
                 .member_id(findMember.getId())
-                .email(findMember.getEmail())
+                .uid(findMember.getUid())
                 .name(findMember.getName())
                 .tokenType("Bearer")
                 .accessToken(accessToken).build();

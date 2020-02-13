@@ -8,7 +8,7 @@ import lombok.*;
 @Builder
 public class LoginUserDto {
     private Long member_id;
-    private String email;
+    private String uid;
     private String name;
     private String accessToken;
     private String tokenType;
