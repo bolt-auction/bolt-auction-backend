@@ -2,11 +2,11 @@ package com.neoga.boltauction.memberstore.member.controller;
 
 import com.neoga.boltauction.exception.custom.CMemberExistException;
 import com.neoga.boltauction.memberstore.member.domain.Members;
-import com.neoga.boltauction.memberstore.member.dto.SignupDto;
+import com.neoga.boltauction.memberstore.member.dto.SignupRequestDto;
 import com.neoga.boltauction.memberstore.member.repository.MemberRepository;
 import com.neoga.boltauction.memberstore.member.service.MemberService;
 import com.neoga.boltauction.security.dto.KakaoProfile;
-import com.neoga.boltauction.security.dto.LoginUserDto;
+import com.neoga.boltauction.security.dto.LoginResponseDto;
 import com.neoga.boltauction.security.service.AuthService;
 import com.neoga.boltauction.security.service.KakaoService;
 import io.swagger.annotations.ApiOperation;
@@ -49,11 +49,11 @@ public class MemberController {
 
     @ApiOperation(value = "회원가입", notes = "정보를 입력받아 회원가입 (반환 메시지는 수정계획)")
     @PostMapping()
-    public ResponseEntity signup(@RequestBody SignupDto signupDto) {
-        Members newMember = memberService.saveMember(signupDto);
+    public ResponseEntity signup(@RequestBody SignupRequestDto signupRequest) {
+        Members newMember = memberService.saveMember(signupRequest);
 
-        EntityModel<LoginUserDto> entityModel = new EntityModel(newMember);
-        entityModel.add(linkTo(methodOn(MemberController.class).signup(signupDto)).withSelfRel());
+        EntityModel<LoginResponseDto> entityModel = new EntityModel(newMember);
+        entityModel.add(linkTo(methodOn(MemberController.class).signup(signupRequest)).withSelfRel());
         entityModel.add(new Link("/swagger-ui.html#/auth%20API/loginUsingPOST").withRel("profile"));
 
         return ResponseEntity.ok().body(entityModel);

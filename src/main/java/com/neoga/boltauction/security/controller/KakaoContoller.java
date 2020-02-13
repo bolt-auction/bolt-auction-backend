@@ -2,7 +2,7 @@ package com.neoga.boltauction.security.controller;
 
 
 import com.neoga.boltauction.memberstore.member.controller.MemberController;
-import com.neoga.boltauction.security.dto.LoginUserDto;
+import com.neoga.boltauction.security.dto.LoginResponseDto;
 import com.neoga.boltauction.security.dto.RetKakaoAuth;
 import com.neoga.boltauction.security.service.KakaoService;
 import io.swagger.annotations.ApiOperation;
@@ -46,7 +46,7 @@ public class KakaoContoller {
     public ResponseEntity redirectKakao(@RequestParam String code) {
         RetKakaoAuth token = kakaoService.getKakaoToken(code);
 
-        EntityModel<LoginUserDto> entityModel = new EntityModel(token);
+        EntityModel<LoginResponseDto> entityModel = new EntityModel(token);
         entityModel.add(linkTo(methodOn(KakaoContoller.class).redirectKakao(code)).withSelfRel());
         entityModel.add(new Link("/swagger-ui.html#/auth%20API/signinByProviderUsingPOST").withRel("profile"));
         entityModel.add(linkTo(MemberController.class).slash("/social").withRel("socialSignup"));
