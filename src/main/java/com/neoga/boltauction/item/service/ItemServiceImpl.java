@@ -39,7 +39,7 @@ public class ItemServiceImpl implements ItemService {
     public Page<Item> getItems(Long categoryId, Pageable pageable) {
 
         if (categoryId == 0) {
-            return itemRepository.findAllByOrderByCreateDtAsc(pageable);
+            return itemRepository.findAll(pageable);
         } else if (categoryId >= 1 && categoryId <= 6) {
             Category findCategory = categoryRepository.findById(categoryId).get();
             return itemRepository.findAllByCategoryEquals(pageable, findCategory);

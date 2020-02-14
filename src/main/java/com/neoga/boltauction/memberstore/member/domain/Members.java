@@ -3,7 +3,6 @@ package com.neoga.boltauction.memberstore.member.domain;
 import com.neoga.boltauction.memberstore.store.domain.Store;
 
 import lombok.*;
-import net.minidev.json.JSONObject;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

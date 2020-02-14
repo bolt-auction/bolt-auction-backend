@@ -21,6 +21,7 @@ public class Item {
     private int quickPrice;
     private int startPrice;
     private int minBidPrice;
+    private int currentPrice;
     private boolean isSell = false;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime createDt;
