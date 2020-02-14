@@ -7,4 +7,8 @@ import java.util.List;
 public interface CategoryService {
     List<Category> getCategoryList();
     Category getCategory(Long categoryId);
+
+    List<Category> getSupCategoryList();
+
+    List<Category> getSubCategoryList(Long supCategoryId);
 }
