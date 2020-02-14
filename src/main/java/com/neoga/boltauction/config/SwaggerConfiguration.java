@@ -3,7 +3,7 @@ package com.neoga.boltauction.config;
 import com.google.common.collect.Lists;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.hateoas.client.LinkDiscoverer;
+import org.springframework.hateoas.LinkDiscoverer;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.plugin.core.OrderAwarePluginRegistry;
@@ -86,9 +86,9 @@ public class SwaggerConfiguration {
                 .build();
     }
 
-    @Bean
+/*    @Bean
     public PluginRegistry<LinkDiscoverer, MediaType> discoverers(
             OrderAwarePluginRegistry<LinkDiscoverer, MediaType> relProviderPluginRegistry) {
         return relProviderPluginRegistry;
-    }
+    }*/
 }

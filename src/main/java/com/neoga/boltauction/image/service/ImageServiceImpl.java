@@ -38,6 +38,10 @@ public class ImageServiceImpl implements ImageService {
             folder.mkdir();
         }
 
+        if (images.equals(null)) {
+            return null;
+        }
+
         // save images
         for (MultipartFile file : images) {
             BufferedImage bufferedImage = ImageIO.read(file.getInputStream());

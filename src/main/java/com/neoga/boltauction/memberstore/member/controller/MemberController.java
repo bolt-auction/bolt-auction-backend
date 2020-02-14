@@ -12,8 +12,8 @@ import com.neoga.boltauction.security.service.KakaoService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 import java.util.Optional;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,7 +40,7 @@ public class MemberController {
         Long member_id = authService.getLoginInfo().getMemberId();
         Members findMember = memberService.findMemberById(member_id);
 
-        EntityModel<Members> entityModel = new EntityModel(findMember);
+        Resource<Members> entityModel = new Resource(findMember);
         entityModel.add(linkTo(MemberController.class).withSelfRel());
         entityModel.add(new Link("/member-controller/findMemberByIdUsingPUT").withRel("profile"));
 
@@ -52,7 +52,7 @@ public class MemberController {
     public ResponseEntity signup(@RequestBody SignupRequestDto signupRequest) {
         Members newMember = memberService.saveMember(signupRequest);
 
-        EntityModel<LoginResponseDto> entityModel = new EntityModel(newMember);
+        Resource<LoginResponseDto> entityModel = new Resource(newMember);
         entityModel.add(linkTo(methodOn(MemberController.class).signup(signupRequest)).withSelfRel());
         entityModel.add(new Link("/swagger-ui.html#/auth%20API/loginUsingPOST").withRel("profile"));
 

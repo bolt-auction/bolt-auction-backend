@@ -19,10 +19,10 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.PagedModel;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.hateoas.PagedResources;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,10 +31,9 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
 @RequiredArgsConstructor
@@ -70,7 +69,7 @@ public class ItemController {
             return itemDto;
         });
 
-        PagedModel<EntityModel<ItemDto>> entityModels = assembler.toModel(itemDtoPage, i -> new EntityModel(i));
+        PagedResources<Resource<ItemDto>> entityModels = assembler.toResource(itemDtoPage, i -> new Resource<>(i));
         entityModels.forEach(entityModel -> entityModel.add(linkTo(methodOn(ItemController.class).getItem(entityModel.getContent().getItemId())).withRel("item-detail")));
         entityModels.add(new Link("/").withRel("profile"));
 
@@ -106,9 +105,9 @@ public class ItemController {
             e.printStackTrace();
         }
 
-        WebMvcLinkBuilder selfLinkBuilder =linkTo(ItemController.class).slash(saveItemDto.getItemId());
+        ControllerLinkBuilder selfLinkBuilder =linkTo(ItemController.class).slash(saveItemDto.getItemId());
         URI createdUri = selfLinkBuilder.toUri();
-        EntityModel entityModel = new EntityModel(saveItemDto);
+        Resource entityModel = new Resource(saveItemDto);
 
         entityModel.add(linkTo(methodOn(ItemController.class).getItem(saveItemDto.getItemId())).withRel("item-detail"));
         entityModel.add(linkTo(ItemController.class).withRel("query-events"));
@@ -136,7 +135,7 @@ public class ItemController {
         itemDto.setItemName(findItem.getName());
         itemDto.setCategoryId(findItem.getCategory().getId());
 
-        EntityModel entityModel = new EntityModel(itemDto);
+        Resource entityModel = new Resource(itemDto);
         entityModel.add(linkTo(ItemController.class).slash(findItem.getId()).withSelfRel());
         entityModel.add(new Link("/").withRel("profile"));
 
@@ -177,7 +176,7 @@ public class ItemController {
 
 
         ItemDto itemDto = modelMapper.map(updateItem, ItemDto.class);
-        EntityModel entityModel = new EntityModel(itemDto);
+        Resource entityModel = new Resource(itemDto);
         entityModel.add(linkTo(ItemController.class).slash(updateItem.getId()).withSelfRel());
         entityModel.add(new Link("/").withRel("profile"));
 

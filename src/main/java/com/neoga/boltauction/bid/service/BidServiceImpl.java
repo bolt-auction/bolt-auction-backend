@@ -7,7 +7,7 @@ import com.neoga.boltauction.item.domain.Item;
 import com.neoga.boltauction.item.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -36,7 +36,7 @@ public class BidServiceImpl implements BidService {
             return modelMapper.map(bid, BidDto.class);
         }).collect(Collectors.toList());
 
-        CollectionModel<BidDto> bidDtoCollectionModel = new CollectionModel<>(bidDtoList);
+        Resources<BidDto> bidDtoCollectionModel = new Resources<>(bidDtoList);
 
         return ResponseEntity.ok(bidDtoCollectionModel);
     }
