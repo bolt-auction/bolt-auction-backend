@@ -1,5 +1,6 @@
 package com.neoga.boltauction.memberstore.member.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.neoga.boltauction.memberstore.store.domain.Store;
 
 import lombok.*;
@@ -21,10 +22,12 @@ public class Members {
     private List<String> role;
     @Column(nullable = false, unique = true)
     private String uid;
+    @JsonIgnore
     private String passwd;
     private String name;
     @Column(name="create_date", updatable = false)
     private LocalDateTime createDt;
+    @JsonIgnore
     @Column(name="change_date")
     private LocalDateTime changeDt;
     @OneToOne(fetch = FetchType.LAZY)

@@ -30,11 +30,8 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 public class MemberController {
     private final MemberService memberService;
     private final AuthService authService;
-    private final KakaoService kakaoService;
-    private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    @ApiOperation(value = "자신 정보조회", notes = "아직 미완성 (반환 메시지는 수정계획)")
+    @ApiOperation(value = "자신 정보조회", notes = "(반환 메시지는 수정계획)")
     @GetMapping()
     public ResponseEntity findMemberById(){
         Long member_id = authService.getLoginInfo().getMemberId();
@@ -59,23 +56,16 @@ public class MemberController {
         return ResponseEntity.ok().body(entityModel);
     }
 
-    @ApiOperation(value = "소셜 회원가입", notes = "소셜 계정 회원가입을 한다.")
+    @ApiOperation(value = "소셜 회원가입", notes = "소셜 계정 회원가입을 한다.(반환 메시지는 수정계획)")
     @PostMapping(value = "/social/{provider}")
     public ResponseEntity signupSocial(@ApiParam(value = "서비스 제공자 provider", required = true, defaultValue = "kakao") @PathVariable String provider,
                                        @ApiParam(value = "소셜 access_token", required = true) @RequestParam String accessToken,
                                        @ApiParam(value = "닉네임", required = true) @RequestParam String name) {
+        Members newMember = memberService.saveSocialMember(provider,accessToken,name);
 
-        KakaoProfile profile = kakaoService.getKakaoProfile(accessToken);
-        Optional<Members> member = memberRepository.findByUidAndProvider(String.valueOf(profile.getId()), provider);
-        if(member.isPresent())
-            throw new CMemberExistException();
-
-        memberRepository.save(Members.builder()
-                .uid(String.valueOf(profile.getId()))
-                .provider(provider)
-                .name(name)
-                .role(Collections.singletonList("USER"))
-                .build());
+        Resource<LoginResponseDto> entityModel = new Resource(newMember);
+        entityModel.add(linkTo(methodOn(MemberController.class).signupSocial(provider,accessToken,name)).withSelfRel());
+        entityModel.add(new Link("/swagger-ui.html#/auth%20API/loginByProviderUsingPOST").withRel("profile"));
 
         return ResponseEntity.ok().build();
     }
