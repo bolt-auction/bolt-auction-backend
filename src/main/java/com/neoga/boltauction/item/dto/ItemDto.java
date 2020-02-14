@@ -20,6 +20,7 @@ public class ItemDto {
     private int startPrice;
     @Positive
     private int minBidPrice;
+    private int currentPrice;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime createDt;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
