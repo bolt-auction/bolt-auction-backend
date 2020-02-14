@@ -13,6 +13,9 @@ import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -30,15 +33,20 @@ public class KakaoContoller {
     @Value("${kakao.redirectURI}")
     private String kakaoRedirectURI;
 
-    @ApiOperation(value = "카카오 로그인페이지 주소", notes = "카카오 로그인 페이지 주소 반환합니다. 이 주소를 이용하여 요청하면 토큰 발행")
+    @ApiOperation(value = "카카오 로그인 요청페이지 주소", notes = "카카오 로그인 페이지 주소 반환합니다. 이 주소를 이용하여 요청하면 토큰 발행")
     @GetMapping("/kakao/login")
-    public String socialLogin() {
-        StringBuilder loginUrl = new StringBuilder()
+    public ResponseEntity socialLogin() {
+        StringBuilder kakaoLoginUrl = new StringBuilder()
                 .append(kakaoLoginURL)
                 .append("?client_id=").append(kakaoClientId)
                 .append("&response_type=code")
                 .append("&redirect_uri=").append(baseUrl).append(kakaoRedirectURI);
-        return loginUrl.toString();
+
+        EntityModel<String> entityModel = new EntityModel(kakaoLoginUrl);
+        entityModel.add(linkTo(methodOn(KakaoContoller.class).socialLogin()).withSelfRel());
+        entityModel.add(new Link("/swagger-ui.html#/kakao-contoller/socialLoginUsingGET").withRel("profile"));
+
+        return ResponseEntity.ok().body(entityModel);
     }
 
     @ApiOperation(value = "카카오 리다이렉션", notes = "프론트분들 신경안쓰셔도 됩니다.(카카오 로그인 성공시 리다이렉션)")
