@@ -2,7 +2,7 @@ package com.neoga.boltauction.memberstore.member.service;
 
 import com.neoga.boltauction.exception.custom.CExistEmailSignUpException;
 import com.neoga.boltauction.memberstore.member.domain.Members;
-import com.neoga.boltauction.memberstore.member.dto.SignupDto;
+import com.neoga.boltauction.memberstore.member.dto.SignupRequestDto;
 import com.neoga.boltauction.memberstore.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,17 +21,17 @@ public class MemberService {
         return memberRepository.findById(member_id).get();
     }
 
-    public Members saveMember(SignupDto signupDto) throws CExistEmailSignUpException {
+    public Members saveMember(SignupRequestDto signupRequest) throws CExistEmailSignUpException {
         //이메일 중복확인
-        Optional<Members> existsMember = memberRepository.findByUid(signupDto.getUid());
+        Optional<Members> existsMember = memberRepository.findByUid(signupRequest.getUid());
         if(existsMember.isPresent()){
             throw new CExistEmailSignUpException();
         }
 
         Members newMember = Members.builder()
-                .uid(signupDto.getUid())
-                .passwd(passwordEncoder.encode(signupDto.getPasswd()))
-                .name(signupDto.getName())
+                .uid(signupRequest.getUid())
+                .passwd(passwordEncoder.encode(signupRequest.getPasswd()))
+                .name(signupRequest.getName())
                 .role(Collections.singletonList("USER"))
                 .build();
 

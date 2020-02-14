@@ -1,10 +1,9 @@
-package com.neoga.boltauction.memberstore.member.dto;
+package com.neoga.boltauction.security.dto;
 
 import lombok.*;
 
 @Builder @NoArgsConstructor @AllArgsConstructor @Getter @Setter
-public class SignupDto {
+public class LoginRequestDto {
     private String uid;
     private String passwd;
-    private String name;
 }

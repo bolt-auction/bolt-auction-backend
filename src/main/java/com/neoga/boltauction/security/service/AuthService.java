@@ -5,9 +5,9 @@ import com.neoga.boltauction.exception.custom.CMemberNotFoundException;
 import com.neoga.boltauction.memberstore.member.domain.Members;
 import com.neoga.boltauction.memberstore.member.repository.MemberRepository;
 import com.neoga.boltauction.security.dto.KakaoProfile;
-import com.neoga.boltauction.security.dto.LoginDto;
+import com.neoga.boltauction.security.dto.LoginRequestDto;
 import com.neoga.boltauction.security.dto.LoginInfo;
-import com.neoga.boltauction.security.dto.LoginUserDto;
+import com.neoga.boltauction.security.dto.LoginResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,9 +27,9 @@ public class AuthService{
     private final KakaoService kakaoService;
 
     //로그인 정보를 받아 검증 후 jwt 토큰 생성 후 로그인 정보 반환
-    public LoginUserDto login(LoginDto loginDto) throws CEmailLoginFailedException{
-        String uid = loginDto.getUid();
-        String passwd = loginDto.getPasswd();
+    public LoginResponseDto login(LoginRequestDto loginRequest) throws CEmailLoginFailedException{
+        String uid = loginRequest.getUid();
+        String passwd = loginRequest.getPasswd();
         Members findMember = memberRepository.findByUid(uid)
                 .orElseThrow(CEmailLoginFailedException::new);
 
@@ -38,18 +38,18 @@ public class AuthService{
 
         String accessToken = jwtTokenService.createToken(findMember);
 
-        return loginUserDtoBuilder(accessToken, findMember);
+        return loginResponseBuilder(accessToken, findMember);
     }
 
     //소셜 accessToken이용하여 jwt 토큰 생성 후 로그인 정보 반환
-    public LoginUserDto socialLogin(String socialAccessToken, String provider) throws CMemberNotFoundException{
+    public LoginResponseDto socialLogin(String socialAccessToken, String provider) throws CMemberNotFoundException{
         KakaoProfile profile = kakaoService.getKakaoProfile(socialAccessToken);
         Members findMember = memberRepository.findByUidAndProvider(String.valueOf(profile.getId()), provider)
                 .orElseThrow(()->new CMemberNotFoundException("member not found : you need signup"));
 
         String accessToken = jwtTokenService.createToken(findMember);
 
-        return loginUserDtoBuilder(accessToken, findMember);
+        return loginResponseBuilder(accessToken, findMember);
     }
 
     // 저장된 인증정보에서 현재 로그인 사용자정보 조회
@@ -64,13 +64,13 @@ public class AuthService{
         return logininfo;
     }
 
-    public LoginUserDto loginUserDtoBuilder(String accessToken, Members findMember){
-        LoginUserDto loginUserDto = LoginUserDto.builder()
-                .member_id(findMember.getId())
+    public LoginResponseDto loginResponseBuilder(String accessToken, Members findMember){
+        LoginResponseDto loginResponse = LoginResponseDto.builder()
+                .memberId((findMember.getId()))
                 .uid(findMember.getUid())
                 .name(findMember.getName())
                 .tokenType("Bearer")
                 .accessToken(accessToken).build();
-        return loginUserDto;
+        return loginResponse;
     }
 }
