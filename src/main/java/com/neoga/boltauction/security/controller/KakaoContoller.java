@@ -8,16 +8,16 @@ import com.neoga.boltauction.security.service.KakaoService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RequiredArgsConstructor
 @RestController
@@ -42,7 +42,7 @@ public class KakaoContoller {
                 .append("&response_type=code")
                 .append("&redirect_uri=").append(baseUrl).append(kakaoRedirectURI);
 
-        EntityModel<String> entityModel = new EntityModel(kakaoLoginUrl);
+        Resource<String> entityModel = new Resource(kakaoLoginUrl);
         entityModel.add(linkTo(methodOn(KakaoContoller.class).socialLogin()).withSelfRel());
         entityModel.add(new Link("/swagger-ui.html#/kakao-contoller/socialLoginUsingGET").withRel("profile"));
 
@@ -54,7 +54,7 @@ public class KakaoContoller {
     public ResponseEntity redirectKakao(@RequestParam String code) {
         RetKakaoAuth token = kakaoService.getKakaoToken(code);
 
-        EntityModel<LoginResponseDto> entityModel = new EntityModel(token);
+        Resource<LoginResponseDto> entityModel = new Resource(token);
         entityModel.add(linkTo(methodOn(KakaoContoller.class).redirectKakao(code)).withSelfRel());
         entityModel.add(new Link("/swagger-ui.html#/auth%20API/signinByProviderUsingPOST").withRel("profile"));
         entityModel.add(linkTo(MemberController.class).slash("/social").withRel("socialSignup"));

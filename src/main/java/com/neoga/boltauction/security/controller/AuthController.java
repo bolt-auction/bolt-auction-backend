@@ -9,14 +9,14 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 
 @RequiredArgsConstructor
@@ -31,7 +31,7 @@ public class AuthController {
     public ResponseEntity login(@RequestBody LoginRequestDto loginRequest) {
         LoginResponseDto loginResponse = authService.login(loginRequest);
 
-        EntityModel<LoginResponseDto> entityModel = new EntityModel(loginResponse);
+        Resource<LoginResponseDto> entityModel = new Resource(loginResponse);
         entityModel.add(linkTo(methodOn(AuthController.class).login(loginRequest)).withSelfRel());
         entityModel.add(new Link("/swagger-ui.html#/auth%20API/loginUsingPOST").withRel("profile"));
 
@@ -44,17 +44,17 @@ public class AuthController {
             @ApiParam(value = "서비스 제공자 provider", required = true, defaultValue = "kakao") @PathVariable String provider,
             @ApiParam(value = "소셜 access_token", required = true) @RequestParam String accessToken) {
         LoginResponseDto loginResponse;
-        EntityModel entityModel = null;
+        Resource entityModel = null;
 
         try {
             loginResponse = authService.socialLogin(accessToken, provider);
         }catch(CMemberNotFoundException e){
-            entityModel = new EntityModel(e.getMessage());
+            entityModel = new Resource(e.getMessage());
             entityModel.add(linkTo(MemberController.class).slash("/social").withRel("socialSignup"));
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(entityModel);
         }
 
-        entityModel = new EntityModel(loginResponse);
+        entityModel = new Resource(loginResponse);
         entityModel.add(linkTo(methodOn(AuthController.class).loginByProvider(provider, accessToken)).withSelfRel());
         entityModel.add(new Link("/swagger-ui.html#/kakao-contoller/socialLoginUsingGET").withRel("profile"));
 

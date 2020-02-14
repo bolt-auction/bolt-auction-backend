@@ -1,7 +1,7 @@
 package com.neoga.boltauction.category.dto;
 
 import lombok.Data;
-import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Resource;
 
 import java.util.List;
 
@@ -9,5 +9,5 @@ import java.util.List;
 public class SupCategoryDto {
     private Long id;
     private String name;
-    private List<EntityModel> subCategoryList;
+    private List<Resource> subCategoryList;
 }

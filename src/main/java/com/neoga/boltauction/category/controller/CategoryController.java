@@ -8,9 +8,8 @@ import com.neoga.boltauction.category.dto.CategoryListDto;
 import com.neoga.boltauction.item.controller.ItemController;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.hateoas.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +19,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
 @RequiredArgsConstructor
@@ -52,9 +51,9 @@ public class CategoryController {
                     .map(category -> modelMapper.map(category, CategoryDto.class))
                     .collect(Collectors.toList());
             //make sub category entity model list
-            List<EntityModel> subCategoryEntityModelList = subCategoryDtoList
+            List<Resource> subCategoryEntityModelList = subCategoryDtoList
                     .stream().map(categoryDto -> {
-                        EntityModel entityModel = new EntityModel(categoryDto);
+                        Resource entityModel = new Resource(categoryDto);
                         entityModel.add(linkTo(methodOn(ItemController.class).getItems(categoryDto.getId(), null, null)).withRel("item-list"));
                         return entityModel;
                     }).collect(Collectors.toList());
@@ -62,8 +61,8 @@ public class CategoryController {
             supCategoryDto.setSubCategoryList(subCategoryEntityModelList);
         });
         // make sup category entity model list
-        List<EntityModel> supCategoryEntityModelList = supCategoryDtoList.stream().map(supCategoryDto -> {
-            EntityModel entityModel = new EntityModel(supCategoryDto);
+        List<Resource> supCategoryEntityModelList = supCategoryDtoList.stream().map(supCategoryDto -> {
+            Resource entityModel = new Resource(supCategoryDto);
             entityModel.add(linkTo(methodOn(ItemController.class).getItems(supCategoryDto.getId(), null, null)).withRel("item-list"));
             return entityModel;
         }).collect(Collectors.toList());
@@ -71,7 +70,7 @@ public class CategoryController {
         // set category list dto
         categoryListDto.setSupCategoryList(supCategoryEntityModelList);
         // make category list dto entity model
-        EntityModel entityModel = new EntityModel(categoryListDto);
+        Resource entityModel = new Resource(categoryListDto);
         entityModel.add(new Link("/").withRel("profile"));
 
         return ResponseEntity.ok(entityModel);
