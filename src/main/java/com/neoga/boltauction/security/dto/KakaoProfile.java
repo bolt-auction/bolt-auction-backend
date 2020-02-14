@@ -8,7 +8,6 @@ import lombok.Setter;
 public class KakaoProfile {
     private Long id;
     private Properties properties;
-
     @Getter
     @Setter
     public static class Properties {

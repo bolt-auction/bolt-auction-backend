@@ -38,7 +38,7 @@ public class AuthService{
 
         String accessToken = jwtTokenService.createToken(findMember);
 
-        return loginUserDtoBuilder(accessToken, findMember);
+        return loginResponseBuilder(accessToken, findMember);
     }
 
     //소셜 accessToken이용하여 jwt 토큰 생성 후 로그인 정보 반환
@@ -49,7 +49,7 @@ public class AuthService{
 
         String accessToken = jwtTokenService.createToken(findMember);
 
-        return loginUserDtoBuilder(accessToken, findMember);
+        return loginResponseBuilder(accessToken, findMember);
     }
 
     // 저장된 인증정보에서 현재 로그인 사용자정보 조회
@@ -64,13 +64,13 @@ public class AuthService{
         return logininfo;
     }
 
-    public LoginResponseDto loginUserDtoBuilder(String accessToken, Members findMember){
-        LoginResponseDto loginResponseDto = LoginResponseDto.builder()
-                .member_id(findMember.getId())
+    public LoginResponseDto loginResponseBuilder(String accessToken, Members findMember){
+        LoginResponseDto loginResponse = LoginResponseDto.builder()
+                .memberId((findMember.getId()))
                 .uid(findMember.getUid())
                 .name(findMember.getName())
                 .tokenType("Bearer")
                 .accessToken(accessToken).build();
-        return loginResponseDto;
+        return loginResponse;
     }
 }
