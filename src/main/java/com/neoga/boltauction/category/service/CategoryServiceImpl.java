@@ -1,10 +1,11 @@
 package com.neoga.boltauction.category.service;
 
 import com.neoga.boltauction.category.domain.Category;
-import com.neoga.boltauction.category.repository.CategoryRepository;
 import com.neoga.boltauction.exception.custom.CCategoryNotFoundException;
+import com.neoga.boltauction.category.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -23,5 +24,13 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findById(categoryId).orElseThrow(CCategoryNotFoundException::new);
     }
 
+    @Override
+    public List<Category> getSupCategoryList() {
+        return categoryRepository.findAllBySupCategoryIsNull();
+    }
 
+    @Override
+    public List<Category> getSubCategoryList(Long supCategoryId) {
+        return categoryRepository.findAllBySupCategoryId(supCategoryId);
+    }
 }
