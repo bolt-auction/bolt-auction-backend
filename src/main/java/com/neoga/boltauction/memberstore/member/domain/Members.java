@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.neoga.boltauction.memberstore.store.domain.Store;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -25,10 +27,10 @@ public class Members {
     @JsonIgnore
     private String passwd;
     private String name;
-    @Column(name="create_date", updatable = false)
+    @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime createDt;
-    @JsonIgnore
-    @Column(name="change_date")
+    @UpdateTimestamp
     private LocalDateTime changeDt;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")

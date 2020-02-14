@@ -3,6 +3,7 @@ package com.neoga.boltauction.chat.domain;
 import com.neoga.boltauction.memberstore.member.domain.Members;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,9 +16,8 @@ public class Message {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
     private String content;
-    @Column(name="create_date")
+    @CreationTimestamp
     private LocalDateTime createDt;
-    @Column(name="is_read")
     private boolean isRead;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_id")

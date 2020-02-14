@@ -4,6 +4,7 @@ import com.neoga.boltauction.category.domain.Category;
 import com.neoga.boltauction.memberstore.store.domain.Store;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -24,6 +25,7 @@ public class Item {
     private int currentPrice;
     private boolean isSell = false;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @CreationTimestamp
     private LocalDateTime createDt;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime endDt;
@@ -33,6 +35,6 @@ public class Item {
     @ManyToOne
     @JoinColumn(name = "store_id")
     private Store store;
-    @Column(columnDefinition = "json", name = "image_path")
+    @Column(columnDefinition = "json")
     private String imagePath;
 }
