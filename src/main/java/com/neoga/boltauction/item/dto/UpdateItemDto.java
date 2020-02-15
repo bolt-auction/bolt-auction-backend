@@ -22,5 +22,4 @@ public class UpdateItemDto {
     @Future
     private LocalDateTime endDt;
     private Long categoryId;
-    //private Long memberId;
 }
