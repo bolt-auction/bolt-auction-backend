@@ -16,6 +16,6 @@ public class Store {
     private String description;
     @OneToOne(mappedBy="store", fetch = FetchType.LAZY)
     private Members members;
-    @Column(columnDefinition = "json", name = "image_path")
+    @Column(columnDefinition = "json")
     private String imagePath;
 }
