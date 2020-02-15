@@ -34,7 +34,6 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
-    private final CategoryService categoryService;
     private final ImageService imageService;
 
     private static final int NO_CATEGORY = 0;
@@ -103,7 +102,7 @@ public class ItemServiceImpl implements ItemService {
         Item item = modelMapper.map(insertItemDto, Item.class);
         item.setName(insertItemDto.getItemName());
         item.setCreateDt(LocalDateTime.now());
-        Category findCategory = categoryService.getCategory(insertItemDto.getCategoryId());
+        Category findCategory = categoryRepository.findById(insertItemDto.getCategoryId()).orElseThrow(CCategoryNotFoundException::new);
         item.setCategory(findCategory);
 
         Item saveItem = itemRepository.save(item);
@@ -133,7 +132,7 @@ public class ItemServiceImpl implements ItemService {
 
         modelMapper.map(updateItemDto, findItem);
         findItem.setName(updateItemDto.getItemName());
-        Category findCategory = categoryService.getCategory(updateItemDto.getCategoryId());
+        Category findCategory = categoryRepository.findById(updateItemDto.getCategoryId()).orElseThrow(CCategoryNotFoundException::new);
         findItem.setCategory(findCategory);
 
         // update image
