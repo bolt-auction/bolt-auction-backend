@@ -18,12 +18,12 @@ public class BidController {
     }
 
     @PostMapping("/{item-id}")
-    public ResponseEntity 입찰_등록() {
+    public ResponseEntity registerBidItem() {
         return null;
     }
 
     @DeleteMapping("/{item-id")
-    public ResponseEntity 입찰_삭제() {
+    public ResponseEntity deleteBidItem() {
         return null;
     }
 }
