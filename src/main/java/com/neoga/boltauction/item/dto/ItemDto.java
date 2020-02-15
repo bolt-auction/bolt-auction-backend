@@ -28,5 +28,5 @@ public class ItemDto {
     private LocalDateTime endDt;
     private Long categoryId;
     private JSONObject imagePath;
-    //private Long memberId;
+    private Long storeId;
 }
