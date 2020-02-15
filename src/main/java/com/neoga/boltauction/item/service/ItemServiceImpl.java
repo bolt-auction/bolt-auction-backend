@@ -5,6 +5,7 @@ import com.neoga.boltauction.category.repository.CategoryRepository;
 import com.neoga.boltauction.category.service.CategoryService;
 import com.neoga.boltauction.exception.custom.CCategoryNotFoundException;
 import com.neoga.boltauction.exception.custom.CItemNotFoundException;
+import com.neoga.boltauction.exception.custom.CMemberNotFoundException;
 import com.neoga.boltauction.exception.custom.CNotImageException;
 import com.neoga.boltauction.image.service.ImageService;
 import com.neoga.boltauction.item.domain.Item;
@@ -12,6 +13,8 @@ import com.neoga.boltauction.item.dto.InsertItemDto;
 import com.neoga.boltauction.item.dto.ItemDto;
 import com.neoga.boltauction.item.dto.UpdateItemDto;
 import com.neoga.boltauction.item.repository.ItemRepository;
+import com.neoga.boltauction.memberstore.member.domain.Members;
+import com.neoga.boltauction.memberstore.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
@@ -35,6 +38,7 @@ public class ItemServiceImpl implements ItemService {
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
     private final ImageService imageService;
+    private final MemberRepository memberRepository;
 
     private static final int NO_CATEGORY = 0;
     private static final int FIRST_CATEGORY = 1;
@@ -43,17 +47,14 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto getItem(Long id) {
 
-
-        Item findItem;
-
-        // get item entity
-        findItem = itemRepository.findById(id).orElseThrow(CItemNotFoundException::new);
+        Item findItem = itemRepository.findById(id).orElseThrow(CItemNotFoundException::new);
 
         // map findItem -> itemDto
         ItemDto itemDto = modelMapper.map(findItem, ItemDto.class);
         itemDto.setItemId(findItem.getId());
         itemDto.setItemName(findItem.getName());
         itemDto.setCategoryId(findItem.getCategory().getId());
+        itemDto.setStoreId(findItem.getStore().getId());
 
         return itemDto;
     }
@@ -89,6 +90,7 @@ public class ItemServiceImpl implements ItemService {
             itemDto.setItemName(item.getName());
             itemDto.setCategoryId(item.getCategory().getId());
             itemDto.setImagePath(null);
+            itemDto.setStoreId(item.getStore().getId());
             return itemDto;
         });
 
@@ -96,7 +98,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto saveItem(InsertItemDto insertItemDto, MultipartFile... images) throws IOException {
+    public ItemDto saveItem(InsertItemDto insertItemDto, Long memberId, MultipartFile... images) throws IOException {
+
+        Members members = memberRepository.findById(memberId).orElseThrow(CMemberNotFoundException::new);
+        Long storeId = members.getStore().getId();
+
         // map insertItemDto -> item
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         Item item = modelMapper.map(insertItemDto, Item.class);
