@@ -20,11 +20,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category getCategory(Long categoryId) {
-        return categoryRepository.findById(categoryId).orElseThrow(CCategoryNotFoundException::new);
-    }
-
-    @Override
     public List<Category> getSupCategoryList() {
         return categoryRepository.findAllBySupCategoryIsNull();
     }
