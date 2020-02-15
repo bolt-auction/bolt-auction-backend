@@ -49,25 +49,7 @@ public class ItemController {
     public ResponseEntity getItems(@PathVariable(name = "category-id") Long categoryId, Pageable pageable,
                                    PagedResourcesAssembler<ItemDto> assembler) {
 
-        Page<Item> itemPage;
-        JSONParser parser = new JSONParser();
-
-        // get item entity
-        try {
-            itemPage = itemService.getItems(categoryId, pageable);
-        } catch (CItemNotFoundException e) {
-            return ResponseEntity.noContent().build();
-        }
-
-        // map item -> itemDto
-        Page<ItemDto> itemDtoPage = itemPage.map(item -> {
-            ItemDto itemDto = modelMapper.map(item, ItemDto.class);
-            itemDto.setItemId(item.getId());
-            itemDto.setItemName(item.getName());
-            itemDto.setCategoryId(item.getCategory().getId());
-            itemDto.setImagePath(null);
-            return itemDto;
-        });
+        Page<ItemDto> itemDtoPage = itemService.getItems(categoryId, pageable);
 
         PagedResources<Resource<ItemDto>> entityModels = assembler.toResource(itemDtoPage, i -> new Resource<>(i));
         entityModels.forEach(entityModel -> entityModel.add(linkTo(methodOn(ItemController.class).getItem(entityModel.getContent().getItemId())).withRel("item-detail")));
@@ -80,30 +62,8 @@ public class ItemController {
     public ResponseEntity insertItem(@Valid InsertItemDto insertItemDto,
                                              MultipartFile... images) throws IOException {
 
-        // map insertItemDto -> item
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        Item item = modelMapper.map(insertItemDto, Item.class);
-        item.setName(insertItemDto.getItemName());
-        item.setCreateDt(LocalDateTime.now());
-        Category findCategory = categoryService.getCategory(insertItemDto.getCategoryId());
-        item.setCategory(findCategory);
-
         // save item
-        Item saveItem = itemService.saveItem(item);
-        // save image
-        String pathList = imageService.saveItemImages(saveItem.getId(), images);
-
-        // map saveItem -> itemDto
-        ItemDto saveItemDto = modelMapper.map(saveItem, ItemDto.class);
-        saveItemDto.setItemId(saveItem.getId());
-        saveItemDto.setItemName(saveItem.getName());
-        saveItemDto.setCategoryId(saveItem.getCategory().getId());
-        try {
-            JSONParser parser = new JSONParser();
-            saveItemDto.setImagePath((JSONObject) parser.parse(pathList));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        ItemDto saveItemDto = itemService.saveItem(insertItemDto, images);
 
         ControllerLinkBuilder selfLinkBuilder =linkTo(ItemController.class).slash(saveItemDto.getItemId());
         URI createdUri = selfLinkBuilder.toUri();
@@ -120,23 +80,11 @@ public class ItemController {
     @GetMapping("/{item-id}")
     public ResponseEntity getItem(@PathVariable(name = "item-id") Long id) {
 
-        Item findItem;
 
-        // get item entity
-        try {
-            findItem = itemService.getItem(id);
-        } catch (CItemNotFoundException e) {
-            return ResponseEntity.noContent().build();
-        }
+        ItemDto findItem = itemService.getItem(id);
 
-        // map findItem -> itemDto
-        ItemDto itemDto = modelMapper.map(findItem, ItemDto.class);
-        itemDto.setItemId(findItem.getId());
-        itemDto.setItemName(findItem.getName());
-        itemDto.setCategoryId(findItem.getCategory().getId());
-
-        Resource entityModel = new Resource(itemDto);
-        entityModel.add(linkTo(ItemController.class).slash(findItem.getId()).withSelfRel());
+        Resource entityModel = new Resource(findItem);
+        entityModel.add(linkTo(ItemController.class).slash(findItem.getItemId()).withSelfRel());
         entityModel.add(new Link("/").withRel("profile"));
 
         return ResponseEntity.ok(entityModel);
@@ -159,25 +107,11 @@ public class ItemController {
     public ResponseEntity updateItem(@PathVariable(name = "item-id") Long id,
                                      @Valid UpdateItemDto updateItemDto,
                                      MultipartFile... images) throws IOException {
-        Item findItem;
 
-        try {
-            findItem = itemService.getItem(id);
-        } catch (CItemNotFoundException e) {
-            return ResponseEntity.noContent().build();
-        }
+        ItemDto itemDto = itemService.updateItem(id, updateItemDto, images);
 
-        Item updateItem = itemService.updateItem(findItem, updateItemDto);
-        try {
-            imageService.updateItemImages(id, images);
-        } catch (CNotImageException e) {
-            
-        }
-
-
-        ItemDto itemDto = modelMapper.map(updateItem, ItemDto.class);
         Resource entityModel = new Resource(itemDto);
-        entityModel.add(linkTo(ItemController.class).slash(updateItem.getId()).withSelfRel());
+        entityModel.add(linkTo(ItemController.class).slash(itemDto.getItemId()).withSelfRel());
         entityModel.add(new Link("/").withRel("profile"));
 
         return ResponseEntity.ok(entityModel);
