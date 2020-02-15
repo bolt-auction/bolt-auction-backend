@@ -1,7 +1,9 @@
 package com.neoga.boltauction.image.service;
 
+import com.neoga.boltauction.exception.custom.CItemNotFoundException;
 import com.neoga.boltauction.exception.custom.CNotImageException;
 import com.neoga.boltauction.item.domain.Item;
+import com.neoga.boltauction.item.repository.ItemRepository;
 import com.neoga.boltauction.item.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
@@ -20,13 +22,13 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
 
-    private final ItemService itemService;
+    private final ItemRepository itemRepository;
 
     @Override
     public String saveItemImages(Long itemId, MultipartFile... images) throws IOException {
 
         // get item entity
-        Item findItem = itemService.getItem(itemId);
+        Item findItem = itemRepository.findById(itemId).orElseThrow(CItemNotFoundException::new);
 
         // field for json
         JSONObject pathJson = new JSONObject();

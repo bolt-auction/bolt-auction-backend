@@ -1,19 +1,24 @@
 package com.neoga.boltauction.item.service;
 
 import com.neoga.boltauction.item.domain.Item;
+import com.neoga.boltauction.item.dto.InsertItemDto;
+import com.neoga.boltauction.item.dto.ItemDto;
 import com.neoga.boltauction.item.dto.UpdateItemDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 public interface ItemService {
 
-    Item getItem(Long id);
+    ItemDto getItem(Long id);
 
     Item deleteItem(Long id);
 
-    Page<Item> getItems(Long categoryId, Pageable pageable);
+    Page<ItemDto> getItems(Long categoryId, Pageable pageable);
 
-    Item saveItem(Item item);
+    ItemDto saveItem(InsertItemDto itemDto, MultipartFile... images) throws IOException;
 
-    Item updateItem(Item item, UpdateItemDto updateItemDto);
+    ItemDto updateItem(Long id, UpdateItemDto updateItemDto, MultipartFile[] images) throws IOException;
 }
