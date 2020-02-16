@@ -5,8 +5,11 @@ import com.neoga.boltauction.bid.service.BidService;
 import com.neoga.boltauction.security.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,7 +21,12 @@ public class BidController {
 
     @GetMapping("/{item-id}")
     public ResponseEntity getBidList(@PathVariable(name = "item-id") Long itemId) {
-       return bidService.getBidList(itemId);
+        List<BidDto> bidList = bidService.getBidList(itemId);
+        Resources<BidDto> bidDtoResources = new Resources<>(bidList);
+
+
+
+        return ResponseEntity.ok(bidDtoResources);
     }
 
     @PostMapping("/{item-id}")
