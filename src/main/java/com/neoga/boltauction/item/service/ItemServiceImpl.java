@@ -4,12 +4,16 @@ import com.neoga.boltauction.category.domain.Category;
 import com.neoga.boltauction.category.repository.CategoryRepository;
 import com.neoga.boltauction.exception.custom.CCategoryNotFoundException;
 import com.neoga.boltauction.exception.custom.CItemNotFoundException;
+import com.neoga.boltauction.exception.custom.CMemberNotFoundException;
 import com.neoga.boltauction.image.service.ImageService;
 import com.neoga.boltauction.item.domain.Item;
 import com.neoga.boltauction.item.dto.InsertItemDto;
 import com.neoga.boltauction.item.dto.ItemDto;
 import com.neoga.boltauction.item.dto.UpdateItemDto;
 import com.neoga.boltauction.item.repository.ItemRepository;
+import com.neoga.boltauction.memberstore.member.repository.MemberRepository;
+import com.neoga.boltauction.memberstore.store.domain.Store;
+import com.neoga.boltauction.memberstore.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
@@ -32,6 +36,7 @@ public class ItemServiceImpl implements ItemService {
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
     private final ImageService imageService;
+    private final MemberRepository memberRepository;
 
     private static final int NO_CATEGORY = 0;
     private static final int FIRST_CATEGORY = 1;
@@ -78,32 +83,28 @@ public class ItemServiceImpl implements ItemService {
         }
 
         // map item -> itemDto
-        return itemPage.map(item -> {
-            ItemDto itemDto = modelMapper.map(item, ItemDto.class);
-            itemDto.setItemName(item.getName());
-            try {
-                itemDto.setImagePath((JSONObject) parser.parse(item.getImagePath()));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            return itemDto;
-        });
+        return itemPage.map(item -> mapItemItemDto(item));
     }
 
     @Override
-    public ItemDto saveItem(InsertItemDto insertItemDto, MultipartFile... images) throws IOException {
+    public ItemDto saveItem(InsertItemDto insertItemDto, Long memberId, MultipartFile... images) throws IOException {
+
+        // find store
+        Store findStore = memberRepository.findById(memberId).orElseThrow(CMemberNotFoundException::new).getStore();
+
         // map insertItemDto -> item
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         Item item = modelMapper.map(insertItemDto, Item.class);
         item.setName(insertItemDto.getItemName());
         item.setCreateDt(LocalDateTime.now());
+        item.setStore(findStore);
         Category findCategory = categoryRepository.findById(insertItemDto.getCategoryId()).orElseThrow(CCategoryNotFoundException::new);
         item.setCategory(findCategory);
 
-        String pathList = imageService.saveItemImages(item.getId(), images);
-        item.setImagePath(pathList);
-
         Item saveItem = itemRepository.save(item);
+
+        String pathList = imageService.saveItemImages(item.getId(), images);
+        //saveItem.setImagePath(pathList);
 
         return mapItemItemDto(saveItem);
     }
@@ -134,6 +135,7 @@ public class ItemServiceImpl implements ItemService {
     private ItemDto mapItemItemDto(Item item) {
         ItemDto itemDto = modelMapper.map(item, ItemDto.class);
         itemDto.setItemName(item.getName());
+        itemDto.setStoreId(item.getStore().getId());
         try {
             itemDto.setImagePath((JSONObject) parser.parse(item.getImagePath()));
         } catch (ParseException e) {

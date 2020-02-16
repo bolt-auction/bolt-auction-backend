@@ -51,11 +51,11 @@ public class ItemController {
     @PostMapping
     public ResponseEntity insertItem(@Valid InsertItemDto insertItemDto,
                                              MultipartFile... images) throws IOException {
-        // 권한 체크 사용자 store 체크
-
+        // get memberId
+        Long memberId = authService.getLoginInfo().getMemberId();
 
         // save item
-        ItemDto saveItemDto = itemService.saveItem(insertItemDto, images);
+        ItemDto saveItemDto = itemService.saveItem(insertItemDto, memberId, images);
 
         ControllerLinkBuilder selfLinkBuilder =linkTo(ItemController.class).slash(saveItemDto.getId());
         URI createdUri = selfLinkBuilder.toUri();

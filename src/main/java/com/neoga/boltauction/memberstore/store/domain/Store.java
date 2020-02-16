@@ -1,5 +1,6 @@
 package com.neoga.boltauction.memberstore.store.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.neoga.boltauction.memberstore.member.domain.Members;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +16,7 @@ public class Store {
     private Long id;
     private String description;
     @OneToOne(mappedBy="store", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Members members;
     @Column(columnDefinition = "json")
     private String imagePath;

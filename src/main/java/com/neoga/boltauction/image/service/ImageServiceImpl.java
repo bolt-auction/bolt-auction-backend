@@ -4,7 +4,6 @@ import com.neoga.boltauction.exception.custom.CItemNotFoundException;
 import com.neoga.boltauction.exception.custom.CNotImageException;
 import com.neoga.boltauction.item.domain.Item;
 import com.neoga.boltauction.item.repository.ItemRepository;
-import com.neoga.boltauction.item.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -60,6 +59,8 @@ public class ImageServiceImpl implements ImageService {
 
         pathJson.put("path", pathList);
         findItem.setImagePath(pathJson.toJSONString());
+
+        itemRepository.save(findItem);
 
         return pathJson.toJSONString();
     }

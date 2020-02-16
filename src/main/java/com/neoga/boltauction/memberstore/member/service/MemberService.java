@@ -35,15 +35,23 @@ public class MemberService {
             throw new CExistEmailSignUpException();
         }
 
+        // store 생성
+        Store store = new Store();
+        Store saveStore = storeRepository.save(store);
+
         Members newMember = Members.builder()
                 .uid(signupRequest.getUid())
                 .provider("local")
                 .passwd(passwordEncoder.encode(signupRequest.getPasswd()))
                 .name(signupRequest.getName())
                 .role(Collections.singletonList("USER"))
+                .store(saveStore)
                 .build();
 
         memberRepository.save(newMember);
+
+        store.setMembers(newMember);
+
         return newMember;
     }
 
@@ -53,11 +61,16 @@ public class MemberService {
         if(member.isPresent())
             throw new CMemberExistException();
 
+        // store 생성
+        Store store = new Store();
+        Store saveStore = storeRepository.save(store);
+
         Members newMember = memberRepository.save(Members.builder()
                 .uid(String.valueOf(profile.getId()))
                 .provider(provider)
                 .name(name)
                 .role(Collections.singletonList("USER"))
+                .store(saveStore)
                 .build());
 
         return newMember;

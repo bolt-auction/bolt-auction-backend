@@ -18,7 +18,7 @@ public interface ItemService {
 
     Page<ItemDto> getItems(Long categoryId, Pageable pageable);
 
-    ItemDto saveItem(InsertItemDto itemDto, MultipartFile... images) throws IOException;
+    ItemDto saveItem(InsertItemDto itemDto, Long memberId, MultipartFile... images) throws IOException;
 
     ItemDto updateItem(Long id, UpdateItemDto updateItemDto, MultipartFile[] images) throws IOException;
 }
