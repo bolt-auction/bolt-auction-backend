@@ -35,22 +35,20 @@ public class MemberService {
             throw new CExistEmailSignUpException();
         }
 
-        // store 생성
-        Store store = new Store();
-        Store saveStore = storeRepository.save(store);
-
         Members newMember = Members.builder()
                 .uid(signupRequest.getUid())
                 .provider("local")
                 .passwd(passwordEncoder.encode(signupRequest.getPasswd()))
                 .name(signupRequest.getName())
                 .role(Collections.singletonList("USER"))
-                .store(saveStore)
                 .build();
 
         memberRepository.save(newMember);
 
-        store.setMembers(newMember);
+        // store 생성
+        Store store = new Store();
+        store.changeMembers(newMember);
+        storeRepository.save(store);
 
         return newMember;
     }

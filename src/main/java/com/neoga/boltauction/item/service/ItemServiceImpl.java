@@ -103,8 +103,7 @@ public class ItemServiceImpl implements ItemService {
 
         Item saveItem = itemRepository.save(item);
 
-        String pathList = imageService.saveItemImages(item.getId(), images);
-        //saveItem.setImagePath(pathList);
+        imageService.saveItemImages(item.getId(), images);
 
         return mapItemItemDto(saveItem);
     }
