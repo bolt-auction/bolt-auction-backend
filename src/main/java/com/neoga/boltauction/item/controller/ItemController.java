@@ -7,6 +7,7 @@ import com.neoga.boltauction.item.dto.UpdateItemDto;
 import com.neoga.boltauction.item.service.ItemService;
 import com.neoga.boltauction.security.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -15,6 +16,7 @@ import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,7 +38,6 @@ public class ItemController {
     @GetMapping("category/{category-id}")
     public ResponseEntity getItems(@PathVariable(name = "category-id") Long categoryId, Pageable pageable,
                                    PagedResourcesAssembler<ItemDto> assembler) {
-
         // 권한체크 추가
 
         Page<ItemDto> itemDtoPage = itemService.getItems(categoryId, pageable);
@@ -110,4 +111,5 @@ public class ItemController {
 
         return ResponseEntity.ok(entityModel);
     }
+
 }

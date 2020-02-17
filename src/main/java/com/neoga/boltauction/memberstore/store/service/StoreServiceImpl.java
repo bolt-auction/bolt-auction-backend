@@ -23,12 +23,16 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public Store updateStore(Long storeId, String description, MultipartFile image) throws IOException {
-        Store store = storeRepository.findById(storeId).orElseThrow(CStoreNotFoundException::new);
+    public Store updateStore(Store store, String description, MultipartFile image) throws IOException {
 
         store.setDescription(description);
-        String imagePath = imageService.saveStoreImage(storeId, image);
-        store.setImagePath(imagePath);
+        imageService.saveStoreImage(store, image);
+
         return storeRepository.save(store);
+    }
+
+    @Override
+    public Store getStore(Long storeId) {
+        return storeRepository.findById(storeId).orElseThrow(CStoreNotFoundException::new);
     }
 }

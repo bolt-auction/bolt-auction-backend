@@ -103,7 +103,7 @@ public class ItemServiceImpl implements ItemService {
 
         Item saveItem = itemRepository.save(item);
 
-        imageService.saveItemImages(item.getId(), images);
+        imageService.saveItemImages(saveItem, images);
 
         return mapItemItemDto(saveItem);
     }
@@ -122,8 +122,7 @@ public class ItemServiceImpl implements ItemService {
         findItem.setCategory(findCategory);
 
         // update image
-        String path = imageService.updateItemImages(id, images);
-        findItem.setImagePath(path);
+        imageService.updateItemImages(findItem, images);
 
         // save item
         itemRepository.save(findItem);

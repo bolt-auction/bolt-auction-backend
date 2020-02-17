@@ -47,11 +47,6 @@ public class BidServiceImpl implements BidService {
         Members findMember = memberRepository.findById(memberId).orElseThrow(CMemberNotFoundException::new);
         bid.setMembers(findMember);
 
-        if (item.getCurrentPrice() < price) {
-            item.setCurrentPrice(price);
-            bid.setPrice(price);
-        }
-
         bidRepository.save(bid);
 
         BidDto bidDto = modelMapper.map(bid, BidDto.class);
