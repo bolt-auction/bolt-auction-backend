@@ -7,11 +7,11 @@ import com.neoga.boltauction.exception.custom.CItemNotFoundException;
 import com.neoga.boltauction.exception.custom.CMemberNotFoundException;
 import com.neoga.boltauction.item.domain.Item;
 import com.neoga.boltauction.item.repository.ItemRepository;
+import com.neoga.boltauction.memberstore.member.domain.Members;
 import com.neoga.boltauction.memberstore.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -28,20 +28,13 @@ public class BidServiceImpl implements BidService {
     private final MemberRepository memberRepository;
 
     @Override
-    public ResponseEntity getBidList(Long itemId) {
-        Optional<Item> optionalItem = itemRepository.findById(itemId);
-        if (!optionalItem.isPresent()) {
-            return ResponseEntity.noContent().build();
-        }
-
-        Item findItem = optionalItem.get();
+    public List<BidDto> getBidList(Long itemId) {
+        Item findItem = itemRepository.findById(itemId).orElseThrow(CItemNotFoundException::new);
 
         List<Bid> findBidList = bidRepository.findAllByItemOrderByPriceAsc(findItem);
         List<BidDto> bidDtoList = findBidList.stream().map(bid -> modelMapper.map(bid, BidDto.class)).collect(Collectors.toList());
 
-        Resources<BidDto> bidDtoCollectionModel = new Resources<>(bidDtoList);
-
-        return ResponseEntity.ok(bidDtoCollectionModel);
+        return bidDtoList;
     }
 
     @Override
@@ -51,12 +44,8 @@ public class BidServiceImpl implements BidService {
         Item item = itemRepository.findById(itemId).orElseThrow(CItemNotFoundException::new);
 
         bid.setItem(item);
-        bid.setMembers(memberRepository.findById(memberId).orElseThrow(CMemberNotFoundException::new));
-
-        if (item.getCurrentPrice() < price) {
-            item.setCurrentPrice(price);
-            bid.setPrice(price);
-        }
+        Members findMember = memberRepository.findById(memberId).orElseThrow(CMemberNotFoundException::new);
+        bid.setMembers(findMember);
 
         bidRepository.save(bid);
 

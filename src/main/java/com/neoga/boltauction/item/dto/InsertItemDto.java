@@ -30,5 +30,4 @@ public class InsertItemDto {
     private LocalDateTime endDt;
     @NotNull(message = "category id is not null")
     private Long categoryId;
-    //private Long memberId;
 }

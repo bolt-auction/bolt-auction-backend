@@ -44,6 +44,12 @@ public class MemberService {
                 .build();
 
         memberRepository.save(newMember);
+
+        // store 생성
+        Store store = new Store();
+        store.changeMembers(newMember);
+        storeRepository.save(store);
+
         return newMember;
     }
 
@@ -53,11 +59,16 @@ public class MemberService {
         if(member.isPresent())
             throw new CMemberExistException();
 
+        // store 생성
+        Store store = new Store();
+        Store saveStore = storeRepository.save(store);
+
         Members newMember = memberRepository.save(Members.builder()
                 .uid(String.valueOf(profile.getId()))
                 .provider(provider)
                 .name(name)
                 .role(Collections.singletonList("USER"))
+                .store(saveStore)
                 .build());
 
         return newMember;

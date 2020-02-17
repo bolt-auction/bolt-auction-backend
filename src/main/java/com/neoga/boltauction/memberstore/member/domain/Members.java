@@ -32,7 +32,7 @@ public class Members {
     private LocalDateTime createDt;
     @UpdateTimestamp
     private LocalDateTime changeDt;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "store_id")
     private Store store;
     private String provider;

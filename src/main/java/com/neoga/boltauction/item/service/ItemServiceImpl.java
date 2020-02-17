@@ -2,18 +2,18 @@ package com.neoga.boltauction.item.service;
 
 import com.neoga.boltauction.category.domain.Category;
 import com.neoga.boltauction.category.repository.CategoryRepository;
-import com.neoga.boltauction.category.service.CategoryService;
 import com.neoga.boltauction.exception.custom.CCategoryNotFoundException;
 import com.neoga.boltauction.exception.custom.CItemNotFoundException;
-import com.neoga.boltauction.exception.custom.CNotImageException;
+import com.neoga.boltauction.exception.custom.CMemberNotFoundException;
 import com.neoga.boltauction.image.service.ImageService;
 import com.neoga.boltauction.item.domain.Item;
 import com.neoga.boltauction.item.dto.InsertItemDto;
 import com.neoga.boltauction.item.dto.ItemDto;
 import com.neoga.boltauction.item.dto.UpdateItemDto;
 import com.neoga.boltauction.item.repository.ItemRepository;
-import com.neoga.boltauction.memberstore.member.domain.Members;
 import com.neoga.boltauction.memberstore.member.repository.MemberRepository;
+import com.neoga.boltauction.memberstore.store.domain.Store;
+import com.neoga.boltauction.memberstore.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
@@ -22,7 +22,6 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,14 +36,16 @@ public class ItemServiceImpl implements ItemService {
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
     private final ImageService imageService;
+    private final MemberRepository memberRepository;
 
     private static final int NO_CATEGORY = 0;
     private static final int FIRST_CATEGORY = 1;
     private static final int LAST_CATEGORY = 53;
 
+    private static final JSONParser parser = new JSONParser();
+
     @Override
     public ItemDto getItem(Long id) {
-
 
         Item findItem;
 
@@ -53,9 +54,6 @@ public class ItemServiceImpl implements ItemService {
 
         // map findItem -> itemDto
         ItemDto itemDto = modelMapper.map(findItem, ItemDto.class);
-        itemDto.setItemId(findItem.getId());
-        itemDto.setItemName(findItem.getName());
-        itemDto.setCategoryId(findItem.getCategory().getId());
 
         return itemDto;
     }
@@ -72,7 +70,6 @@ public class ItemServiceImpl implements ItemService {
     public Page<ItemDto> getItems(Long categoryId, Pageable pageable) {
 
         Page<Item> itemPage;
-        JSONParser parser = new JSONParser();
 
         // get item entity
         if (categoryId == NO_CATEGORY) {
@@ -85,43 +82,28 @@ public class ItemServiceImpl implements ItemService {
         }
 
         // map item -> itemDto
-        Page<ItemDto> itemDtoPage = itemPage.map(item -> {
-            ItemDto itemDto = modelMapper.map(item, ItemDto.class);
-            itemDto.setItemId(item.getId());
-            itemDto.setItemName(item.getName());
-            itemDto.setCategoryId(item.getCategory().getId());
-            itemDto.setImagePath(null);
-            return itemDto;
-        });
-
-        return itemDtoPage;
+        return itemPage.map(item -> mapItemItemDto(item));
     }
 
     @Override
-    public ItemDto saveItem(InsertItemDto insertItemDto, MultipartFile... images) throws IOException {
+    public ItemDto saveItem(InsertItemDto insertItemDto, Long memberId, MultipartFile... images) throws IOException {
+
+        // find store
+        Store findStore = memberRepository.findById(memberId).orElseThrow(CMemberNotFoundException::new).getStore();
+
         // map insertItemDto -> item
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         Item item = modelMapper.map(insertItemDto, Item.class);
-        item.setName(insertItemDto.getItemName());
         item.setCreateDt(LocalDateTime.now());
+        item.setStore(findStore);
         Category findCategory = categoryRepository.findById(insertItemDto.getCategoryId()).orElseThrow(CCategoryNotFoundException::new);
         item.setCategory(findCategory);
 
         Item saveItem = itemRepository.save(item);
-        String pathList = imageService.saveItemImages(saveItem.getId(), images);
 
-        ItemDto saveItemDto = modelMapper.map(saveItem, ItemDto.class);
-        saveItemDto.setItemId(saveItem.getId());
-        saveItemDto.setItemName(saveItem.getName());
-        saveItemDto.setCategoryId(saveItem.getCategory().getId());
-        try {
-            JSONParser parser = new JSONParser();
-            saveItemDto.setImagePath((JSONObject) parser.parse(pathList));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        imageService.saveItemImages(saveItem, images);
 
-        return saveItemDto;
+        return mapItemItemDto(saveItem);
     }
 
     @Override
@@ -133,24 +115,23 @@ public class ItemServiceImpl implements ItemService {
         Item findItem = itemRepository.findById(id).orElseThrow(CItemNotFoundException::new);
 
         modelMapper.map(updateItemDto, findItem);
-        findItem.setName(updateItemDto.getItemName());
         Category findCategory = categoryRepository.findById(updateItemDto.getCategoryId()).orElseThrow(CCategoryNotFoundException::new);
         findItem.setCategory(findCategory);
 
         // update image
-        String path = imageService.updateItemImages(id, images);
-        findItem.setImagePath(path);
-
+        imageService.updateItemImages(findItem, images);
 
         // save item
         itemRepository.save(findItem);
 
-        ItemDto itemDto = modelMapper.map(findItem, ItemDto.class);
-        itemDto.setItemId(findItem.getId());
-        itemDto.setItemName(findItem.getName());
+        return mapItemItemDto(findItem);
+    }
+
+    private ItemDto mapItemItemDto(Item item) {
+        ItemDto itemDto = modelMapper.map(item, ItemDto.class);
+        itemDto.setStoreId(item.getStore().getId());
         try {
-            JSONParser parser = new JSONParser();
-            itemDto.setImagePath((JSONObject) parser.parse(path));
+            itemDto.setImagePath((JSONObject) parser.parse(item.getImagePath()));
         } catch (ParseException e) {
             e.printStackTrace();
         }
