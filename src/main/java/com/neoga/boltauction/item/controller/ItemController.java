@@ -6,6 +6,7 @@ import com.neoga.boltauction.item.dto.ItemDto;
 import com.neoga.boltauction.item.dto.UpdateItemDto;
 import com.neoga.boltauction.item.service.ItemService;
 import com.neoga.boltauction.security.service.AuthService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.data.domain.Page;
@@ -35,6 +36,7 @@ public class ItemController {
     private final ItemService itemService;
     private final AuthService authService;
 
+    @ApiOperation(value = "카테고리별 상품조", notes = "sort=creatDt,ASC 등으로 정렬방식 선택 가능")
     @GetMapping("category/{category-id}")
     public ResponseEntity getItems(@PathVariable(name = "category-id") Long categoryId, Pageable pageable,
                                    PagedResourcesAssembler<ItemDto> assembler) {
@@ -49,6 +51,7 @@ public class ItemController {
         return ResponseEntity.ok(entityModels);
     }
 
+    @ApiOperation(value = "상품등록", notes = "swagger 에서 이미지 등록 불가능")
     @PostMapping
     public ResponseEntity insertItem(@Valid InsertItemDto insertItemDto,
                                              MultipartFile... images) throws IOException {
@@ -70,6 +73,7 @@ public class ItemController {
         return ResponseEntity.created(createdUri).body(entityModel);
     }
 
+    @ApiOperation(value = "상품조회", notes = "특정상품 조회")
     @GetMapping("/{item-id}")
     public ResponseEntity getItem(@PathVariable(name = "item-id") Long id) {
         // 권한 체크
@@ -83,6 +87,7 @@ public class ItemController {
         return ResponseEntity.ok(entityModel);
     }
 
+    @ApiOperation(value = "상품삭제", notes = "반환 메세지 미정")
     @DeleteMapping("/{item-id}")
     public ResponseEntity deleteItem(@PathVariable(name = "item-id") Long id) {
         //권한 체크 해당 사용자인지 체크
@@ -97,6 +102,7 @@ public class ItemController {
         return ResponseEntity.ok().build();
     }
 
+    @ApiOperation(value = "상품수정", notes = "이미지 업데이트 개발중")
     @PutMapping("/{item-id}")
     public ResponseEntity updateItem(@PathVariable(name = "item-id") Long id,
                                      @Valid UpdateItemDto updateItemDto,
