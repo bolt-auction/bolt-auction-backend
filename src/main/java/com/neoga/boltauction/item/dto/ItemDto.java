@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class ItemDto {
 
     private Long id;
-    private String itemName;
+    private String name;
     private String description;
     @Positive
     private int quickPrice;

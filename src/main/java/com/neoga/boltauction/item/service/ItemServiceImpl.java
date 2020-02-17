@@ -54,7 +54,6 @@ public class ItemServiceImpl implements ItemService {
 
         // map findItem -> itemDto
         ItemDto itemDto = modelMapper.map(findItem, ItemDto.class);
-        itemDto.setItemName(findItem.getName());
 
         return itemDto;
     }
@@ -95,7 +94,6 @@ public class ItemServiceImpl implements ItemService {
         // map insertItemDto -> item
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         Item item = modelMapper.map(insertItemDto, Item.class);
-        item.setName(insertItemDto.getItemName());
         item.setCreateDt(LocalDateTime.now());
         item.setStore(findStore);
         Category findCategory = categoryRepository.findById(insertItemDto.getCategoryId()).orElseThrow(CCategoryNotFoundException::new);
@@ -117,7 +115,6 @@ public class ItemServiceImpl implements ItemService {
         Item findItem = itemRepository.findById(id).orElseThrow(CItemNotFoundException::new);
 
         modelMapper.map(updateItemDto, findItem);
-        findItem.setName(updateItemDto.getItemName());
         Category findCategory = categoryRepository.findById(updateItemDto.getCategoryId()).orElseThrow(CCategoryNotFoundException::new);
         findItem.setCategory(findCategory);
 
@@ -132,7 +129,6 @@ public class ItemServiceImpl implements ItemService {
 
     private ItemDto mapItemItemDto(Item item) {
         ItemDto itemDto = modelMapper.map(item, ItemDto.class);
-        itemDto.setItemName(item.getName());
         itemDto.setStoreId(item.getStore().getId());
         try {
             itemDto.setImagePath((JSONObject) parser.parse(item.getImagePath()));
