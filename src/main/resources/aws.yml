@@ -1,0 +1,8 @@
+#cloud.aws.credentials.access-key=AKIAQRBLHZ45W2MS5A5T
+#cloud.aws.credentials.secret-key=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
+
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAQRBLHZ45W2MS5A5T
+      secretKey: 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
