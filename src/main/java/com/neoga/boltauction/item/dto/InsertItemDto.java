@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class InsertItemDto {
 
     @NotNull(message = "item name is not null")
-    private String itemName;
+    private String name;
     @NotNull(message = "description is not null")
     private String description;
     @NotNull(message = "quick price is not null")

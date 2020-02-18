@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Data
 public class UpdateItemDto {
 
-    private String itemName;
+    private String name;
     private String description;
     @PositiveOrZero
     private int quickPrice;
