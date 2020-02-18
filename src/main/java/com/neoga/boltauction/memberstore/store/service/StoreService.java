@@ -6,7 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 public interface StoreService {
-    Store saveStore(Store store);
 
     Store updateStore(Store store, String description, MultipartFile image) throws IOException;
 

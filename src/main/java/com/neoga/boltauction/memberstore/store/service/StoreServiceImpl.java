@@ -18,11 +18,6 @@ public class StoreServiceImpl implements StoreService {
     private final ImageService imageService;
 
     @Override
-    public Store saveStore(Store store) {
-        return storeRepository.save(store);
-    }
-
-    @Override
     public Store updateStore(Store store, String description, MultipartFile image) throws IOException {
 
         store.setDescription(description);
