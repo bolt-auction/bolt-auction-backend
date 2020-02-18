@@ -1,6 +1,7 @@
 package com.neoga.boltauction.memberstore.store.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.neoga.boltauction.item.domain.Item;
 import com.neoga.boltauction.memberstore.member.domain.Members;
 import lombok.Getter;
 import lombok.Setter;

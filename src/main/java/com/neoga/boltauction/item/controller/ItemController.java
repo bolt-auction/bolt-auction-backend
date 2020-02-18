@@ -5,6 +5,9 @@ import com.neoga.boltauction.item.dto.InsertItemDto;
 import com.neoga.boltauction.item.dto.ItemDto;
 import com.neoga.boltauction.item.dto.UpdateItemDto;
 import com.neoga.boltauction.item.service.ItemService;
+import com.neoga.boltauction.memberstore.member.domain.Members;
+import com.neoga.boltauction.memberstore.member.service.MemberService;
+import com.neoga.boltauction.memberstore.store.service.StoreService;
 import com.neoga.boltauction.security.service.AuthService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +19,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -35,8 +40,10 @@ public class ItemController {
 
     private final ItemService itemService;
     private final AuthService authService;
+    private final MemberService memberService;
+    private final StoreService storeService;
 
-    @ApiOperation(value = "카테고리별 상품조", notes = "sort=creatDt,ASC 등으로 정렬방식 선택 가능")
+    @ApiOperation(value = "카테고리별 상품조회", notes = "sort=creatDt,ASC 등으로 정렬방식 선택 가능")
     @GetMapping("category/{category-id}")
     public ResponseEntity getItems(@PathVariable(name = "category-id") Long categoryId, Pageable pageable,
                                    PagedResourcesAssembler<ItemDto> assembler) {
@@ -107,9 +114,16 @@ public class ItemController {
     public ResponseEntity updateItem(@PathVariable(name = "item-id") Long id,
                                      @Valid UpdateItemDto updateItemDto,
                                      MultipartFile... images) throws IOException {
-        // 권한 체크 해당 사용자인지 체크
 
-        ItemDto itemDto = itemService.updateItem(id, updateItemDto, images);
+        Long memberId = authService.getLoginInfo().getMemberId();
+        Members findMember = memberService.findMemberById(memberId);
+        ItemDto findItem = itemService.getItem(id);
+
+        if (findItem.getStoreId() != findMember.getStore().getId()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        ItemDto itemDto = itemService.updateItem(id, updateItemDto, memberId, images);
 
         Resource entityModel = new Resource(itemDto);
         entityModel.add(linkTo(ItemController.class).slash(itemDto.getId()).withSelfRel());

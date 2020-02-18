@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -94,6 +95,7 @@ public class ItemServiceImpl implements ItemService {
         // map insertItemDto -> item
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         Item item = modelMapper.map(insertItemDto, Item.class);
+        item.setCurrentPrice(insertItemDto.getStartPrice());
         item.setCreateDt(LocalDateTime.now());
         item.setStore(findStore);
         Category findCategory = categoryRepository.findById(insertItemDto.getCategoryId()).orElseThrow(CCategoryNotFoundException::new);
@@ -107,7 +109,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto updateItem(Long id, UpdateItemDto updateItemDto, MultipartFile[] images) throws IOException {
+    public ItemDto updateItem(Long id, UpdateItemDto updateItemDto, Long memberId, MultipartFile... images) throws IOException {
 
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
