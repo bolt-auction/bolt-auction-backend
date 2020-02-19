@@ -9,9 +9,10 @@ import com.neoga.boltauction.memberstore.member.domain.Members;
 import com.neoga.boltauction.memberstore.member.service.MemberService;
 import com.neoga.boltauction.memberstore.store.service.StoreService;
 import com.neoga.boltauction.security.service.AuthService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -21,14 +22,13 @@ import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
-import java.util.List;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -41,12 +41,20 @@ public class ItemController {
     private final ItemService itemService;
     private final AuthService authService;
     private final MemberService memberService;
-    private final StoreService storeService;
 
     @ApiOperation(value = "카테고리별 상품조회", notes = "sort=creatDt,ASC 등으로 정렬방식 선택 가능")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page" ,dataType = "integer", paramType = "query",
+                    value = "페이지 번호 (0..N)", defaultValue = "0"),
+            @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query",
+                    value = "페이지의 아이템 수", defaultValue = "20"),
+            @ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query",
+                    value = "property(,asc|desc)\n " +
+                            "기본 내림차순")
+    })
     @GetMapping("category/{category-id}")
-    public ResponseEntity getItems(@PathVariable(name = "category-id") Long categoryId, Pageable pageable,
-                                   PagedResourcesAssembler<ItemDto> assembler) {
+    public ResponseEntity getItems(@PathVariable(name = "category-id") Long categoryId, @ApiIgnore Pageable pageable,
+                                   @ApiIgnore PagedResourcesAssembler<ItemDto> assembler) {
         // 권한체크 추가
 
         Page<ItemDto> itemDtoPage = itemService.getItems(categoryId, pageable);
