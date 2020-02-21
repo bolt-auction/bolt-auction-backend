@@ -13,7 +13,6 @@ import com.neoga.boltauction.item.dto.UpdateItemDto;
 import com.neoga.boltauction.item.repository.ItemRepository;
 import com.neoga.boltauction.memberstore.member.repository.MemberRepository;
 import com.neoga.boltauction.memberstore.store.domain.Store;
-import com.neoga.boltauction.memberstore.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
@@ -27,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -139,5 +137,11 @@ public class ItemServiceImpl implements ItemService {
         }
 
         return itemDto;
+    }
+
+    @Override
+    public Page<ItemDto> searchItem(Pageable pageable, String search){
+        Page<Item> searchItems = itemRepository.findAllByNameIsContaining(pageable, search);
+        return searchItems.map(item -> mapItemItemDto(item));
     }
 }

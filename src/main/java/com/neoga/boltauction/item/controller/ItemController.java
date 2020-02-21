@@ -7,7 +7,6 @@ import com.neoga.boltauction.item.dto.UpdateItemDto;
 import com.neoga.boltauction.item.service.ItemService;
 import com.neoga.boltauction.memberstore.member.domain.Members;
 import com.neoga.boltauction.memberstore.member.service.MemberService;
-import com.neoga.boltauction.memberstore.store.service.StoreService;
 import com.neoga.boltauction.security.service.AuthService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -59,11 +58,11 @@ public class ItemController {
 
         Page<ItemDto> itemDtoPage = itemService.getItems(categoryId, pageable);
 
-        PagedResources<Resource<ItemDto>> entityModels = assembler.toResource(itemDtoPage, i -> new Resource<>(i));
-        entityModels.forEach(entityModel -> entityModel.add(linkTo(methodOn(ItemController.class).getItem(entityModel.getContent().getId())).withRel("item-detail")));
-        entityModels.add(new Link("/swagger-ui.html#/item-controller/getItemsUsingGET").withRel("profile"));
+        PagedResources<Resource<ItemDto>> resources = assembler.toResource(itemDtoPage, i -> new Resource<>(i));
+        resources.forEach(resource -> resource.add(linkTo(methodOn(ItemController.class).getItem(resource.getContent().getId())).withRel("item-detail")));
+        resources.add(new Link("/swagger-ui.html#/item-controller/getItemsUsingGET").withRel("profile"));
 
-        return ResponseEntity.ok(entityModels);
+        return ResponseEntity.ok(resources);
     }
 
     @ApiOperation(value = "상품등록", notes = "swagger 에서 이미지 등록 불가능")
@@ -78,14 +77,14 @@ public class ItemController {
 
         ControllerLinkBuilder selfLinkBuilder =linkTo(ItemController.class).slash(saveItemDto.getId());
         URI createdUri = selfLinkBuilder.toUri();
-        Resource entityModel = new Resource(saveItemDto);
+        Resource resource = new Resource(saveItemDto);
 
-        entityModel.add(linkTo(methodOn(ItemController.class).getItem(saveItemDto.getId())).withRel("item-detail"));
-        entityModel.add(linkTo(ItemController.class).withRel("query-events"));
-        entityModel.add(selfLinkBuilder.withRel("update-event"));
-        entityModel.add(new Link("/swagger-ui.html#/item-controller/insertItemUsingPOST").withRel("profile"));
+        resource.add(linkTo(methodOn(ItemController.class).getItem(saveItemDto.getId())).withRel("item-detail"));
+        resource.add(linkTo(ItemController.class).withRel("query-events"));
+        resource.add(selfLinkBuilder.withRel("update-event"));
+        resource.add(new Link("/swagger-ui.html#/item-controller/insertItemUsingPOST").withRel("profile"));
 
-        return ResponseEntity.created(createdUri).body(entityModel);
+        return ResponseEntity.created(createdUri).body(resource);
     }
 
     @ApiOperation(value = "상품조회", notes = "특정상품 조회")
@@ -95,11 +94,11 @@ public class ItemController {
 
         ItemDto findItem = itemService.getItem(id);
 
-        Resource entityModel = new Resource(findItem);
-        entityModel.add(linkTo(ItemController.class).slash(findItem.getId()).withSelfRel());
-        entityModel.add(new Link("/swagger-ui.html#/item-controller/getItemUsingGET").withRel("profile"));
+        Resource resource = new Resource(findItem);
+        resource.add(linkTo(ItemController.class).slash(findItem.getId()).withSelfRel());
+        resource.add(new Link("/swagger-ui.html#/item-controller/getItemUsingGET").withRel("profile"));
 
-        return ResponseEntity.ok(entityModel);
+        return ResponseEntity.ok(resource);
     }
 
     @ApiOperation(value = "상품삭제", notes = "반환 메세지 미정")
@@ -133,11 +132,22 @@ public class ItemController {
 
         ItemDto itemDto = itemService.updateItem(id, updateItemDto, memberId, images);
 
-        Resource entityModel = new Resource(itemDto);
-        entityModel.add(linkTo(ItemController.class).slash(itemDto.getId()).withSelfRel());
-        entityModel.add(new Link("/swagger-ui.html#/item-controller/updateItemUsingPUT").withRel("profile"));
+        Resource resource = new Resource(itemDto);
+        resource.add(linkTo(ItemController.class).slash(itemDto.getId()).withSelfRel());
+        resource.add(new Link("/swagger-ui.html#/item-controller/updateItemUsingPUT").withRel("profile"));
 
-        return ResponseEntity.ok(entityModel);
+        return ResponseEntity.ok(resource);
     }
 
+    @GetMapping("search/{search}")
+    public ResponseEntity<PagedResources<Resource<ItemDto>>> searchItem(@PathVariable(name = "search") String search, @ApiIgnore Pageable pageable,
+                                                                        @ApiIgnore PagedResourcesAssembler<ItemDto> assembler) {
+        Page<ItemDto> itemDtoPage = itemService.searchItem(pageable, search);
+
+        PagedResources<Resource<ItemDto>> resources = assembler.toResource(itemDtoPage, i -> new Resource<>(i));
+        resources.forEach(resource -> resource.add(linkTo(methodOn(ItemController.class).getItem(resource.getContent().getId())).withRel("item-detail")));
+        resources.add(new Link("/swagger-ui.html#/item-controller/searchItemUsingGET").withRel("profile"));
+
+        return ResponseEntity.ok(resources);
+    }
 }

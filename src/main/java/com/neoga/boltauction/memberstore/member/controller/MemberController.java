@@ -29,11 +29,11 @@ public class MemberController {
         Long member_id = authService.getLoginInfo().getMemberId();
         Members findMember = memberService.findMemberById(member_id);
 
-        Resource<Members> entityModel = new Resource(findMember);
-        entityModel.add(linkTo(MemberController.class).withSelfRel());
-        entityModel.add(new Link("/member-controller/findMemberByIdUsingPUT").withRel("profile"));
+        Resource<Members> resource = new Resource(findMember);
+        resource.add(linkTo(MemberController.class).withSelfRel());
+        resource.add(new Link("/member-controller/findMemberByIdUsingPUT").withRel("profile"));
 
-        return ResponseEntity.ok().body(entityModel);
+        return ResponseEntity.ok().body(resource);
     }
 
     @ApiOperation(value = "회원가입", notes = "정보를 입력받아 회원가입 \n" +
@@ -42,11 +42,11 @@ public class MemberController {
     public ResponseEntity signup(@RequestBody SignupRequestDto signupRequest) {
         Members newMember = memberService.saveMember(signupRequest);
 
-        Resource<LoginResponseDto> entityModel = new Resource(newMember);
-        entityModel.add(linkTo(methodOn(MemberController.class).signup(signupRequest)).withSelfRel());
-        entityModel.add(new Link("/swagger-ui.html#/auth%20API/loginUsingPOST").withRel("profile"));
+        Resource<LoginResponseDto> resource = new Resource(newMember);
+        resource.add(linkTo(methodOn(MemberController.class).signup(signupRequest)).withSelfRel());
+        resource.add(new Link("/swagger-ui.html#/auth%20API/loginUsingPOST").withRel("profile"));
 
-        return ResponseEntity.ok().body(entityModel);
+        return ResponseEntity.ok().body(resource);
     }
 
     @ApiOperation(value = "소셜 회원가입", notes = "소셜 계정 회원가입을 한다. \n" +
@@ -57,9 +57,9 @@ public class MemberController {
                                        @ApiParam(value = "닉네임", required = true) @RequestParam String name) {
         Members newMember = memberService.saveSocialMember(provider,accessToken,name);
 
-        Resource<LoginResponseDto> entityModel = new Resource(newMember);
-        entityModel.add(linkTo(methodOn(MemberController.class).signupSocial(provider,accessToken,name)).withSelfRel());
-        entityModel.add(new Link("/swagger-ui.html#/auth%20API/loginByProviderUsingPOST").withRel("profile"));
+        Resource<LoginResponseDto> resource = new Resource(newMember);
+        resource.add(linkTo(methodOn(MemberController.class).signupSocial(provider,accessToken,name)).withSelfRel());
+        resource.add(new Link("/swagger-ui.html#/auth%20API/loginByProviderUsingPOST").withRel("profile"));
 
         return ResponseEntity.ok().build();
     }

@@ -5,11 +5,10 @@ import com.neoga.boltauction.item.domain.Item;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
-    Page<Item> findAllByOrderByCreateDtAsc(Pageable pageable);
-    Page<Item> findAllByOrderByEndDtAsc(Pageable pageable);
-    Page<Item> findAllByOrderByCurrentPriceAsc(Pageable pageable);
-    Page<Item> findAllByOrderByCurrentPriceDesc(Pageable pageable);
+    Page<Item> findAllByNameIsContaining(Pageable pageable, String string);
+    @Query(value = "select i from Item i where i.category=:category or i.category.supCategory=:category")
     Page<Item> findAllByCategoryEquals(Pageable pageable, Category category);
 }

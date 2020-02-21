@@ -53,26 +53,26 @@ public class CategoryController {
             //make sub category entity model list
             List<Resource> subCategoryEntityModelList = subCategoryDtoList
                     .stream().map(categoryDto -> {
-                        Resource entityModel = new Resource(categoryDto);
-                        entityModel.add(linkTo(methodOn(ItemController.class).getItems(categoryDto.getId(), null, null)).withRel("item-list"));
-                        return entityModel;
+                        Resource resource = new Resource(categoryDto);
+                        resource.add(linkTo(methodOn(ItemController.class).getItems(categoryDto.getId(), null, null)).withRel("item-list"));
+                        return resource;
                     }).collect(Collectors.toList());
             //set sub category entity model list to sup category
             supCategoryDto.setSubCategoryList(subCategoryEntityModelList);
         });
         // make sup category entity model list
         List<Resource> supCategoryEntityModelList = supCategoryDtoList.stream().map(supCategoryDto -> {
-            Resource entityModel = new Resource(supCategoryDto);
-            entityModel.add(linkTo(methodOn(ItemController.class).getItems(supCategoryDto.getId(), null, null)).withRel("item-list"));
-            return entityModel;
+            Resource resource = new Resource(supCategoryDto);
+            resource.add(linkTo(methodOn(ItemController.class).getItems(supCategoryDto.getId(), null, null)).withRel("item-list"));
+            return resource;
         }).collect(Collectors.toList());
 
         // set category list dto
         categoryListDto.setSupCategoryList(supCategoryEntityModelList);
         // make category list dto entity model
-        Resource entityModel = new Resource(categoryListDto);
-        entityModel.add(new Link("/").withRel("profile"));
+        Resource resource = new Resource(categoryListDto);
+        resource.add(new Link("/").withRel("profile"));
 
-        return ResponseEntity.ok(entityModel);
+        return ResponseEntity.ok(resource);
     }
 }
