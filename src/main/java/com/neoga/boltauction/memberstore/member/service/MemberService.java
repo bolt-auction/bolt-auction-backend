@@ -1,7 +1,7 @@
 package com.neoga.boltauction.memberstore.member.service;
 
-import com.neoga.boltauction.exception.custom.CExistEmailSignUpException;
-import com.neoga.boltauction.exception.custom.CMemberExistException;
+import com.neoga.boltauction.exception.custom.CExistUidSignUpException;
+import com.neoga.boltauction.exception.custom.CAlreadySignUpException;
 import com.neoga.boltauction.memberstore.member.domain.Members;
 import com.neoga.boltauction.memberstore.member.dto.SignupRequestDto;
 import com.neoga.boltauction.memberstore.member.repository.MemberRepository;
@@ -28,11 +28,11 @@ public class MemberService {
         return memberRepository.findById(member_id).get();
     }
 
-    public Members saveMember(SignupRequestDto signupRequest) throws CExistEmailSignUpException {
+    public Members saveMember(SignupRequestDto signupRequest) throws CExistUidSignUpException {
         //이메일 중복확인
         Optional<Members> existsMember = memberRepository.findByUid(signupRequest.getUid());
         if(existsMember.isPresent()){
-            throw new CExistEmailSignUpException();
+            throw new CExistUidSignUpException();
         }
 
         Members newMember = Members.builder()
@@ -53,11 +53,11 @@ public class MemberService {
         return newMember;
     }
 
-    public Members saveSocialMember(String provider, String accessToken, String name){
+    public Members saveSocialMember(String provider, String accessToken, String name) throws CAlreadySignUpException {
         KakaoProfile profile = kakaoService.getKakaoProfile(accessToken);
         Optional<Members> member = memberRepository.findByUidAndProvider(String.valueOf(profile.getId()), provider);
         if(member.isPresent())
-            throw new CMemberExistException();
+            throw new CAlreadySignUpException();
 
         // store 생성
         Store store = new Store();

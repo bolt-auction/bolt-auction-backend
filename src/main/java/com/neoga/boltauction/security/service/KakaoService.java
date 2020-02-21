@@ -48,7 +48,7 @@ public class KakaoService {
     }
 
     //kakao access token 이용하여 사용자 프로필정보 요청
-    public KakaoProfile getKakaoProfile(String accessToken) {
+    public KakaoProfile getKakaoProfile(String accessToken) throws CCommunicationException{
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         headers.set("Authorization", "Bearer " + accessToken);

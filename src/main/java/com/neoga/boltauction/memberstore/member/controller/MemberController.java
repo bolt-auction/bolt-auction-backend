@@ -1,25 +1,17 @@
 package com.neoga.boltauction.memberstore.member.controller;
 
-import com.neoga.boltauction.exception.custom.CMemberExistException;
 import com.neoga.boltauction.memberstore.member.domain.Members;
 import com.neoga.boltauction.memberstore.member.dto.SignupRequestDto;
-import com.neoga.boltauction.memberstore.member.repository.MemberRepository;
 import com.neoga.boltauction.memberstore.member.service.MemberService;
-import com.neoga.boltauction.security.dto.KakaoProfile;
 import com.neoga.boltauction.security.dto.LoginResponseDto;
 import com.neoga.boltauction.security.service.AuthService;
-import com.neoga.boltauction.security.service.KakaoService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collections;
-import java.util.Optional;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -31,7 +23,7 @@ public class MemberController {
     private final MemberService memberService;
     private final AuthService authService;
 
-    @ApiOperation(value = "자신 정보조회", notes = "(반환 메시지는 수정계획)")
+    @ApiOperation(value = "자신 정보조회")
     @GetMapping()
     public ResponseEntity findMemberById(){
         Long member_id = authService.getLoginInfo().getMemberId();
@@ -44,7 +36,8 @@ public class MemberController {
         return ResponseEntity.ok().body(entityModel);
     }
 
-    @ApiOperation(value = "회원가입", notes = "정보를 입력받아 회원가입 (반환 메시지는 수정계획)")
+    @ApiOperation(value = "회원가입", notes = "정보를 입력받아 회원가입 \n" +
+            "403(Forbidden) - 이미 사용자가 있는 중복된 아이디 오류")
     @PostMapping()
     public ResponseEntity signup(@RequestBody SignupRequestDto signupRequest) {
         Members newMember = memberService.saveMember(signupRequest);
@@ -56,7 +49,8 @@ public class MemberController {
         return ResponseEntity.ok().body(entityModel);
     }
 
-    @ApiOperation(value = "소셜 회원가입", notes = "소셜 계정 회원가입을 한다.(반환 메시지는 수정계획)")
+    @ApiOperation(value = "소셜 회원가입", notes = "소셜 계정 회원가입을 한다. \n" +
+            "403(Forbidden) - 이미 소셜 회원가입한 사용자")
     @PostMapping(value = "/social/{provider}")
     public ResponseEntity signupSocial(@ApiParam(value = "서비스 제공자 provider", required = true, defaultValue = "kakao") @PathVariable String provider,
                                        @ApiParam(value = "소셜 access_token", required = true) @RequestParam String accessToken,

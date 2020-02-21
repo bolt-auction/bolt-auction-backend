@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +34,8 @@ public class KakaoContoller {
     @Value("${kakao.redirectURI}")
     private String kakaoRedirectURI;
 
-    @ApiOperation(value = "카카오 로그인 요청페이지 주소", notes = "카카오 로그인 페이지 주소 반환합니다. 이 주소를 이용하여 요청하면 토큰 발행")
+    @ApiOperation(value = "카카오 로그인 요청페이지 주소", notes = "카카오 로그인 페이지 리다이렉션 주소 반환합니다. " +
+            "\n 이 주소를 이용하여 요청하면 토큰 발행")
     @GetMapping("/kakao/login")
     public ResponseEntity socialLogin() {
         StringBuilder kakaoLoginUrl = new StringBuilder()
@@ -49,7 +51,8 @@ public class KakaoContoller {
         return ResponseEntity.ok().body(entityModel);
     }
 
-    @ApiOperation(value = "카카오 리다이렉션", notes = "프론트분들 신경안쓰셔도 됩니다.(카카오 로그인 성공시 리다이렉션)")
+    @ApiOperation(value = "카카오 리다이렉션", notes = "프론트분들 신경안쓰셔도 됩니다.(카카오 로그인 성공시 리다이렉션) \n" +
+            "409(conflict) - 카카오서버와 통신오류")
     @GetMapping(value = "/kakao")
     public ResponseEntity redirectKakao(@RequestParam String code) {
         RetKakaoAuth token = kakaoService.getKakaoToken(code);

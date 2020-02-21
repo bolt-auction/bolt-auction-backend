@@ -26,8 +26,13 @@ public class ExceptionAdvice {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
-    @ExceptionHandler(CExistEmailSignUpException.class)
-    public ResponseEntity CExistEmailSignUpException() {
+    @ExceptionHandler(CExistUidSignUpException.class)
+    public ResponseEntity CExistUidSignUpException() {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+
+    @ExceptionHandler(CAlreadySignUpException.class)
+    public ResponseEntity CMemberExistException() {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
@@ -35,4 +40,10 @@ public class ExceptionAdvice {
     public ResponseEntity CMemberNotFoundException() {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+
+    @ExceptionHandler(CCommunicationException.class)
+    public ResponseEntity CCommunicationException() {
+        return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    }
+
 }
