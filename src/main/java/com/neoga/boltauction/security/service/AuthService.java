@@ -56,14 +56,16 @@ public class AuthService{
     // 저장된 인증정보에서 현재 로그인 사용자정보 조회
     public LoginInfo getLoginInfo(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Map<String, Object> detail = ((Map)authentication.getDetails());
+        Map<String, Object> detail = ((Map<String, Object>)authentication.getDetails());
         LoginInfo logininfo = LoginInfo.builder()
                 .memberId(Long.valueOf((String)detail.get("id")))
+                .storeId(Long.valueOf((String)detail.get("storeId")))
                 .uid((String)detail.get("uid"))
                 .name((String)detail.get("name"))
                 .role((List)detail.get("authorities")).build();
         return logininfo;
     }
+
 
     public LoginResponseDto loginResponseBuilder(String accessToken, Members findMember){
         LoginResponseDto loginResponse = LoginResponseDto.builder()
