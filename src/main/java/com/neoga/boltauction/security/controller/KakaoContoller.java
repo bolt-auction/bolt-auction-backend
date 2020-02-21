@@ -44,11 +44,11 @@ public class KakaoContoller {
                 .append("&response_type=code")
                 .append("&redirect_uri=").append(baseUrl).append(kakaoRedirectURI);
 
-        Resource<String> entityModel = new Resource(kakaoLoginUrl);
-        entityModel.add(linkTo(methodOn(KakaoContoller.class).socialLogin()).withSelfRel());
-        entityModel.add(new Link("/swagger-ui.html#/kakao-contoller/socialLoginUsingGET").withRel("profile"));
+        Resource<String> resource = new Resource(kakaoLoginUrl);
+        resource.add(linkTo(methodOn(KakaoContoller.class).socialLogin()).withSelfRel());
+        resource.add(new Link("/swagger-ui.html#/kakao-contoller/socialLoginUsingGET").withRel("profile"));
 
-        return ResponseEntity.ok().body(entityModel);
+        return ResponseEntity.ok().body(resource);
     }
 
     @ApiOperation(value = "카카오 리다이렉션", notes = "프론트분들 신경안쓰셔도 됩니다.(카카오 로그인 성공시 리다이렉션) \n" +
@@ -57,12 +57,12 @@ public class KakaoContoller {
     public ResponseEntity redirectKakao(@RequestParam String code) {
         RetKakaoAuth token = kakaoService.getKakaoToken(code);
 
-        Resource<LoginResponseDto> entityModel = new Resource(token);
-        entityModel.add(linkTo(methodOn(KakaoContoller.class).redirectKakao(code)).withSelfRel());
-        entityModel.add(new Link("/swagger-ui.html#/auth%20API/signinByProviderUsingPOST").withRel("profile"));
-        entityModel.add(linkTo(MemberController.class).slash("/social").withRel("socialSignup"));
-        entityModel.add(linkTo(AuthController.class).slash("/login/social").withRel("socialLogin"));
+        Resource<LoginResponseDto> resource = new Resource(token);
+        resource.add(linkTo(methodOn(KakaoContoller.class).redirectKakao(code)).withSelfRel());
+        resource.add(new Link("/swagger-ui.html#/auth%20API/signinByProviderUsingPOST").withRel("profile"));
+        resource.add(linkTo(MemberController.class).slash("/social").withRel("socialSignup"));
+        resource.add(linkTo(AuthController.class).slash("/login/social").withRel("socialLogin"));
 
-        return ResponseEntity.ok().body(entityModel);
+        return ResponseEntity.ok().body(resource);
     }
 }
