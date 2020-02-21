@@ -140,7 +140,7 @@ public class ItemController {
     }
 
     @GetMapping("search/{search}")
-    public ResponseEntity<PagedResources<Resource<ItemDto>>> searchItem(@PathVariable(name = "search") String search, Pageable pageable,
+    public ResponseEntity<PagedResources<Resource<ItemDto>>> searchItem(@PathVariable(name = "search") String search, @ApiIgnore Pageable pageable,
                                                                         @ApiIgnore PagedResourcesAssembler<ItemDto> assembler) {
         Page<ItemDto> itemDtoPage = itemService.searchItem(pageable, search);
 
