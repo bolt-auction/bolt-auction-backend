@@ -51,11 +51,6 @@ public class SwaggerConfiguration {
                 .apiInfo(ApiInfo.DEFAULT)
                 .forCodeGeneration(true)
                 .genericModelSubstitutes(ResponseEntity.class)
-                .ignoredParameterTypes(Pageable.class)
-                .ignoredParameterTypes(java.sql.Date.class)
-                .directModelSubstitute(java.time.LocalDate.class, java.sql.Date.class)
-                .directModelSubstitute(java.time.ZonedDateTime.class, Date.class)
-                .directModelSubstitute(java.time.LocalDateTime.class, Date.class)
                 .securityContexts(Lists.newArrayList(securityContext()))
                 .securitySchemes(Lists.newArrayList(apiKey()))
                 .useDefaultResponseMessages(false);
@@ -86,9 +81,4 @@ public class SwaggerConfiguration {
                 .build();
     }
 
-/*    @Bean
-    public PluginRegistry<LinkDiscoverer, MediaType> discoverers(
-            OrderAwarePluginRegistry<LinkDiscoverer, MediaType> relProviderPluginRegistry) {
-        return relProviderPluginRegistry;
-    }*/
 }

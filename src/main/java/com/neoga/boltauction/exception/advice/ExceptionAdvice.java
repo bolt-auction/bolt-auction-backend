@@ -40,4 +40,10 @@ public class ExceptionAdvice {
     public ResponseEntity CMemberNotFoundException() {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+
+    @ExceptionHandler(CCommunicationException.class)
+    public ResponseEntity CCommunicationException() {
+        return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    }
+
 }

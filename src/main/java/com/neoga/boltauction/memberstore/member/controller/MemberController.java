@@ -23,7 +23,7 @@ public class MemberController {
     private final MemberService memberService;
     private final AuthService authService;
 
-    @ApiOperation(value = "자신 정보조회", notes = "(반환 메시지는 수정계획)")
+    @ApiOperation(value = "자신 정보조회")
     @GetMapping()
     public ResponseEntity findMemberById(){
         Long member_id = authService.getLoginInfo().getMemberId();
@@ -36,7 +36,8 @@ public class MemberController {
         return ResponseEntity.ok().body(entityModel);
     }
 
-    @ApiOperation(value = "회원가입", notes = "정보를 입력받아 회원가입 (반환 메시지는 수정계획)")
+    @ApiOperation(value = "회원가입", notes = "정보를 입력받아 회원가입 \n" +
+            "403(Forbidden) - 이미 사용자가 있는 중복된 아이디 오류")
     @PostMapping()
     public ResponseEntity signup(@RequestBody SignupRequestDto signupRequest) {
         Members newMember = memberService.saveMember(signupRequest);
@@ -48,7 +49,8 @@ public class MemberController {
         return ResponseEntity.ok().body(entityModel);
     }
 
-    @ApiOperation(value = "소셜 회원가입", notes = "소셜 계정 회원가입을 한다.(반환 메시지는 수정계획)")
+    @ApiOperation(value = "소셜 회원가입", notes = "소셜 계정 회원가입을 한다. \n" +
+            "403(Forbidden) - 이미 소셜 회원가입한 사용자")
     @PostMapping(value = "/social/{provider}")
     public ResponseEntity signupSocial(@ApiParam(value = "서비스 제공자 provider", required = true, defaultValue = "kakao") @PathVariable String provider,
                                        @ApiParam(value = "소셜 access_token", required = true) @RequestParam String accessToken,

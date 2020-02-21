@@ -26,7 +26,8 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 public class AuthController {
     private final AuthService authService;
 
-    @ApiOperation(value = "일반 로그인", notes = "로그인을 하며 jwt 토큰 발행")
+    @ApiOperation(value = "일반 로그인", notes = "로그인을 하며 jwt 토큰 발행 \n" +
+            "403(Forbidden) - 아이디 혹은 비밀번호 오류")
     @PostMapping(value = "/login")
     public ResponseEntity login(@RequestBody LoginRequestDto loginRequest) {
         LoginResponseDto loginResponse = authService.login(loginRequest);
@@ -38,7 +39,8 @@ public class AuthController {
         return ResponseEntity.ok().body(entityModel);
     }
 
-    @ApiOperation(value = "소셜 로그인", notes = "소셜 회원 로그인을 한다.")
+    @ApiOperation(value = "소셜 로그인", notes = "소셜 회원 로그인을 한다. \n" +
+            "401(Unauthorized) - 소셜 회원가입 안되어있음 (회원가입 리다이렉션 주소 반환)")
     @PostMapping(value = "/login/social/{provider}")
     public ResponseEntity loginByProvider(
             @ApiParam(value = "서비스 제공자 provider", required = true, defaultValue = "kakao") @PathVariable String provider,
