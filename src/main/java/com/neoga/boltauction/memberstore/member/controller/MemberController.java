@@ -1,25 +1,17 @@
 package com.neoga.boltauction.memberstore.member.controller;
 
-import com.neoga.boltauction.exception.custom.CMemberExistException;
 import com.neoga.boltauction.memberstore.member.domain.Members;
 import com.neoga.boltauction.memberstore.member.dto.SignupRequestDto;
-import com.neoga.boltauction.memberstore.member.repository.MemberRepository;
 import com.neoga.boltauction.memberstore.member.service.MemberService;
-import com.neoga.boltauction.security.dto.KakaoProfile;
 import com.neoga.boltauction.security.dto.LoginResponseDto;
 import com.neoga.boltauction.security.service.AuthService;
-import com.neoga.boltauction.security.service.KakaoService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collections;
-import java.util.Optional;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
