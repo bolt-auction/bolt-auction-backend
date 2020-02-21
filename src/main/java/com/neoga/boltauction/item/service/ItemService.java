@@ -21,4 +21,6 @@ public interface ItemService {
     ItemDto saveItem(InsertItemDto itemDto, Long memberId, MultipartFile... images) throws IOException;
 
     ItemDto updateItem(Long id, UpdateItemDto updateItemDto, Long memberId, MultipartFile... images) throws IOException;
+
+    Page<ItemDto> searchItem(Pageable pageable, String search);
 }
