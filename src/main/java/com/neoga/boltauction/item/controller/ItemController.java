@@ -65,7 +65,7 @@ public class ItemController {
         return ResponseEntity.ok(resources);
     }
 
-    @ApiOperation(value = "상품등록", notes = "swagger 에서 이미지 등록 불가능")
+    @ApiOperation(value = "상품등록", notes = "swagger 에서 이미지 등록 불가능\n로그인 필")
     @PostMapping
     public ResponseEntity insertItem(@Valid InsertItemDto insertItemDto,
                                              MultipartFile... images) throws IOException {
@@ -116,7 +116,7 @@ public class ItemController {
         return ResponseEntity.ok().build();
     }
 
-    @ApiOperation(value = "상품수정", notes = "이미지 업데이트 개발중")
+    @ApiOperation(value = "상품수정", notes = "로그인 필요")
     @PutMapping("/{item-id}")
     public ResponseEntity updateItem(@PathVariable(name = "item-id") Long id,
                                      @Valid UpdateItemDto updateItemDto,

@@ -58,10 +58,10 @@ public class AuthService{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Map<String, Object> detail = ((Map<String, Object>)authentication.getDetails());
         LoginInfo logininfo = LoginInfo.builder()
-                .memberId(Long.valueOf((String)detail.get("id")))
-                .storeId(Long.valueOf((String)detail.get("storeId")))
-                .uid((String)detail.get("uid"))
-                .name((String)detail.get("name"))
+                .memberId(Long.valueOf(String.valueOf(detail.get("id"))))
+                .storeId(Long.valueOf(String.valueOf(detail.get("storeId"))))
+                .uid(String.valueOf(detail.get("uid")))
+                .name(String.valueOf(detail.get("name")))
                 .role((List)detail.get("authorities")).build();
         return logininfo;
     }
