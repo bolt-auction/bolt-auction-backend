@@ -39,7 +39,7 @@ public class BidController {
     }
 
     @ApiOperation(value = "입찰 삭제", notes = "미구현")
-    @DeleteMapping("/{item-id")
+    @DeleteMapping("/{item-id}")
     public ResponseEntity deleteBidItem() {
         return null;
     }
