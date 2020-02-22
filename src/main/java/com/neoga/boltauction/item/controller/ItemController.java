@@ -11,6 +11,7 @@ import com.neoga.boltauction.security.service.AuthService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -65,7 +66,7 @@ public class ItemController {
         return ResponseEntity.ok(resources);
     }
 
-    @ApiOperation(value = "상품등록", notes = "swagger 에서 이미지 등록 불가능\n로그인 필")
+    @ApiOperation(value = "상품등록(로그인 필요)", notes = "swagger 에서 이미지 등록 불가능")
     @PostMapping
     public ResponseEntity insertItem(@Valid InsertItemDto insertItemDto,
                                              MultipartFile... images) throws IOException {
@@ -116,7 +117,7 @@ public class ItemController {
         return ResponseEntity.ok().build();
     }
 
-    @ApiOperation(value = "상품수정", notes = "로그인 필요")
+    @ApiOperation(value = "상품수정(로그인 필요)", notes = "")
     @PutMapping("/{item-id}")
     public ResponseEntity updateItem(@PathVariable(name = "item-id") Long id,
                                      @Valid UpdateItemDto updateItemDto,
@@ -139,10 +140,15 @@ public class ItemController {
         return ResponseEntity.ok(resource);
     }
 
-    @GetMapping("search/{search}")
-    public ResponseEntity<PagedResources<Resource<ItemDto>>> searchItem(@PathVariable(name = "search") String search, @ApiIgnore Pageable pageable,
+    @ApiOperation(value = "상품검색")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "filter", value = "검색조건 ex)name", dataType = "string"),
+            @ApiImplicitParam(name = "keyword", value = "검색 키워드", dataType = "string")
+    })
+    @GetMapping
+    public ResponseEntity<PagedResources<Resource<ItemDto>>> searchItem(@RequestParam String filter,@RequestParam String keyword, @ApiIgnore Pageable pageable,
                                                                         @ApiIgnore PagedResourcesAssembler<ItemDto> assembler) {
-        Page<ItemDto> itemDtoPage = itemService.searchItem(pageable, search);
+        Page<ItemDto> itemDtoPage = itemService.searchItem(filter, keyword, pageable);
 
         PagedResources<Resource<ItemDto>> resources = assembler.toResource(itemDtoPage, i -> new Resource<>(i));
         resources.forEach(resource -> resource.add(linkTo(methodOn(ItemController.class).getItem(resource.getContent().getId())).withRel("item-detail")));
