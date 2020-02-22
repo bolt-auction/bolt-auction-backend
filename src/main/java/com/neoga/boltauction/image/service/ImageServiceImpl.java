@@ -55,6 +55,7 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public void updateItemImages(Item item, MultipartFile... images) throws IOException {
 
+        // 기존의 이미지 삭제
         try {
             JSONObject savePath = (JSONObject) parser.parse(item.getImagePath());
             String pathUrl = "https://bolt-auction-image.s3.ap-northeast-2.amazonaws.com/";
@@ -74,7 +75,7 @@ public class ImageServiceImpl implements ImageService {
             BufferedImage bufferedImage = ImageIO.read(image.getInputStream());
             // when image
             if (bufferedImage != null) {
-                String path = s3Uploader.upload(image, "image/" + item.getId().toString());
+                String path = s3Uploader.upload(image, "image/item/" + item.getId().toString());
                 pathList.add(path);
             } else {
                 throw new CNotImageException("이미지가 아닙니다.");
@@ -92,13 +93,26 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public void saveStoreImage(Store store, MultipartFile image) throws IOException {
 
+        // 기존의 이미지 삭제
+        try {
+            JSONObject savePath = (JSONObject) parser.parse(store.getImagePath());
+            String pathUrl = "https://bolt-auction-image.s3.ap-northeast-2.amazonaws.com/";
+            ArrayList savePathList = (ArrayList) savePath.get("path");
+            savePathList.forEach(o -> {
+                String dirFile = o.toString().substring(pathUrl.length());
+                s3Uploader.removeS3File(dirFile);
+            });
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         JSONObject pathJson = new JSONObject();
         ArrayList pathList = new ArrayList();
 
         BufferedImage bufferedImage = ImageIO.read(image.getInputStream());
         // when image
         if (bufferedImage != null) {
-            String path = s3Uploader.upload(image, "image/" + store.getId().toString());
+            String path = s3Uploader.upload(image, "image/store/" + store.getId().toString());
             pathList.add(path);
         } else {
             throw new CNotImageException("이미지가 아닙니다.");
