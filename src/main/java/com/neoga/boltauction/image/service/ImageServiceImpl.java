@@ -40,7 +40,7 @@ public class ImageServiceImpl implements ImageService {
                 String path = s3Uploader.upload(image, "image/" + item.getId().toString());
                 pathList.add(path);
             } else {
-                throw new CNotImageException();
+                throw new CNotImageException("이미지가 아닙니다.");
             }
         }
 
@@ -66,7 +66,7 @@ public class ImageServiceImpl implements ImageService {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        
+
         JSONObject pathJson = new JSONObject();
         ArrayList pathList = new ArrayList();
 
@@ -77,7 +77,7 @@ public class ImageServiceImpl implements ImageService {
                 String path = s3Uploader.upload(image, "image/" + item.getId().toString());
                 pathList.add(path);
             } else {
-                throw new CNotImageException();
+                throw new CNotImageException("이미지가 아닙니다.");
             }
         }
 
@@ -101,7 +101,7 @@ public class ImageServiceImpl implements ImageService {
             String path = s3Uploader.upload(image, "image/" + store.getId().toString());
             pathList.add(path);
         } else {
-            throw new CNotImageException();
+            throw new CNotImageException("이미지가 아닙니다.");
         }
 
         pathJson.put("path", pathList);

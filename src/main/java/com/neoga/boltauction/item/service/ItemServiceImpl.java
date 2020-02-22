@@ -77,7 +77,7 @@ public class ItemServiceImpl implements ItemService {
             Category findCategory = categoryRepository.findById(categoryId).orElseThrow(CCategoryNotFoundException::new);
             itemPage = itemRepository.findAllByCategoryEquals(pageable, findCategory);
         } else {
-            throw new CCategoryNotFoundException();
+            throw new CCategoryNotFoundException("존제하지 않는 카테고리 입니다");
         }
 
         // map item -> itemDto
