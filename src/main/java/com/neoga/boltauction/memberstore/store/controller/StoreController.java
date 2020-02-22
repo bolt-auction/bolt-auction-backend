@@ -1,5 +1,6 @@
 package com.neoga.boltauction.memberstore.store.controller;
 
+import com.neoga.boltauction.item.service.ItemService;
 import com.neoga.boltauction.memberstore.member.service.MemberService;
 import com.neoga.boltauction.memberstore.store.domain.Store;
 import com.neoga.boltauction.memberstore.store.service.StoreService;
@@ -25,6 +26,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 public class StoreController {
 
     private final StoreService storeService;
+    private final ItemService itemService;
     private final AuthService authService;
     private final MemberService memberService;
 

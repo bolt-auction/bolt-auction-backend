@@ -7,6 +7,7 @@ import com.neoga.boltauction.item.dto.UpdateItemDto;
 import com.neoga.boltauction.item.service.ItemService;
 import com.neoga.boltauction.memberstore.member.domain.Members;
 import com.neoga.boltauction.memberstore.member.service.MemberService;
+import com.neoga.boltauction.memberstore.store.controller.StoreController;
 import com.neoga.boltauction.security.service.AuthService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -18,6 +19,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,8 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -65,7 +69,7 @@ public class ItemController {
         return ResponseEntity.ok(resources);
     }
 
-    @ApiOperation(value = "상품등록", notes = "swagger 에서 이미지 등록 불가능")
+    @ApiOperation(value = "상품등록(로그인 필요)", notes = "swagger 에서 이미지 등록 불가능")
     @PostMapping
     public ResponseEntity insertItem(@Valid InsertItemDto insertItemDto,
                                              MultipartFile... images) throws IOException {
@@ -116,7 +120,7 @@ public class ItemController {
         return ResponseEntity.ok().build();
     }
 
-    @ApiOperation(value = "상품수정", notes = "이미지 업데이트 개발중")
+    @ApiOperation(value = "상품수정(로그인 필요)", notes = "")
     @PutMapping("/{item-id}")
     public ResponseEntity updateItem(@PathVariable(name = "item-id") Long id,
                                      @Valid UpdateItemDto updateItemDto,
@@ -139,14 +143,36 @@ public class ItemController {
         return ResponseEntity.ok(resource);
     }
 
-    @GetMapping("search/{search}")
-    public ResponseEntity<PagedResources<Resource<ItemDto>>> searchItem(@PathVariable(name = "search") String search, @ApiIgnore Pageable pageable,
+    @ApiOperation(value = "상품검색")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "filter", value = "검색조건 ex)name", dataType = "string"),
+            @ApiImplicitParam(name = "keyword", value = "검색 키워드", dataType = "string")
+    })
+    @GetMapping
+    public ResponseEntity<PagedResources<Resource<ItemDto>>> searchItem(@RequestParam String filter,@RequestParam String keyword, @ApiIgnore Pageable pageable,
                                                                         @ApiIgnore PagedResourcesAssembler<ItemDto> assembler) {
-        Page<ItemDto> itemDtoPage = itemService.searchItem(pageable, search);
+        Page<ItemDto> itemDtoPage = itemService.searchItem(filter, keyword, pageable);
 
         PagedResources<Resource<ItemDto>> resources = assembler.toResource(itemDtoPage, i -> new Resource<>(i));
         resources.forEach(resource -> resource.add(linkTo(methodOn(ItemController.class).getItem(resource.getContent().getId())).withRel("item-detail")));
         resources.add(new Link("/swagger-ui.html#/item-controller/searchItemUsingGET").withRel("profile"));
+
+        return ResponseEntity.ok(resources);
+    }
+
+    @GetMapping("store/{store-id}")
+    public ResponseEntity getStoreItems(@PathVariable(name = "store-id") Long storeId){
+        List<ItemDto> itemDtoList = itemService.getItemsByStore(storeId);
+
+        List<Resource> resourceList = itemDtoList.stream().map(itemDto -> {
+            Resource resource = new Resource(itemDto);
+            resource.add(linkTo(ItemController.class).slash(itemDto.getId()).withSelfRel());
+            return resource;
+        }).collect(Collectors.toList());
+
+        Resources resources = new Resources(resourceList);
+        resources.add(linkTo(StoreController.class).slash(storeId).withSelfRel());
+        resources.add(new Link("/swagger-ui.html#/item-controller/getStoreItemsUsingGET").withRel("profile"));
 
         return ResponseEntity.ok(resources);
     }

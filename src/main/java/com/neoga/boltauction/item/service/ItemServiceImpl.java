@@ -26,6 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -77,7 +79,7 @@ public class ItemServiceImpl implements ItemService {
             Category findCategory = categoryRepository.findById(categoryId).orElseThrow(CCategoryNotFoundException::new);
             itemPage = itemRepository.findAllByCategoryEquals(pageable, findCategory);
         } else {
-            throw new CCategoryNotFoundException();
+            throw new CCategoryNotFoundException("존제하지 않는 카테고리 입니다");
         }
 
         // map item -> itemDto
@@ -127,6 +129,22 @@ public class ItemServiceImpl implements ItemService {
         return mapItemItemDto(findItem);
     }
 
+    @Override
+    public Page<ItemDto> searchItem(String filter, String search, Pageable pageable){
+
+        Page<Item> searchItems = null;
+        if (filter.equals("name")) {
+            searchItems = itemRepository.findAllByNameIsContaining(pageable, search);
+        }
+        return searchItems.map(item -> mapItemItemDto(item));
+    }
+
+    @Override
+    public List<ItemDto> getItemsByStore(Long storeId) {
+        List<Item> findItems = itemRepository.findAllByStore_Id(storeId);
+        return findItems.stream().map(item -> mapItemItemDto(item)).collect(Collectors.toList());
+    }
+
     private ItemDto mapItemItemDto(Item item) {
         ItemDto itemDto = modelMapper.map(item, ItemDto.class);
         itemDto.setStoreId(item.getStore().getId());
@@ -137,11 +155,5 @@ public class ItemServiceImpl implements ItemService {
         }
 
         return itemDto;
-    }
-
-    @Override
-    public Page<ItemDto> searchItem(Pageable pageable, String search){
-        Page<Item> searchItems = itemRepository.findAllByNameIsContaining(pageable, search);
-        return searchItems.map(item -> mapItemItemDto(item));
     }
 }
