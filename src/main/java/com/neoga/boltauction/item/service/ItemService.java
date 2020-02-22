@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface ItemService {
 
@@ -22,5 +23,7 @@ public interface ItemService {
 
     ItemDto updateItem(Long id, UpdateItemDto updateItemDto, Long memberId, MultipartFile... images) throws IOException;
 
-    Page<ItemDto> searchItem(Pageable pageable, String search);
+    List<ItemDto> getItemsByStore(Long storeId);
+
+    Page<ItemDto> searchItem(String filter, String search, Pageable pageable);
 }
