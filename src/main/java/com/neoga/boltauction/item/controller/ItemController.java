@@ -7,11 +7,11 @@ import com.neoga.boltauction.item.dto.UpdateItemDto;
 import com.neoga.boltauction.item.service.ItemService;
 import com.neoga.boltauction.memberstore.member.domain.Members;
 import com.neoga.boltauction.memberstore.member.service.MemberService;
+import com.neoga.boltauction.memberstore.store.controller.StoreController;
 import com.neoga.boltauction.security.service.AuthService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +19,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,8 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -153,6 +156,23 @@ public class ItemController {
         PagedResources<Resource<ItemDto>> resources = assembler.toResource(itemDtoPage, i -> new Resource<>(i));
         resources.forEach(resource -> resource.add(linkTo(methodOn(ItemController.class).getItem(resource.getContent().getId())).withRel("item-detail")));
         resources.add(new Link("/swagger-ui.html#/item-controller/searchItemUsingGET").withRel("profile"));
+
+        return ResponseEntity.ok(resources);
+    }
+
+    @GetMapping("store/{store-id}")
+    public ResponseEntity getStoreItems(@PathVariable(name = "store-id") Long storeId){
+        List<ItemDto> itemDtoList = itemService.getItemsByStore(storeId);
+
+        List<Resource> resourceList = itemDtoList.stream().map(itemDto -> {
+            Resource resource = new Resource(itemDto);
+            resource.add(linkTo(ItemController.class).slash(itemDto.getId()).withSelfRel());
+            return resource;
+        }).collect(Collectors.toList());
+
+        Resources resources = new Resources(resourceList);
+        resources.add(linkTo(StoreController.class).slash(storeId).withSelfRel());
+        resources.add(new Link("/swagger-ui.html#/item-controller/getStoreItemsUsingGET").withRel("profile"));
 
         return ResponseEntity.ok(resources);
     }
