@@ -76,7 +76,7 @@ public class ItemServiceImpl implements ItemService {
         if (categoryId == NO_CATEGORY) {
             itemPage = itemRepository.findAll(pageable);
         } else if (categoryId >= FIRST_CATEGORY && categoryId <= LAST_CATEGORY) {
-            Category findCategory = categoryRepository.findById(categoryId).orElseThrow(CCategoryNotFoundException::new);
+            Category findCategory = categoryRepository.findById(categoryId).orElseThrow(() -> new CCategoryNotFoundException("카테고리를 찾을 수 없습니다."));
             itemPage = itemRepository.findAllByCategoryEquals(pageable, findCategory);
         } else {
             throw new CCategoryNotFoundException("존제하지 않는 카테고리 입니다");
@@ -98,7 +98,7 @@ public class ItemServiceImpl implements ItemService {
         item.setCurrentPrice(insertItemDto.getStartPrice());
         item.setCreateDt(LocalDateTime.now());
         item.setStore(findStore);
-        Category findCategory = categoryRepository.findById(insertItemDto.getCategoryId()).orElseThrow(CCategoryNotFoundException::new);
+        Category findCategory = categoryRepository.findById(insertItemDto.getCategoryId()).orElseThrow(() -> new CCategoryNotFoundException("카테고리를 찾을 수 없습니다."));
         item.setCategory(findCategory);
 
         Item saveItem = itemRepository.save(item);
@@ -117,7 +117,7 @@ public class ItemServiceImpl implements ItemService {
         Item findItem = itemRepository.findById(id).orElseThrow(CItemNotFoundException::new);
 
         modelMapper.map(updateItemDto, findItem);
-        Category findCategory = categoryRepository.findById(updateItemDto.getCategoryId()).orElseThrow(CCategoryNotFoundException::new);
+        Category findCategory = categoryRepository.findById(updateItemDto.getCategoryId()).orElseThrow(() -> new CCategoryNotFoundException("카테고리를 찾을 수 없습니다."));
         findItem.setCategory(findCategory);
 
         // update image
