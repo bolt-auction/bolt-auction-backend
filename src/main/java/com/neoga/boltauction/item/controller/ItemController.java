@@ -178,7 +178,7 @@ public class ItemController {
         }).collect(Collectors.toList());
 
         Resources resources = new Resources(resourceList);
-        resources.add(linkTo(StoreController.class).slash(storeId).withSelfRel());
+        resources.add(linkTo(StoreController.class).slash("store/" + storeId).withSelfRel());
         resources.add(new Link("/swagger-ui.html#/item-controller/getStoreItemsUsingGET").withRel("profile"));
 
         return ResponseEntity.ok(resources);
