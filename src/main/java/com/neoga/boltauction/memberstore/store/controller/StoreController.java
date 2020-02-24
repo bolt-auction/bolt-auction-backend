@@ -26,7 +26,6 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 public class StoreController {
 
     private final StoreService storeService;
-    private final ItemService itemService;
     private final AuthService authService;
     private final MemberService memberService;
 
