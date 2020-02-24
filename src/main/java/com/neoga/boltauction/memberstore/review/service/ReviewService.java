@@ -1,9 +1,14 @@
 package com.neoga.boltauction.memberstore.review.service;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.neoga.boltauction.memberstore.review.domain.Review;
+import com.neoga.boltauction.memberstore.review.domain.ReviewDto;
 
-@Service
-@RequiredArgsConstructor
-public class ReviewService {
+import java.util.List;
+
+public interface ReviewService {
+    ReviewDto addReview(Long storeId, Long memberId, String content);
+    List<ReviewDto> getReviews(Long storeId);
+    Review getReview(Long reviewId);
+
+    void deleteReview(Long reviewId);
 }
