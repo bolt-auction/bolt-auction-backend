@@ -1,7 +1,7 @@
 package com.neoga.boltauction.memberstore.review.controller;
 
 import com.neoga.boltauction.memberstore.review.domain.Review;
-import com.neoga.boltauction.memberstore.review.domain.ReviewDto;
+import com.neoga.boltauction.memberstore.review.dto.ReviewDto;
 import com.neoga.boltauction.memberstore.review.service.ReviewServiceImpl;
 import com.neoga.boltauction.security.service.AuthService;
 import io.swagger.annotations.ApiImplicitParam;

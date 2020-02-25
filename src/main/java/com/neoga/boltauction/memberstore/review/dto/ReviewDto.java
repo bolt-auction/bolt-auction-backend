@@ -1,4 +1,4 @@
-package com.neoga.boltauction.memberstore.review.domain;
+package com.neoga.boltauction.memberstore.review.dto;
 
 import lombok.Data;
 import java.time.LocalDateTime;

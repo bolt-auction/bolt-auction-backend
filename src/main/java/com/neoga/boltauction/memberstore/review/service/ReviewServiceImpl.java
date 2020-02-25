@@ -5,9 +5,9 @@ import com.neoga.boltauction.exception.custom.CReviewNotExistException;
 import com.neoga.boltauction.exception.custom.CStoreNotFoundException;
 import com.neoga.boltauction.memberstore.member.domain.Members;
 import com.neoga.boltauction.memberstore.member.repository.MemberRepository;
-import com.neoga.boltauction.memberstore.review.domain.RegisterDto;
+import com.neoga.boltauction.memberstore.review.dto.RegisterDto;
 import com.neoga.boltauction.memberstore.review.domain.Review;
-import com.neoga.boltauction.memberstore.review.domain.ReviewDto;
+import com.neoga.boltauction.memberstore.review.dto.ReviewDto;
 import com.neoga.boltauction.memberstore.review.repository.ReviewRepository;
 import com.neoga.boltauction.memberstore.store.domain.Store;
 import com.neoga.boltauction.memberstore.store.repository.StoreRepository;
@@ -37,7 +37,6 @@ public class ReviewServiceImpl implements ReviewService {
         review.setRegister(findMember);
         review.setStore(findStore);
         review.setContent(content);
-        review.setCreateDt(LocalDateTime.now());
         reviewRepository.save(review);
 
         return mapReviewReviewDto(review);
