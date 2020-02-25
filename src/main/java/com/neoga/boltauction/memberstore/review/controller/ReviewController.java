@@ -1,7 +1,7 @@
 package com.neoga.boltauction.memberstore.review.controller;
 
 import com.neoga.boltauction.memberstore.review.domain.Review;
-import com.neoga.boltauction.memberstore.review.domain.ReviewDto;
+import com.neoga.boltauction.memberstore.review.dto.ReviewDto;
 import com.neoga.boltauction.memberstore.review.service.ReviewServiceImpl;
 import com.neoga.boltauction.security.service.AuthService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -28,7 +28,7 @@ public class ReviewController {
     private final ReviewServiceImpl reviewService;
 
     @ApiOperation(value = "상점 리뷰조회")
-    @ApiImplicitParam(name = "storeId", value = "상품 id", dataType = "long")
+    @ApiImplicitParam(name = "store-id", value = "상품 id", dataType = "long")
     @GetMapping("/store/{store-id}")
     public ResponseEntity getReviews(@PathVariable(name = "store-id") Long storeId) {
         List<ReviewDto> reviews = reviewService.getReviews(storeId);
@@ -42,7 +42,7 @@ public class ReviewController {
 
     @ApiOperation(value = "상점 리뷰 등록")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "storeId", value = "상품 id", dataType = "long"),
+            @ApiImplicitParam(name = "store-id", value = "상품 id", dataType = "long"),
             @ApiImplicitParam(name = "content", value = "리뷰 내용", dataType = "string")
     })
     @PostMapping("/store/{store-id}")

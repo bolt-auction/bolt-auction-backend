@@ -26,6 +26,7 @@ public class Item {
     private boolean isSell = false;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime createDt;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime endDt;

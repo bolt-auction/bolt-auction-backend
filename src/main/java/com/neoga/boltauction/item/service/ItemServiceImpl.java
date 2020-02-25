@@ -96,7 +96,6 @@ public class ItemServiceImpl implements ItemService {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         Item item = modelMapper.map(insertItemDto, Item.class);
         item.setCurrentPrice(insertItemDto.getStartPrice());
-        item.setCreateDt(LocalDateTime.now());
         item.setStore(findStore);
         Category findCategory = categoryRepository.findById(insertItemDto.getCategoryId()).orElseThrow(() -> new CCategoryNotFoundException("카테고리를 찾을 수 없습니다."));
         item.setCategory(findCategory);

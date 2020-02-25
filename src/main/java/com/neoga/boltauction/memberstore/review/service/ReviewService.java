@@ -1,7 +1,7 @@
 package com.neoga.boltauction.memberstore.review.service;
 
 import com.neoga.boltauction.memberstore.review.domain.Review;
-import com.neoga.boltauction.memberstore.review.domain.ReviewDto;
+import com.neoga.boltauction.memberstore.review.dto.ReviewDto;
 
 import java.util.List;
 

@@ -3,6 +3,7 @@ package com.neoga.boltauction.memberstore.store.controller;
 import com.neoga.boltauction.item.service.ItemService;
 import com.neoga.boltauction.memberstore.member.service.MemberService;
 import com.neoga.boltauction.memberstore.store.domain.Store;
+import com.neoga.boltauction.memberstore.store.dto.StoreDto;
 import com.neoga.boltauction.memberstore.store.service.StoreService;
 import com.neoga.boltauction.security.service.AuthService;
 import io.swagger.annotations.ApiOperation;
@@ -33,10 +34,10 @@ public class StoreController {
     @GetMapping("{store-id}")
     public ResponseEntity getStore(@PathVariable(name = "store-id") Long storeId) {
 
-        Store findStore = storeService.getStore(storeId);
+        StoreDto findStoreDto = storeService.getStore(storeId);
 
-        Resource<Store> storeResource = new Resource(findStore);
-        storeResource.add(linkTo(StoreController.class).slash(findStore.getId()).withSelfRel());
+        Resource<Store> storeResource = new Resource(findStoreDto);
+        storeResource.add(linkTo(StoreController.class).slash(findStoreDto.getId()).withSelfRel());
         storeResource.add(new Link("/swagger-ui.html#/store-controller/getStoreUsingGET").withRel("profile"));
 
         return ResponseEntity.ok(storeResource);
