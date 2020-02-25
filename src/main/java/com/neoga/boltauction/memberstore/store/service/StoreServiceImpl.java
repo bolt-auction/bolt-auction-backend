@@ -3,11 +3,17 @@ package com.neoga.boltauction.memberstore.store.service;
 import com.neoga.boltauction.exception.custom.CStoreNotFoundException;
 import com.neoga.boltauction.image.service.ImageService;
 import com.neoga.boltauction.memberstore.store.domain.Store;
+import com.neoga.boltauction.memberstore.store.dto.StoreDto;
 import com.neoga.boltauction.memberstore.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
+import net.minidev.json.parser.ParseException;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityManager;
 import java.io.IOException;
 
 @Service
@@ -16,18 +22,36 @@ public class StoreServiceImpl implements StoreService {
 
     private final StoreRepository storeRepository;
     private final ImageService imageService;
+    private final ModelMapper modelMapper;
 
     @Override
-    public Store updateStore(Store store, String description, MultipartFile image) throws IOException {
+    public StoreDto updateStore(Store store, String description, MultipartFile image) throws IOException {
 
         store.setDescription(description);
         imageService.saveStoreImage(store, image);
 
-        return storeRepository.save(store);
+        Store saveStore = storeRepository.save(store);
+
+        return mapStoreStoreDto(saveStore);
     }
 
     @Override
-    public Store getStore(Long storeId) {
-        return storeRepository.findById(storeId).orElseThrow(CStoreNotFoundException::new);
+    public StoreDto getStore(Long storeId) {
+        Store findStore = storeRepository.findById(storeId).orElseThrow(CStoreNotFoundException::new);
+
+        return mapStoreStoreDto(findStore);
+    }
+
+    private StoreDto mapStoreStoreDto(Store store) {
+        StoreDto storeDto = modelMapper.map(store, StoreDto.class);
+        storeDto.setName(store.getMembers().getName());
+        JSONParser jsonParser = new JSONParser();
+        try {
+            storeDto.setImagePath((JSONObject) jsonParser.parse(store.getImagePath()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return storeDto;
     }
 }
