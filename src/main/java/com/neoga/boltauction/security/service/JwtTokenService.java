@@ -22,7 +22,7 @@ import java.util.*;
 public class JwtTokenService {
     @Value("${spring.jwt.secret}")
     private String secretKey;
-    private long tokenValidMilisecond = 1000L * 60 * 60;
+    private long tokenValidMilisecond = 1000L * 60 * 60 * 240;
 
     @PostConstruct
     protected void init() {
