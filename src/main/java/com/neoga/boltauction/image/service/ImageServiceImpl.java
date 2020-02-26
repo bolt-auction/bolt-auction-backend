@@ -106,20 +106,14 @@ public class ImageServiceImpl implements ImageService {
             e.printStackTrace();
         }
 
-        JSONObject pathJson = new JSONObject();
-        ArrayList pathList = new ArrayList();
-
         BufferedImage bufferedImage = ImageIO.read(image.getInputStream());
         // when image
         if (bufferedImage != null) {
             String path = s3Uploader.upload(image, "image/store/" + store.getId().toString());
-            pathList.add(path);
+            store.setImagePath(path);
         } else {
             throw new CNotImageException("이미지가 아닙니다.");
         }
-
-        pathJson.put("path", pathList);
-        store.setImagePath(pathJson.toJSONString());
 
         storeRepository.save(store);
 

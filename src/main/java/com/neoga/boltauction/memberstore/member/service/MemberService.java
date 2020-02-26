@@ -50,8 +50,6 @@ public class MemberService {
         // store 생성
         Store store = new Store();
         store.changeMembers(newMember);
-        JSONParser jsonParser = new JSONParser();
-        store.setImagePath("{\"path\": []}");
 
         storeRepository.save(store);
 

@@ -19,7 +19,6 @@ public class Store {
     @OneToOne(mappedBy="store", fetch = FetchType.LAZY)
     @JsonIgnore
     private Members members;
-    @Column(columnDefinition = "json")
     private String imagePath;
 
     public void changeMembers(Members members) {
