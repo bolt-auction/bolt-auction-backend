@@ -90,7 +90,7 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto saveItem(InsertItemDto insertItemDto, Long memberId, MultipartFile... images) throws IOException {
 
         // find store
-        Store findStore = memberRepository.findById(memberId).orElseThrow(CMemberNotFoundException::new).getStore();
+        Store findStore = memberRepository.getOne(memberId).getStore();
 
         // map insertItemDto -> item
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);

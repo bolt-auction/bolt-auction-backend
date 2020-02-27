@@ -2,11 +2,13 @@ package com.neoga.boltauction.memberstore.review.service;
 
 import com.neoga.boltauction.exception.custom.CReviewNotExistException;
 import com.neoga.boltauction.memberstore.member.domain.Members;
+import com.neoga.boltauction.memberstore.member.repository.MemberRepository;
 import com.neoga.boltauction.memberstore.review.dto.RegisterDto;
 import com.neoga.boltauction.memberstore.review.domain.Review;
 import com.neoga.boltauction.memberstore.review.dto.ReviewDto;
 import com.neoga.boltauction.memberstore.review.repository.ReviewRepository;
 import com.neoga.boltauction.memberstore.store.domain.Store;
+import com.neoga.boltauction.memberstore.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
@@ -24,12 +26,13 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final ModelMapper modelMapper;
-    private final EntityManager entityManager;
+    private final StoreRepository storeRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     public ReviewDto addReview(Long storeId, Long memberId, String content) {
-        Store refStore = entityManager.getReference(Store.class, storeId);
-        Members refMembers = entityManager.getReference(Members.class, memberId);
+        Store refStore = storeRepository.getOne(storeId);
+        Members refMembers = memberRepository.getOne(memberId);
 
         Review review = new Review();
 
