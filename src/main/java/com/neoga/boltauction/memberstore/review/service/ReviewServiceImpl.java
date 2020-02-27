@@ -2,14 +2,15 @@ package com.neoga.boltauction.memberstore.review.service;
 
 import com.neoga.boltauction.exception.custom.CReviewNotExistException;
 import com.neoga.boltauction.memberstore.member.domain.Members;
-import com.neoga.boltauction.memberstore.member.repository.MemberRepository;
 import com.neoga.boltauction.memberstore.review.dto.RegisterDto;
 import com.neoga.boltauction.memberstore.review.domain.Review;
 import com.neoga.boltauction.memberstore.review.dto.ReviewDto;
 import com.neoga.boltauction.memberstore.review.repository.ReviewRepository;
 import com.neoga.boltauction.memberstore.store.domain.Store;
-import com.neoga.boltauction.memberstore.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
+import net.minidev.json.parser.ParseException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final ModelMapper modelMapper;
     private final EntityManager entityManager;
+    private static JSONParser jsonParser = new JSONParser();
 
     @Override
     public ReviewDto addReview(Long storeId, Long memberId, String content) {
@@ -63,6 +65,12 @@ public class ReviewServiceImpl implements ReviewService {
         RegisterDto registerDto = new RegisterDto();
         registerDto.setId(review.getRegister().getId());
         registerDto.setName(review.getRegister().getName());
+        try {
+            registerDto.setImagePath((JSONObject) jsonParser.parse(review.getRegister().getStore().getImagePath()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        reviewDto.setRegister(registerDto);
 
         return reviewDto;
     }

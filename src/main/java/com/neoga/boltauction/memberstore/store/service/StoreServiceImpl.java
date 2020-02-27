@@ -45,12 +45,6 @@ public class StoreServiceImpl implements StoreService {
     private StoreDto mapStoreStoreDto(Store store) {
         StoreDto storeDto = modelMapper.map(store, StoreDto.class);
         storeDto.setName(store.getMembers().getName());
-        JSONParser jsonParser = new JSONParser();
-        try {
-            storeDto.setImagePath((JSONObject) jsonParser.parse(store.getImagePath()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
         return storeDto;
     }

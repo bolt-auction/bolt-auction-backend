@@ -12,5 +12,5 @@ public class StoreDto {
     private Long id;
     private String description;
     private String name;
-    private JSONObject imagePath;
+    private String imagePath;
 }
