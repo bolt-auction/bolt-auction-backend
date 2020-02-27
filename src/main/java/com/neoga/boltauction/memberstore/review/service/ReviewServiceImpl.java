@@ -25,7 +25,6 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final ModelMapper modelMapper;
     private final EntityManager entityManager;
-    private static JSONParser jsonParser = new JSONParser();
 
     @Override
     public ReviewDto addReview(Long storeId, Long memberId, String content) {
@@ -65,11 +64,12 @@ public class ReviewServiceImpl implements ReviewService {
         RegisterDto registerDto = new RegisterDto();
         registerDto.setId(review.getRegister().getId());
         registerDto.setName(review.getRegister().getName());
-        try {
-            registerDto.setImagePath((JSONObject) jsonParser.parse(review.getRegister().getStore().getImagePath()));
-        } catch (ParseException e) {
-            e.printStackTrace();
+
+        String imagePath = review.getRegister().getStore().getImagePath();
+        if (imagePath != null) {
+            registerDto.setImagePath(imagePath);
         }
+
         reviewDto.setRegister(registerDto);
 
         return reviewDto;
