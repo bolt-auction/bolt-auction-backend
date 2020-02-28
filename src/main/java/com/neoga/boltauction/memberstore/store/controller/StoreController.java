@@ -46,7 +46,7 @@ public class StoreController {
     @ApiOperation(value = "상점 수정", notes = "상점 설명 이미지 등록")
     @PutMapping("{store-id}")
     public ResponseEntity updateStore(@PathVariable(name = "store-id") Long storeId,
-                                      String description, MultipartFile image) throws IOException {
+                                      @RequestBody String description, @RequestBody String name, MultipartFile image) throws IOException {
         // 해당 유저인지 체크
         Long memberId = authService.getLoginInfo().getMemberId();
         Store findStore = memberService.findMemberById(memberId).getStore();
