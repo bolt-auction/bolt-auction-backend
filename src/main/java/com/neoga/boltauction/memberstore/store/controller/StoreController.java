@@ -1,6 +1,5 @@
 package com.neoga.boltauction.memberstore.store.controller;
 
-import com.neoga.boltauction.item.service.ItemService;
 import com.neoga.boltauction.memberstore.member.service.MemberService;
 import com.neoga.boltauction.memberstore.store.domain.Store;
 import com.neoga.boltauction.memberstore.store.dto.StoreDto;
@@ -37,7 +36,7 @@ public class StoreController {
         StoreDto findStoreDto = storeService.getStore(storeId);
 
         Resource<Store> storeResource = new Resource(findStoreDto);
-        storeResource.add(linkTo(StoreController.class).slash(findStoreDto.getId()).withSelfRel());
+        storeResource.add(linkTo(StoreController.class).slash(findStoreDto.getStoreId()).withSelfRel());
         storeResource.add(new Link("/swagger-ui.html#/store-controller/getStoreUsingGET").withRel("profile"));
 
         return ResponseEntity.ok(storeResource);
@@ -46,7 +45,7 @@ public class StoreController {
     @ApiOperation(value = "상점 수정", notes = "상점 설명 이미지 등록")
     @PutMapping("{store-id}")
     public ResponseEntity updateStore(@PathVariable(name = "store-id") Long storeId,
-                                      String description, MultipartFile image) throws IOException {
+                                      @RequestBody String description, @RequestBody String name, MultipartFile image) throws IOException {
         // 해당 유저인지 체크
         Long memberId = authService.getLoginInfo().getMemberId();
         Store findStore = memberService.findMemberById(memberId).getStore();

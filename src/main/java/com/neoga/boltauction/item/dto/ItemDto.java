@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 @Data
 public class ItemDto {
 
-    private Long id;
-    private String name;
+    private Long itemId;
+    private String itemName;
     private String description;
     @Positive
     private int quickPrice;
@@ -30,4 +30,5 @@ public class ItemDto {
     private Category category;
     private JSONObject imagePath;
     private Long storeId;
+    private Long sellerId;
 }

@@ -8,5 +8,5 @@ import java.util.List;
 public interface BidService {
     List<BidDto> getBidList(Long id);
 
-    Resource<BidDto> saveBid(Long itemId, int price, Long memberId);
+    BidDto saveBid(Long itemId, int price, Long memberId);
 }

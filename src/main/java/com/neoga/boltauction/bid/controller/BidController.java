@@ -2,15 +2,19 @@ package com.neoga.boltauction.bid.controller;
 
 import com.neoga.boltauction.bid.dto.BidDto;
 import com.neoga.boltauction.bid.service.BidService;
+import com.neoga.boltauction.item.controller.ItemController;
 import com.neoga.boltauction.security.service.AuthService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,9 +37,13 @@ public class BidController {
     @PostMapping("/{item-id}")
     public ResponseEntity registerBidItem(@PathVariable(name = "item-id") Long itemId, int price) {
         Long memberId = authService.getLoginInfo().getMemberId();
-        Resource<BidDto> bidDtoResource = bidService.saveBid(itemId, price, memberId);
+        BidDto bidDto = bidService.saveBid(itemId, price, memberId);
 
-        return ResponseEntity.ok(bidDtoResource);
+        Resource resource = new Resource(bidDto);
+        resource.add(linkTo(BidController.class).slash(bidDto.getBidId()).withSelfRel());
+        resource.add(new Link("/swagger-ui.html#/bid-controller/registerBidItemUsingGET").withRel("profile"));
+
+        return ResponseEntity.ok(resource);
     }
 
     @ApiOperation(value = "입찰 삭제", notes = "미구현")

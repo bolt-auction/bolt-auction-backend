@@ -46,7 +46,7 @@ public class ReviewController {
             @ApiImplicitParam(name = "content", value = "리뷰 내용", dataType = "string")
     })
     @PostMapping("/store/{store-id}")
-    public ResponseEntity addReview(@PathVariable(name = "store-id") Long storeId, String content) {
+    public ResponseEntity addReview(@PathVariable(name = "store-id") Long storeId, @RequestBody String content) {
         Long memberId = authService.getLoginInfo().getMemberId();
         ReviewDto reviewDto = reviewService.addReview(storeId, memberId, content);
 

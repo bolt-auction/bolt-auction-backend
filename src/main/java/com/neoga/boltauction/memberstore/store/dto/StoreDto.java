@@ -9,8 +9,8 @@ import java.util.List;
 
 @Data
 public class StoreDto {
-    private Long id;
+    private Long storeId;
     private String description;
-    private String name;
+    private String storeName;
     private String imagePath;
 }

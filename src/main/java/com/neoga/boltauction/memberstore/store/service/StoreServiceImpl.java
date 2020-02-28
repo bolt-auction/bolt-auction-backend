@@ -13,7 +13,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.EntityManager;
 import java.io.IOException;
 
 @Service
@@ -44,7 +43,7 @@ public class StoreServiceImpl implements StoreService {
 
     private StoreDto mapStoreStoreDto(Store store) {
         StoreDto storeDto = modelMapper.map(store, StoreDto.class);
-        storeDto.setName(store.getMembers().getName());
+        storeDto.setStoreName(store.getMembers().getName());
 
         return storeDto;
     }
