@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/social")
+@RequestMapping(value = "/api/social", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
 public class KakaoContoller {
     private final KakaoService kakaoService;
     @Value("${kakao.loginURL}")
@@ -57,7 +58,7 @@ public class KakaoContoller {
     public ResponseEntity redirectKakao(@RequestParam String code) {
         RetKakaoAuth token = kakaoService.getKakaoToken(code);
 
-        Resource<LoginResponseDto> resource = new Resource(token);
+        Resource<RetKakaoAuth> resource = new Resource(token);
         resource.add(linkTo(methodOn(KakaoContoller.class).redirectKakao(code)).withSelfRel());
         resource.add(new Link("/swagger-ui.html#/auth%20API/signinByProviderUsingPOST").withRel("profile"));
         resource.add(linkTo(MemberController.class).slash("/social").withRel("socialSignup"));

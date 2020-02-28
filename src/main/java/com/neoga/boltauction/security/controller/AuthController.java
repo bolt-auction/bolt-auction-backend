@@ -40,7 +40,7 @@ public class AuthController {
     }
 
     @ApiOperation(value = "소셜 로그인", notes = "소셜 회원 로그인을 한다. \n" +
-            "401(Unauthorized) - 소셜 회원가입 안되어있음 (회원가입 리다이렉션 주소 반환)")
+            "403(FORBIDDEN) - 소셜 회원가입 안되어있음 (회원가입 리다이렉션 주소 반환)")
     @PostMapping(value = "/login/social/{provider}")
     public ResponseEntity loginByProvider(
             @ApiParam(value = "서비스 제공자 provider", required = true, defaultValue = "kakao") @PathVariable String provider,
@@ -53,7 +53,7 @@ public class AuthController {
         }catch(CMemberNotFoundException e){
             resource = new Resource(e.getMessage());
             resource.add(linkTo(MemberController.class).slash("/social").withRel("socialSignup"));
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(resource);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(resource);
         }
 
         resource = new Resource(loginResponse);
