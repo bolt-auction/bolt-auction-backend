@@ -2,7 +2,6 @@ package com.neoga.boltauction.item.repository;
 
 import com.neoga.boltauction.category.domain.Category;
 import com.neoga.boltauction.item.domain.Item;
-import com.neoga.boltauction.memberstore.store.domain.Store;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
