@@ -10,9 +10,6 @@ import com.neoga.boltauction.memberstore.review.repository.ReviewRepository;
 import com.neoga.boltauction.memberstore.store.domain.Store;
 import com.neoga.boltauction.memberstore.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
-import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
-import net.minidev.json.parser.ParseException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -65,8 +62,8 @@ public class ReviewServiceImpl implements ReviewService {
         ReviewDto reviewDto = modelMapper.map(review, ReviewDto.class);
 
         RegisterDto registerDto = new RegisterDto();
-        registerDto.setId(review.getRegister().getId());
-        registerDto.setName(review.getRegister().getName());
+        registerDto.setRegisterId(review.getRegister().getId());
+        registerDto.setRegisterName(review.getRegister().getName());
 
         String imagePath = review.getRegister().getStore().getImagePath();
         if (imagePath != null) {

@@ -63,7 +63,7 @@ public class ItemController {
         Page<ItemDto> itemDtoPage = itemService.getItems(categoryId, pageable);
 
         PagedResources<Resource<ItemDto>> resources = assembler.toResource(itemDtoPage, i -> new Resource<>(i));
-        resources.forEach(resource -> resource.add(linkTo(methodOn(ItemController.class).getItem(resource.getContent().getId())).withRel("item-detail")));
+        resources.forEach(resource -> resource.add(linkTo(methodOn(ItemController.class).getItem(resource.getContent().getItemId())).withRel("item-detail")));
         resources.add(new Link("/swagger-ui.html#/item-controller/getItemsUsingGET").withRel("profile"));
 
         return ResponseEntity.ok(resources);
@@ -79,11 +79,11 @@ public class ItemController {
         // save item
         ItemDto saveItemDto = itemService.saveItem(insertItemDto, memberId, images);
 
-        ControllerLinkBuilder selfLinkBuilder =linkTo(ItemController.class).slash(saveItemDto.getId());
+        ControllerLinkBuilder selfLinkBuilder =linkTo(ItemController.class).slash(saveItemDto.getItemId());
         URI createdUri = selfLinkBuilder.toUri();
         Resource resource = new Resource(saveItemDto);
 
-        resource.add(linkTo(methodOn(ItemController.class).getItem(saveItemDto.getId())).withRel("item-detail"));
+        resource.add(linkTo(methodOn(ItemController.class).getItem(saveItemDto.getItemId())).withRel("item-detail"));
         resource.add(linkTo(ItemController.class).withRel("query-events"));
         resource.add(selfLinkBuilder.withRel("update-event"));
         resource.add(new Link("/swagger-ui.html#/item-controller/insertItemUsingPOST").withRel("profile"));
@@ -99,7 +99,7 @@ public class ItemController {
         ItemDto findItem = itemService.getItem(id);
 
         Resource resource = new Resource(findItem);
-        resource.add(linkTo(ItemController.class).slash(findItem.getId()).withSelfRel());
+        resource.add(linkTo(ItemController.class).slash(findItem.getItemId()).withSelfRel());
         resource.add(new Link("/swagger-ui.html#/item-controller/getItemUsingGET").withRel("profile"));
 
         return ResponseEntity.ok(resource);
@@ -137,7 +137,7 @@ public class ItemController {
         ItemDto itemDto = itemService.updateItem(id, updateItemDto, memberId, images);
 
         Resource resource = new Resource(itemDto);
-        resource.add(linkTo(ItemController.class).slash(itemDto.getId()).withSelfRel());
+        resource.add(linkTo(ItemController.class).slash(itemDto.getItemId()).withSelfRel());
         resource.add(new Link("/swagger-ui.html#/item-controller/updateItemUsingPUT").withRel("profile"));
 
         return ResponseEntity.ok(resource);
@@ -161,7 +161,7 @@ public class ItemController {
         Page<ItemDto> itemDtoPage = itemService.searchItem(filter, keyword, pageable);
 
         PagedResources<Resource<ItemDto>> resources = assembler.toResource(itemDtoPage, i -> new Resource<>(i));
-        resources.forEach(resource -> resource.add(linkTo(methodOn(ItemController.class).getItem(resource.getContent().getId())).withRel("item-detail")));
+        resources.forEach(resource -> resource.add(linkTo(methodOn(ItemController.class).getItem(resource.getContent().getItemId())).withRel("item-detail")));
         resources.add(new Link("/swagger-ui.html#/item-controller/searchItemUsingGET").withRel("profile"));
 
         return ResponseEntity.ok(resources);
@@ -173,7 +173,7 @@ public class ItemController {
 
         List<Resource> resourceList = itemDtoList.stream().map(itemDto -> {
             Resource resource = new Resource(itemDto);
-            resource.add(linkTo(ItemController.class).slash(itemDto.getId()).withSelfRel());
+            resource.add(linkTo(ItemController.class).slash(itemDto.getItemId()).withSelfRel());
             return resource;
         }).collect(Collectors.toList());
 
