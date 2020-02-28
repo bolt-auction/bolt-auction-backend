@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class RegisterDto {
-    private Long id;
-    private String name;
+    private Long registerId;
+    private String registerName;
     private String imagePath;
 }
