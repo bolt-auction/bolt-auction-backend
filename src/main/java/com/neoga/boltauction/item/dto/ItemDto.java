@@ -30,4 +30,5 @@ public class ItemDto {
     private Category category;
     private JSONObject imagePath;
     private Long storeId;
+    private Long sellerId;
 }

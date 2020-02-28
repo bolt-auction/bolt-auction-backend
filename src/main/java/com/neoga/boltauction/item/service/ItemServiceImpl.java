@@ -147,6 +147,7 @@ public class ItemServiceImpl implements ItemService {
     private ItemDto mapItemItemDto(Item item) {
         ItemDto itemDto = modelMapper.map(item, ItemDto.class);
         itemDto.setStoreId(item.getStore().getId());
+        itemDto.setSellerId(item.getStore().getMembers().getId());
         try {
             itemDto.setImagePath((JSONObject) parser.parse(item.getImagePath()));
         } catch (ParseException e) {
