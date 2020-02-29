@@ -6,9 +6,6 @@ import com.neoga.boltauction.memberstore.store.domain.Store;
 import com.neoga.boltauction.memberstore.store.dto.StoreDto;
 import com.neoga.boltauction.memberstore.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
-import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
-import net.minidev.json.parser.ParseException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,9 +21,10 @@ public class StoreServiceImpl implements StoreService {
     private final ModelMapper modelMapper;
 
     @Override
-    public StoreDto updateStore(Store store, String description, MultipartFile image) throws IOException {
+    public StoreDto updateStore(Store store, String description, String memberName, MultipartFile image) throws IOException {
 
         store.setDescription(description);
+        store.getMembers().setName(memberName);
         imageService.saveStoreImage(store, image);
 
         Store saveStore = storeRepository.save(store);

@@ -45,7 +45,7 @@ public class StoreController {
     @ApiOperation(value = "상점 수정", notes = "상점 설명 이미지 등록")
     @PutMapping("{store-id}")
     public ResponseEntity updateStore(@PathVariable(name = "store-id") Long storeId,
-                                      @RequestBody String description, @RequestBody String name, MultipartFile image) throws IOException {
+                                      @RequestBody String description, @RequestBody String memberName, MultipartFile image) throws IOException {
         // 해당 유저인지 체크
         Long memberId = authService.getLoginInfo().getMemberId();
         Store findStore = memberService.findMemberById(memberId).getStore();
@@ -53,7 +53,7 @@ public class StoreController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        storeService.updateStore(findStore, description, image);
+        storeService.updateStore(findStore, description, memberName, image);
 
         Resource<Store> storeResource = new Resource(findStore);
         storeResource.add(linkTo(StoreController.class).slash(findStore.getId()).withSelfRel());
