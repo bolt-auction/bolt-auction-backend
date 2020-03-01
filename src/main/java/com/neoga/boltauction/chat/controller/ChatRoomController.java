@@ -2,6 +2,7 @@ package com.neoga.boltauction.chat.controller;
 
 import com.neoga.boltauction.chat.domain.ChatRoom;
 import com.neoga.boltauction.chat.domain.ChatRoomJoin;
+import com.neoga.boltauction.chat.dto.CreateRoomDto;
 import com.neoga.boltauction.chat.repository.ChatRoomRepository;
 import com.neoga.boltauction.chat.service.ChatRoomJoinService;
 import com.neoga.boltauction.chat.service.ChatRoomService;
@@ -32,8 +33,8 @@ public class ChatRoomController {
     // 1:1 채팅방 생성
     @PostMapping()
     @ResponseBody
-    public ResponseEntity createRoom(@RequestParam String roomName, @RequestParam Long rcvMemberId) {
-        ChatRoom newRoom = chatRoomService.createChatRoom(roomName, rcvMemberId);
+    public ResponseEntity createRoom(@RequestBody CreateRoomDto createRoomDto) {
+        ChatRoom newRoom = chatRoomService.createChatRoom(createRoomDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(newRoom);
     }
 }
