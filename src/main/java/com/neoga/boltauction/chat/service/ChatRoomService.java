@@ -2,6 +2,7 @@ package com.neoga.boltauction.chat.service;
 
 import com.neoga.boltauction.chat.domain.ChatRoom;
 import com.neoga.boltauction.chat.repository.ChatRoomRepository;
+import com.neoga.boltauction.memberstore.member.domain.Members;
 import com.neoga.boltauction.security.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,9 @@ public class ChatRoomService {
 
     // 1:1 채팅방 생성
     public ChatRoom createChatRoom(String roomName, Long recvMemberId){
-        ChatRoom newRoom = chatRoomRepository.save(ChatRoom.builder().name(roomName).build());
+        ChatRoom newRoom = chatRoomRepository.save(new ChatRoom(roomName));
         Long memberId = authService.getLoginInfo().getMemberId();
+
         chatRoomJoinService.joinRoom(newRoom, recvMemberId);
         chatRoomJoinService.joinRoom(newRoom, memberId);
         return newRoom;
