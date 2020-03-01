@@ -20,6 +20,7 @@ public class ChatRoomJoinService {
     private final MemberRepository memberRepository;
     private final AuthService authService;
 
+    //채팅방 참여
     public void joinRoom(ChatRoom Room, Long memberId){
         Members member = memberRepository.findById(memberId).orElseThrow(CMemberNotFoundException::new);
         ChatRoomJoin roomJoin = ChatRoomJoin.builder()
