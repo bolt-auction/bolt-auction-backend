@@ -6,6 +6,7 @@ import com.neoga.boltauction.chat.repository.ChatRoomRepository;
 import com.neoga.boltauction.chat.service.ChatRoomJoinService;
 import com.neoga.boltauction.chat.service.ChatRoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,6 @@ import java.util.List;
 public class ChatRoomController {
 
     private final ChatRoomService chatRoomService;
-    private final ChatRoomJoinService chatRoomJoinService;
 
     // 자신의 채팅방 목록 반환
     @GetMapping()
@@ -34,13 +34,6 @@ public class ChatRoomController {
     @ResponseBody
     public ResponseEntity createRoom(@RequestParam String roomName, @RequestParam Long rcvMemberId) {
         ChatRoom newRoom = chatRoomService.createChatRoom(roomName, rcvMemberId);
-        return ResponseEntity.ok().body(newRoom);
-    }
-
-    // 특정 채팅방 조회
-    @GetMapping("/{roomId}")
-    @ResponseBody
-    public ResponseEntity roomInfo(@PathVariable Long roomId) {
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(newRoom);
     }
 }
