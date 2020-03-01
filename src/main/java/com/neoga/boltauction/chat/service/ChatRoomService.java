@@ -1,12 +1,15 @@
 package com.neoga.boltauction.chat.service;
 
 import com.neoga.boltauction.chat.domain.ChatRoom;
+import com.neoga.boltauction.chat.dto.CreateRoomDto;
 import com.neoga.boltauction.chat.repository.ChatRoomRepository;
+import com.neoga.boltauction.item.domain.Item;
 import com.neoga.boltauction.memberstore.member.domain.Members;
 import com.neoga.boltauction.security.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -15,13 +18,19 @@ public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomJoinService chatRoomJoinService;
     private final AuthService authService;
+    private final EntityManager em;
 
     // 1:1 채팅방 생성
-    public ChatRoom createChatRoom(String roomName, Long recvMemberId){
-        ChatRoom newRoom = chatRoomRepository.save(new ChatRoom(roomName));
+    public ChatRoom createChatRoom(CreateRoomDto createRoomDto){
+        Item item = em.getReference(Item.class, createRoomDto.getItemId());
+        ChatRoom newRoom = chatRoomRepository
+                .save(ChatRoom.builder()
+                        .name(createRoomDto.getName())
+                        .item(item).build());
+
         Long memberId = authService.getLoginInfo().getMemberId();
 
-        chatRoomJoinService.joinRoom(newRoom, recvMemberId);
+        chatRoomJoinService.joinRoom(newRoom, createRoomDto.getRcvMemberId());
         chatRoomJoinService.joinRoom(newRoom, memberId);
         return newRoom;
     }
