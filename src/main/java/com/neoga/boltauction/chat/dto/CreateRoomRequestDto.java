@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CreateRoomDto {
+public class CreateRoomRequestDto {
     @JsonProperty("chatRoomName")
     private String name;
     @JsonProperty("recvMemberId")
