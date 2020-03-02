@@ -9,7 +9,11 @@ branches:
   only:
     - develop
 
-script: "./gradlew clean build"
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+
+script: "./mvnw clean package"
 
 notifications:
   email:
