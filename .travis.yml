@@ -1,0 +1,17 @@
+language: java
+jdk:
+  - openjdk8
+
+before_install:
+  - chmod +x mvnw
+
+branches:
+  only:
+    - develop
+
+script: "./gradlew clean build"
+
+notifications:
+  email:
+    recipients:
+      - hscom96@gmail.com 
