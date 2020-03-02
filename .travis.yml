@@ -25,7 +25,7 @@ deploy:
     access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
     secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
     bucket: boltauction # 6-3-3에서 생성한 S3 버킷
-    region: us-east-2
+    region: us-east-2a
     skip_cleanup: true
     acl: public_read
     local_dir: deploy
