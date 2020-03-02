@@ -92,6 +92,7 @@ public class ItemServiceImpl implements ItemService {
         item.setStore(findStore);
         Category findCategory = categoryRepository.findById(insertItemDto.getCategoryId()).orElseThrow(() -> new CCategoryNotFoundException("카테고리를 찾을 수 없습니다."));
         item.setCategory(findCategory);
+        item.setBidCount(0);
 
         Item saveItem = itemRepository.save(item);
 

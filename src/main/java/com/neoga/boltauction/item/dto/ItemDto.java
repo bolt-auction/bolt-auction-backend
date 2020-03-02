@@ -31,4 +31,5 @@ public class ItemDto {
     private String[] imagePath;
     private Long storeId;
     private Long sellerId;
+    private Long bidCount;
 }
