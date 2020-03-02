@@ -16,6 +16,4 @@ cache:
 script: "./mvnw clean package"
 
 notifications:
-  email:
-    recipients:
-      - hscom96@gmail.com 
+  slack: auctionnara:bbI6hEve7YM2YlHDKpBbwE6m
