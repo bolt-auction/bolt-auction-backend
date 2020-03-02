@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public interface StoreService {
 
-    StoreDto updateStore(Store store, String description, MultipartFile image) throws IOException;
+    StoreDto updateStore(Store store, String description, String memberName, MultipartFile image) throws IOException;
 
     StoreDto getStore(Long storeId);
 }
