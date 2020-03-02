@@ -35,7 +35,7 @@ public class BidController {
 
     @ApiOperation(value = "입찰 등록", notes = "해당 상품에 입찰 등록")
     @PostMapping("/{item-id}")
-    public ResponseEntity registerBidItem(@PathVariable(name = "item-id") Long itemId, int price) {
+    public ResponseEntity registerBidItem(@PathVariable(name = "item-id") Long itemId, @RequestBody int price) {
         Long memberId = authService.getLoginInfo().getMemberId();
         BidDto bidDto = bidService.saveBid(itemId, price, memberId);
 
@@ -46,9 +46,16 @@ public class BidController {
         return ResponseEntity.ok(resource);
     }
 
-    @ApiOperation(value = "입찰 삭제", notes = "미구현")
+    @ApiOperation(value = "입찰 삭제", notes = "")
     @DeleteMapping("/{item-id}")
-    public ResponseEntity deleteBidItem() {
+    public ResponseEntity deleteBidItem(@PathVariable(name = "item-id") Long itemId, @RequestBody Long bidId) {
+        Long memberId = authService.getLoginInfo().getMemberId();
+        Long findMemberId = bidService.getMemberId(bidId);
+
+        if (memberId == findMemberId){
+            bidService.deleteBid(bidId);
+        }
+
         return null;
     }
 }

@@ -6,13 +6,10 @@ import com.neoga.boltauction.bid.repository.BidRepository;
 import com.neoga.boltauction.exception.custom.CItemNotFoundException;
 import com.neoga.boltauction.exception.custom.CMemberNotFoundException;
 import com.neoga.boltauction.item.domain.Item;
-import com.neoga.boltauction.item.dto.ItemDto;
 import com.neoga.boltauction.item.repository.ItemRepository;
 import com.neoga.boltauction.memberstore.member.domain.Members;
 import com.neoga.boltauction.memberstore.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import net.minidev.json.JSONObject;
-import net.minidev.json.parser.ParseException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -52,6 +49,16 @@ public class BidServiceImpl implements BidService {
         bidRepository.save(bid);
 
         return mapBidBidDto(bid);
+    }
+
+    @Override
+    public Long getMemberId(Long bidId) {
+        return bidRepository.getOne(bidId).getMembers().getId();
+    }
+
+    @Override
+    public void deleteBid(Long bidId) {
+        bidRepository.deleteById(bidId);
     }
 
     private BidDto mapBidBidDto(Bid bid) {
