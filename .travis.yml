@@ -5,7 +5,11 @@ jdk:
 before_install:
   - chmod +x mvnw
 
-branches:
+
+before_deploy:
+  - zip -r springboot-boltauction *
+  - mkdir -p deploy
+  - mv springboot-boltauction.zip deploy/springboot-boltauction.zip
   only:
     - develop
 
@@ -17,3 +21,17 @@ script: "./mvnw clean package"
 
 notifications:
   slack: auctionnara:bbI6hEve7YM2YlHDKpBbwE6m
+
+deploy:
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
+    secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
+    bucket: springboot-webservice-deploy # 6-3-3에서 생성한 S3 버킷
+    region: us-east-2
+    skip_cleanup: true
+    acl: public_read
+    local_dir: deploy
+    wait-until-deployed: true
+    on:
+      repo: bolt-auction/bolt-auction-backend #Github 주소
+      branch: develop
