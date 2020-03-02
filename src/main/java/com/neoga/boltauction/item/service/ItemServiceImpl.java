@@ -4,7 +4,6 @@ import com.neoga.boltauction.category.domain.Category;
 import com.neoga.boltauction.category.repository.CategoryRepository;
 import com.neoga.boltauction.exception.custom.CCategoryNotFoundException;
 import com.neoga.boltauction.exception.custom.CItemNotFoundException;
-import com.neoga.boltauction.exception.custom.CMemberNotFoundException;
 import com.neoga.boltauction.image.service.ImageService;
 import com.neoga.boltauction.item.domain.Item;
 import com.neoga.boltauction.item.dto.InsertItemDto;
@@ -14,9 +13,6 @@ import com.neoga.boltauction.item.repository.ItemRepository;
 import com.neoga.boltauction.memberstore.member.repository.MemberRepository;
 import com.neoga.boltauction.memberstore.store.domain.Store;
 import lombok.RequiredArgsConstructor;
-import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
-import net.minidev.json.parser.ParseException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.data.domain.Page;
@@ -25,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,8 +37,6 @@ public class ItemServiceImpl implements ItemService {
     private static final int NO_CATEGORY = 0;
     private static final int FIRST_CATEGORY = 1;
     private static final int LAST_CATEGORY = 53;
-
-    private static final JSONParser parser = new JSONParser();
 
     @Override
     public ItemDto getItem(Long id) {
@@ -146,13 +139,13 @@ public class ItemServiceImpl implements ItemService {
 
     private ItemDto mapItemItemDto(Item item) {
         ItemDto itemDto = modelMapper.map(item, ItemDto.class);
+        itemDto.setItemId(item.getId());
+        itemDto.setItemName(item.getName());
         itemDto.setStoreId(item.getStore().getId());
         itemDto.setSellerId(item.getStore().getMembers().getId());
-        try {
-            itemDto.setImagePath((JSONObject) parser.parse(item.getImagePath()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
+        String[] pathArray = item.getImagePath().split(",");
+        itemDto.setImagePath(pathArray);
 
         return itemDto;
     }

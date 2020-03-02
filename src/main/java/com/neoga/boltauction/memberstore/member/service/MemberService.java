@@ -10,8 +10,6 @@ import com.neoga.boltauction.memberstore.store.repository.StoreRepository;
 import com.neoga.boltauction.security.dto.KakaoProfile;
 import com.neoga.boltauction.security.service.KakaoService;
 import lombok.RequiredArgsConstructor;
-import net.minidev.json.parser.JSONParser;
-import net.minidev.json.parser.ParseException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

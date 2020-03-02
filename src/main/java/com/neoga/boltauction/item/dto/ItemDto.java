@@ -28,7 +28,7 @@ public class ItemDto {
     @Future
     private LocalDateTime endDt;
     private Category category;
-    private JSONObject imagePath;
+    private String[] imagePath;
     private Long storeId;
     private Long sellerId;
 }
