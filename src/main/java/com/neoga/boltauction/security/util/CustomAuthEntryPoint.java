@@ -1,4 +1,4 @@
-package com.neoga.boltauction.security.config;
+package com.neoga.boltauction.security.util;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
