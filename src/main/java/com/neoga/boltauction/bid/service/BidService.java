@@ -9,4 +9,8 @@ public interface BidService {
     List<BidDto> getBidList(Long id);
 
     BidDto saveBid(Long itemId, int price, Long memberId);
+
+    Long getMemberId(Long bidId);
+
+    void deleteBid(Long bidId);
 }
