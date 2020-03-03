@@ -5,7 +5,7 @@ import com.neoga.boltauction.item.domain.Item;
 import com.neoga.boltauction.item.repository.ItemRepository;
 import com.neoga.boltauction.memberstore.store.domain.Store;
 import com.neoga.boltauction.memberstore.store.repository.StoreRepository;
-import com.neoga.boltauction.s3.S3Uploader;
+import com.neoga.boltauction.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
