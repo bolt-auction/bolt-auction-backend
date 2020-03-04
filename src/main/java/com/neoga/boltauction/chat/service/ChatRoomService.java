@@ -10,6 +10,7 @@ import com.neoga.boltauction.item.domain.Item;
 import com.neoga.boltauction.memberstore.member.domain.Members;
 import com.neoga.boltauction.memberstore.member.repository.MemberRepository;
 import com.neoga.boltauction.security.service.AuthService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,24 +21,15 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class ChatRoomService {
-    private EntityManager em;
-    private  AuthService authService;
-    private ChatRoomRepository chatRoomRepository;
-    private ChatRoomJoinRepository chatjoinRepository;
-    private MemberRepository memberRepository;
+    private final EntityManager em;
+    private final AuthService authService;
+    private final ChatRoomRepository chatRoomRepository;
+    private final ChatRoomJoinRepository chatjoinRepository;
+    private final MemberRepository memberRepository;
 
-    @Autowired
-    public ChatRoomService(EntityManager em, AuthService authService,
-                           ChatRoomRepository chatRoomRepository,
-                           ChatRoomJoinRepository chatjoinRepository, MemberRepository memberRepository) {
-        this.em = em;
-        this.authService = authService;
-        this.chatRoomRepository = chatRoomRepository;
-        this.chatjoinRepository = chatjoinRepository;
-        this.memberRepository = memberRepository;
-    }
 
     // 1:1 채팅방 생성
     public ChatRoom createChatRoom(CreateRoomRequestDto createRoomDto){

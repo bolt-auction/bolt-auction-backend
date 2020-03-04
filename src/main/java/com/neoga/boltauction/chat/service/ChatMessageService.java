@@ -18,26 +18,27 @@ import javax.persistence.EntityManager;
 @RequiredArgsConstructor
 @Service
 public class ChatMessageService {
+    private final EntityManager em;
+    private final SimpMessagingTemplate webSocketMessagingTemplate;
     private final ChatMessageRepository chatMessageRepository;
     private final AuthService authService;
     private final ModelMapper modelMapper;
-    private final EntityManager em;
 
-    public ChatMessage saveMessage(SendMessageDto sendMessageDto){
+    public void sendMessage(SendMessageDto sendMessageDto){
         Members sender = em.getReference(Members.class, authService.getLoginInfo().getMemberId());
         ChatRoom chatRoom = em.getReference(ChatRoom.class,sendMessageDto.getChatRoomId());
+
         ChatMessage chatMessage = modelMapper.map(sendMessageDto, ChatMessage.class);
         chatMessage.setChatRoom(chatRoom);
         chatMessage.setSender(sender);
 
-        chatMessageRepository.save(chatMessage);
+        ChatMessage newMessage = chatMessageRepository.save(chatMessage);
 
-        return  chatMessage;
+        webSocketMessagingTemplate.convertAndSend("/topic/chatRoom."+ newMessage.getChatRoom().getId(), newMessage);
     }
 
-
-    public Page<ChatMessage> findMessageByChatRoom(ChatRoom chatroom, Pageable pageable){
+    public Page<ChatMessage> findMessageByChatRoom(Long chatRoomId, Pageable pageable){
+        ChatRoom chatroom = em.getReference(ChatRoom.class,chatRoomId);
         return chatMessageRepository.findAllByChatRoom(chatroom, pageable);
     }
-
 }

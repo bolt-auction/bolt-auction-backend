@@ -25,3 +25,4 @@ public class ChatRoomJoin {
     @JoinColumn(name = "member_id")
     private Members participant;
 }
+

@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
-    @Query("select j.chatRoom from ChatRoomJoin j JOIN j.chatRoom  ON j.participant.id = :memberId")
+    @Query("select r from ChatRoom r JOIN r.chatRoomJoins j ON j.participant.id = :memberId")
     Page<ChatRoom> findChatRoomList(Long memberId, Pageable pageable);
 
 }
