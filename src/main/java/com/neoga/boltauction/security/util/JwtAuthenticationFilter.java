@@ -1,4 +1,4 @@
-package com.neoga.boltauction.security.config;
+package com.neoga.boltauction.security.util;
 
 import com.neoga.boltauction.exception.custom.CJwtTokenMissingException;
 import com.neoga.boltauction.security.service.JwtTokenService;

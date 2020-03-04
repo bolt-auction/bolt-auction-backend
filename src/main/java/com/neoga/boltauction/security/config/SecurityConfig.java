@@ -1,6 +1,9 @@
 package com.neoga.boltauction.security.config;
 
 import com.neoga.boltauction.security.service.JwtTokenService;
+import com.neoga.boltauction.security.util.CustomAccessDeniedHandler;
+import com.neoga.boltauction.security.util.CustomAuthEntryPoint;
+import com.neoga.boltauction.security.util.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,7 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeRequests()
-                         .antMatchers(HttpMethod.GET, "/api/member/**").hasRole("USER")
+                        .antMatchers(HttpMethod.GET, "/api/member/**").hasRole("USER")
+                        .antMatchers("/api/chat/**").hasRole("USER")
                         .antMatchers("/api/auth/**","/api/social/**","/favicon.ico").permitAll()
                         .antMatchers(HttpMethod.GET, "/api/**","/exception/**","/*").permitAll()
                         .antMatchers(HttpMethod.POST, "/api/member/**", "/api/bid/**").permitAll()

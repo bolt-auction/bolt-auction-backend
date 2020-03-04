@@ -26,8 +26,8 @@ public class MemberController {
     @ApiOperation(value = "자신 정보조회")
     @GetMapping()
     public ResponseEntity findMemberById(){
-        Long member_id = authService.getLoginInfo().getMemberId();
-        Members findMember = memberService.findMemberById(member_id);
+        Long memberId = authService.getLoginInfo().getMemberId();
+        Members findMember = memberService.findMemberById(memberId);
 
         Resource<Members> resource = new Resource(findMember);
         resource.add(linkTo(MemberController.class).withSelfRel());

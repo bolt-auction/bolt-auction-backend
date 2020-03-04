@@ -3,20 +3,14 @@ package com.neoga.boltauction.config;
 import com.google.common.collect.Lists;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.hateoas.LinkDiscoverer;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.plugin.core.OrderAwarePluginRegistry;
-import org.springframework.plugin.core.PluginRegistry;
 import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.awt.print.Pageable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static springfox.documentation.builders.PathSelectors.regex;
@@ -25,7 +19,7 @@ import static springfox.documentation.builders.PathSelectors.regex;
 @EnableSwagger2
 public class SwaggerConfiguration {
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String DEFAULT_INCLUDE_PATTERN = "/api/.*";
+    public static final String DEFAULT_INCLUDE_PATTERN = "/.*";
 
     @Bean
     public Docket swaggerSpringfoxDocket() {
