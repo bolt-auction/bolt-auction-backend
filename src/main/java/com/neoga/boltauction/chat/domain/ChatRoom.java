@@ -2,7 +2,9 @@ package com.neoga.boltauction.chat.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.neoga.boltauction.item.domain.Item;
+import com.neoga.boltauction.item.util.ItemSerializer;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -27,8 +29,8 @@ public class ChatRoom {
     @Column(updatable = false)
     @CreationTimestamp
     private LocalDateTime createDt;
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "item_id")
+    @JsonSerialize(using = ItemSerializer.class)
     private Item item;
 }
