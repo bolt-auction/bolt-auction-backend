@@ -12,6 +12,7 @@ import com.neoga.boltauction.memberstore.member.repository.MemberRepository;
 import com.neoga.boltauction.security.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -56,7 +57,7 @@ public class ChatRoomService {
     }
 
     //자신이 참여한 채팅방 리스트 반환
-    public List<ChatRoom> findChatRoomList(Pageable pageable){
+    public Page<ChatRoom> findChatRoomList(Pageable pageable){
         Long memberId = authService.getLoginInfo().getMemberId();
         return chatRoomRepository.findChatRoomList(memberId, pageable);
     }

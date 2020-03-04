@@ -29,8 +29,8 @@ public class ChatRoom {
     @Column(updatable = false)
     @CreationTimestamp
     private LocalDateTime createDt;
+    @JsonSerialize(using = ItemSerializer.class)
     @ManyToOne
     @JoinColumn(name = "item_id")
-    @JsonSerialize(using = ItemSerializer.class)
     private Item item;
 }

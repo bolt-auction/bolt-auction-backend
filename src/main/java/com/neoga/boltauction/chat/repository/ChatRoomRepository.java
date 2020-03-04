@@ -2,6 +2,7 @@ package com.neoga.boltauction.chat.repository;
 
 import com.neoga.boltauction.chat.domain.ChatRoom;
 import com.neoga.boltauction.chat.domain.ChatRoomJoin;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Repository
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
-    @Query("select j.chatRoom from ChatRoomJoin j JOIN j.chatRoom r ON j.participant.id = :memberId")
-    List<ChatRoom> findChatRoomList(Long memberId, Pageable pageable);
+    @Query("select j.chatRoom from ChatRoomJoin j JOIN j.chatRoom  ON j.participant.id = :memberId")
+    Page<ChatRoom> findChatRoomList(Long memberId, Pageable pageable);
+
 }
