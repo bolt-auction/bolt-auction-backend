@@ -2,6 +2,7 @@ package com.neoga.boltauction.config;
 
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +24,6 @@ public class AppConfig {
 
     @Bean
     public RestTemplate restTemplate() {
-
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
 
         CloseableHttpClient client = HttpClientBuilder.create()
@@ -36,5 +36,10 @@ public class AppConfig {
         factory.setReadTimeout(env.getProperty("rest.factory.setReadTimeout",Integer.class));
 
         return new RestTemplate(factory);
+    }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
     }
 }
