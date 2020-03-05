@@ -10,6 +10,4 @@ import java.util.Optional;
 
 @Repository
 public interface ChatRoomJoinRepository extends JpaRepository<ChatRoomJoin, Long> {
-    @Query("select j.participant from ChatRoomJoin j JOIN j.participant ON j.participant.id = :memberId")
-    Optional<Members> getChatMemberInfo(Long chatRoomid);
 }
