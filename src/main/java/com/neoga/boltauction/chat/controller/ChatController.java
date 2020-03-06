@@ -54,6 +54,4 @@ public class ChatController {
     public void sendMessage(@Payload SendMessageDto sendMessageDto){
         chatMessageService.sendMessage(sendMessageDto);
     }
-
-
 }

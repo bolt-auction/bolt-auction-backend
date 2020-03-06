@@ -30,8 +30,8 @@ public class RabbitMqWebSocketConfig implements WebSocketMessageBrokerConfigurer
         registry.enableStompBrokerRelay("/queue/", "/topic/")
                 .setRelayHost(relayHost)
                 .setRelayPort(relayPort)
-                .setClientLogin("guest")
-                .setClientPasscode("guest");
+                .setClientLogin("admin")
+                .setClientPasscode("admin");
         registry.setApplicationDestinationPrefixes("/app")
                 .setPathMatcher(new AntPathMatcher("."));
     }
