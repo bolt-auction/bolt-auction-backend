@@ -34,14 +34,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .httpBasic().disable()
-                .cors().disable() // 프론트 엔드 개발을 위한 설정 (추후 삭제)
-                .csrf().disable()
+                .cors() // 프론트 엔드 개발을 위한 설정 (추후 삭제)
+                .and()
+                //.csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeRequests()
                         .antMatchers(HttpMethod.GET, "/api/member/**").hasRole("USER")
                         .antMatchers("/api/chat/**").hasRole("USER")
-                        .antMatchers("/api/auth/**","/api/social/**","/favicon.ico").permitAll()
+                        .antMatchers("/api/auth/**","/api/social/**","/favicon.ico","ws-stomp").permitAll()
                         .antMatchers(HttpMethod.GET, "/api/**","/exception/**","/*").permitAll()
                         .antMatchers(HttpMethod.POST, "/api/member/**", "/api/bid/**").permitAll()
                     .anyRequest().hasRole("USER")
