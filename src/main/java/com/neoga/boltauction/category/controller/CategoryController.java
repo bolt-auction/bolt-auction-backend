@@ -10,13 +10,12 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,9 +32,59 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity getCategory() {
+        CategoryListDto categoryListDto = new CategoryListDto();
 
-        List<Category> categoryList = categoryService.getSupCategoryList();
-        Resources resource = new Resources(categoryList);
+        //get all category List
+        List<Category> categoryList = categoryService.getCategoryList();
+
+
+        //get all super category List
+        List<Category> supCategoryList = new ArrayList<>();
+        for (Category category : categoryList) {
+            if (category.getSupCategory() == null) {
+                supCategoryList.add(category);
+            }
+        }
+        //map super category list to super category dto list
+        List<SupCategoryDto> supCategoryDtoList = supCategoryList.stream()
+                .map(category -> modelMapper.map(category, SupCategoryDto.class))
+                .collect(Collectors.toList());
+        //set sub category list
+        supCategoryDtoList.forEach(supCategoryDto -> {
+            //get sub category list
+            List<Category> subCategoryList = new ArrayList<>();
+            for (Category category : categoryList) {
+                if (category.getSupCategory() != null &&
+                        category.getSupCategory().getId() == supCategoryDto.getId()) {
+                    subCategoryList.add(category);
+                }
+            }
+            //map sub category to category dto
+            List<CategoryDto> subCategoryDtoList = subCategoryList.stream()
+                    .map(category -> modelMapper.map(category, CategoryDto.class))
+                    .collect(Collectors.toList());
+            //make sub category entity model list
+            List<Resource> subCategoryEntityModelList = subCategoryDtoList
+                    .stream().map(categoryDto -> {
+                        Resource resource = new Resource(categoryDto);
+                        resource.add(linkTo(methodOn(ItemController.class).getItems(categoryDto.getId(), null, null)).withRel("item-list"));
+                        return resource;
+                    }).collect(Collectors.toList());
+            //set sub category entity model list to sup category
+            supCategoryDto.setSubCategoryList(subCategoryEntityModelList);
+        });
+        // make sup category entity model list
+        List<Resource> supCategoryEntityModelList = supCategoryDtoList.stream().map(supCategoryDto -> {
+            Resource resource = new Resource(supCategoryDto);
+            resource.add(linkTo(methodOn(ItemController.class).getItems(supCategoryDto.getId(), null, null)).withRel("item-list"));
+            return resource;
+        }).collect(Collectors.toList());
+
+        // set category list dto
+        categoryListDto.setSupCategoryList(supCategoryEntityModelList);
+        // make category list dto entity model
+        Resource resource = new Resource(categoryListDto);
+        resource.add(new Link("/").withRel("profile"));
 
         return ResponseEntity.ok(resource);
     }
