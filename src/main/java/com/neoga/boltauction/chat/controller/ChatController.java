@@ -40,7 +40,7 @@ public class ChatController {
             @ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query",
                     value = "property(,asc|desc) 기본 내림차순")
     })
-    @GetMapping("/chat/message")
+    @GetMapping("/api/chat/message")
     public ResponseEntity<PagedResources<Resource<ChatMessage>>> listOldMessages(@RequestParam Long chatRoomId,
                                                                                  @ApiIgnore Pageable pageable,
                                                                                  @ApiIgnore PagedResourcesAssembler<ChatMessage> assembler){
