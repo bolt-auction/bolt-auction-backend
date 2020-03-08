@@ -2,7 +2,6 @@ package com.neoga.boltauction.bid.controller;
 
 import com.neoga.boltauction.bid.dto.BidDto;
 import com.neoga.boltauction.bid.service.BidService;
-import com.neoga.boltauction.item.controller.ItemController;
 import com.neoga.boltauction.security.service.AuthService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
