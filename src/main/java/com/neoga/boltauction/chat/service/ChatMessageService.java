@@ -14,6 +14,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import java.lang.reflect.Member;
 
 @RequiredArgsConstructor
 @Service
@@ -21,12 +22,11 @@ public class ChatMessageService {
     private final EntityManager em;
     private final SimpMessagingTemplate webSocketMessagingTemplate;
     private final ChatMessageRepository chatMessageRepository;
-    private final AuthService authService;
     private final ModelMapper modelMapper;
 
     public void sendMessage(SendMessageDto sendMessageDto){
-        Members sender = em.getReference(Members.class, authService.getLoginInfo().getMemberId());
         ChatRoom chatRoom = em.getReference(ChatRoom.class,sendMessageDto.getChatRoomId());
+        Members sender = em.getReference(Members.class,sendMessageDto.getSenderId());
 
         ChatMessage chatMessage = modelMapper.map(sendMessageDto, ChatMessage.class);
         chatMessage.setChatRoom(chatRoom);
