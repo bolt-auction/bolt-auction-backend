@@ -52,10 +52,10 @@ public class ItemController {
             @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query",
                     value = "페이지의 아이템 수", defaultValue = "20"),
             @ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query",
-                    value = "인기순 : bidCount,asc" +
-                            "최신순 : createDt,asc" +
-                            "낮은가격순 : currentPrice,asc " +
-                            "높은가격순 : currentPrice,desc")
+                    value = "인기순 : bidCount,asc\n" +
+                            "최신순 : createDt,asc\n" +
+                            "낮은가격순 : currentPrice,asc\n" +
+                            "높은가격순 : currentPrice,desc\n")
     })
     @GetMapping("category/{category-id}")
     public ResponseEntity getItems(@PathVariable(name = "category-id") Long categoryId, @ApiIgnore Pageable pageable,
@@ -154,10 +154,10 @@ public class ItemController {
             @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query",
                     value = "페이지의 아이템 수", defaultValue = "20"),
             @ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query",
-                    value = "인기순 : bidCount,asc" +
-                            "최신순 : createDt,asc" +
-                            "낮은가격순 : currentPrice,asc " +
-                            "높은가격순 : currentPrice,desc")
+                    value = "인기순 : bidCount,asc\n" +
+                            "최신순 : createDt,asc\n" +
+                            "낮은가격순 : currentPrice,asc\n" +
+                            "높은가격순 : currentPrice,desc\n")
     })
     @GetMapping
     public ResponseEntity<PagedResources<Resource<ItemDto>>> searchItem(@RequestParam String filter,@RequestParam String keyword, @ApiIgnore Pageable pageable,
