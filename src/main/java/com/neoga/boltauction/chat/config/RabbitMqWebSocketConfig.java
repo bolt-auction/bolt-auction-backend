@@ -34,7 +34,6 @@ public class RabbitMqWebSocketConfig implements WebSocketMessageBrokerConfigurer
                 .setClientPasscode("admin")
                 .setSystemLogin("admin")
                 .setSystemPasscode("admin");
-        registry.setApplicationDestinationPrefixes("/app")
-                .setPathMatcher(new AntPathMatcher("."));
+        registry.setApplicationDestinationPrefixes("/app");
     }
 }
