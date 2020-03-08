@@ -24,8 +24,8 @@ public class ChatMessageService {
     private final ChatMessageRepository chatMessageRepository;
     private final ModelMapper modelMapper;
 
-    public void sendMessage(SendMessageDto sendMessageDto){
-        ChatRoom chatRoom = em.getReference(ChatRoom.class,sendMessageDto.getChatRoomId());
+    public ChatMessage sendMessage(Long chatRoomId, SendMessageDto sendMessageDto){
+        ChatRoom chatRoom = em.getReference(ChatRoom.class, chatRoomId);
         Members sender = em.getReference(Members.class,sendMessageDto.getSenderId());
 
         ChatMessage chatMessage = modelMapper.map(sendMessageDto, ChatMessage.class);
@@ -34,7 +34,8 @@ public class ChatMessageService {
 
         ChatMessage newMessage = chatMessageRepository.save(chatMessage);
 
-        webSocketMessagingTemplate.convertAndSend("/topic/chatRoom."+ newMessage.getChatRoom().getId(), newMessage);
+        return newMessage;
+        //webSocketMessagingTemplate.convertAndSend("/topic/chatRoom."+ newMessage.getChatRoom().getId(), newMessage);
     }
 
     public Page<ChatMessage> findMessageByChatRoom(Long chatRoomId, Pageable pageable){
