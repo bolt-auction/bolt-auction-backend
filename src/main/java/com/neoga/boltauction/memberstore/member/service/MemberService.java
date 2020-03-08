@@ -5,8 +5,6 @@ import com.neoga.boltauction.exception.custom.CAlreadySignUpException;
 import com.neoga.boltauction.memberstore.member.domain.Members;
 import com.neoga.boltauction.memberstore.member.dto.SignupRequestDto;
 import com.neoga.boltauction.memberstore.member.repository.MemberRepository;
-import com.neoga.boltauction.memberstore.store.domain.Store;
-import com.neoga.boltauction.memberstore.store.repository.StoreRepository;
 import com.neoga.boltauction.security.dto.KakaoProfile;
 import com.neoga.boltauction.security.service.KakaoService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +20,6 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final KakaoService kakaoService;
-    private final StoreRepository storeRepository;
 
     public Members findMemberById(Long member_id){
         return memberRepository.findById(member_id).get();
@@ -45,12 +42,6 @@ public class MemberService {
 
         memberRepository.save(newMember);
 
-        // store 생성
-        Store store = new Store();
-        store.changeMembers(newMember);
-
-        storeRepository.save(store);
-
         return newMember;
     }
 
@@ -60,16 +51,11 @@ public class MemberService {
         if(member.isPresent())
             throw new CAlreadySignUpException();
 
-        // store 생성
-        Store store = new Store();
-        Store saveStore = storeRepository.save(store);
-
         Members newMember = memberRepository.save(Members.builder()
                 .uid(String.valueOf(profile.getId()))
                 .provider(provider)
                 .name(name)
                 .role(Collections.singletonList("USER"))
-                .store(saveStore)
                 .build());
 
         return newMember;

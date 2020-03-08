@@ -3,8 +3,8 @@ package com.neoga.boltauction.image.service;
 import com.neoga.boltauction.exception.custom.CNotImageException;
 import com.neoga.boltauction.item.domain.Item;
 import com.neoga.boltauction.item.repository.ItemRepository;
-import com.neoga.boltauction.memberstore.store.domain.Store;
-import com.neoga.boltauction.memberstore.store.repository.StoreRepository;
+import com.neoga.boltauction.memberstore.member.domain.Members;
+import com.neoga.boltauction.memberstore.member.repository.MemberRepository;
 import com.neoga.boltauction.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,9 +19,9 @@ import java.io.IOException;
 public class ImageServiceImpl implements ImageService {
 
     private final ItemRepository itemRepository;
-    private final StoreRepository storeRepository;
     private final S3Uploader s3Uploader;
     private final static String pathUrl = "https://bolt-auction-image.s3.ap-northeast-2.amazonaws.com/";
+    private final MemberRepository memberRepository;
 
     @Override
     public void saveItemImages(Item item, MultipartFile... images) throws IOException {
@@ -81,23 +81,31 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public void saveStoreImage(Store store, MultipartFile image) throws IOException {
+    public void saveStoreImage(Members members, MultipartFile image) throws IOException {
 
         // 기존의 이미지 삭제
-        String oldPath = store.getImagePath();
-        String dirFile = oldPath.substring(pathUrl.length());
-        s3Uploader.removeS3File(dirFile);
+        String oldPath = members.getImagePath();
+        if (oldPath != null) {
+            String dirFile = oldPath.substring(pathUrl.length());
+            s3Uploader.removeS3File(dirFile);
+        }
+
+        if (image == null){
+            members.setImagePath(null);
+            return;
+        }
+
 
         BufferedImage bufferedImage = ImageIO.read(image.getInputStream());
         // when image
         if (bufferedImage != null) {
-            String path = s3Uploader.upload(image, "image/store/" + store.getId().toString());
-            store.setImagePath(path);
+            String path = s3Uploader.upload(image, "image/store/" + members.getId().toString());
+            members.setImagePath(path);
         } else {
             throw new CNotImageException("이미지가 아닙니다.");
         }
 
-        storeRepository.save(store);
+        memberRepository.save(members);
 
         return;
     }

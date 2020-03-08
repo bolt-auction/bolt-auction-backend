@@ -29,12 +29,12 @@ public class ReviewController {
 
     @ApiOperation(value = "상점 리뷰조회")
     @ApiImplicitParam(name = "store-id", value = "상품 id", dataType = "long")
-    @GetMapping("/store/{store-id}")
-    public ResponseEntity getReviews(@PathVariable(name = "store-id") Long storeId) {
-        List<ReviewDto> reviews = reviewService.getReviews(storeId);
+    @GetMapping("/store/{member-id}")
+    public ResponseEntity getReviews(@PathVariable(name = "member-id") Long memberId) {
+        List<ReviewDto> reviews = reviewService.getReviews(memberId);
 
         Resources resources = new Resources(reviews);
-        resources.add(linkTo(Review.class).slash("store/" + storeId).withSelfRel());
+        resources.add(linkTo(Review.class).slash("store/" + memberId).withSelfRel());
         resources.add(new Link("/swagger-ui.html#/review-controller/getReviewsUsingGET").withRel("profile"));
 
         return ResponseEntity.ok(resources);
@@ -45,13 +45,13 @@ public class ReviewController {
             @ApiImplicitParam(name = "store-id", value = "상품 id", dataType = "long"),
             @ApiImplicitParam(name = "content", value = "리뷰 내용", dataType = "string")
     })
-    @PostMapping("/store/{store-id}")
-    public ResponseEntity addReview(@PathVariable(name = "store-id") Long storeId, @RequestBody String content) {
-        Long memberId = authService.getLoginInfo().getMemberId();
-        ReviewDto reviewDto = reviewService.addReview(storeId, memberId, content);
+    @PostMapping("/store/{member-id}")
+    public ResponseEntity addReview(@PathVariable(name = "member-id") Long memberId, @RequestBody String content) {
+        Long currentMemberId = authService.getLoginInfo().getMemberId();
+        ReviewDto reviewDto = reviewService.addReview(memberId, currentMemberId, content);
 
         Resource resource = new Resource(reviewDto);
-        resource.add(linkTo(ReviewController.class).slash("store/" + storeId).withSelfRel());
+        resource.add(linkTo(ReviewController.class).slash("store/" + memberId).withSelfRel());
         resource.add(new Link("/swagger-ui.html#/review-controller").withRel("profile"));
 
         return ResponseEntity.ok(resource);

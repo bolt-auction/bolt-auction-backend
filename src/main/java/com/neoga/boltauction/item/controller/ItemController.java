@@ -52,8 +52,10 @@ public class ItemController {
             @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query",
                     value = "페이지의 아이템 수", defaultValue = "20"),
             @ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query",
-                    value = "property(,asc|desc)\n " +
-                            "기본 내림차순")
+                    value = "인기순 : bidCount,asc\n" +
+                            "최신순 : createDt,asc\n" +
+                            "낮은가격순 : currentPrice,asc\n" +
+                            "높은가격순 : currentPrice,desc\n")
     })
     @GetMapping("category/{category-id}")
     public ResponseEntity getItems(@PathVariable(name = "category-id") Long categoryId, @ApiIgnore Pageable pageable,
@@ -130,7 +132,7 @@ public class ItemController {
         Members findMember = memberService.findMemberById(memberId);
         ItemDto findItem = itemService.getItem(id);
 
-        if (findItem.getStoreId() != findMember.getStore().getId()) {
+        if (findItem.getSellerId() != findMember.getId()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
@@ -152,8 +154,10 @@ public class ItemController {
             @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query",
                     value = "페이지의 아이템 수", defaultValue = "20"),
             @ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query",
-                    value = "property(,asc|desc)\n " +
-                            "기본 내림차순")
+                    value = "인기순 : bidCount,asc\n" +
+                            "최신순 : createDt,asc\n" +
+                            "낮은가격순 : currentPrice,asc\n" +
+                            "높은가격순 : currentPrice,desc\n")
     })
     @GetMapping
     public ResponseEntity<PagedResources<Resource<ItemDto>>> searchItem(@RequestParam String filter,@RequestParam String keyword, @ApiIgnore Pageable pageable,
@@ -167,9 +171,9 @@ public class ItemController {
         return ResponseEntity.ok(resources);
     }
 
-    @GetMapping("store/{store-id}")
-    public ResponseEntity getStoreItems(@PathVariable(name = "store-id") Long storeId){
-        List<ItemDto> itemDtoList = itemService.getItemsByStore(storeId);
+    @GetMapping("store/{member-id}")
+    public ResponseEntity getStoreItems(@PathVariable(name = "member-id") Long memberId){
+        List<ItemDto> itemDtoList = itemService.getItemsByMemberId(memberId);
 
         List<Resource> resourceList = itemDtoList.stream().map(itemDto -> {
             Resource resource = new Resource(itemDto);
@@ -178,7 +182,7 @@ public class ItemController {
         }).collect(Collectors.toList());
 
         Resources resources = new Resources(resourceList);
-        resources.add(linkTo(StoreController.class).slash("store/" + storeId).withSelfRel());
+        resources.add(linkTo(StoreController.class).slash("store/" + memberId).withSelfRel());
         resources.add(new Link("/swagger-ui.html#/item-controller/getStoreItemsUsingGET").withRel("profile"));
 
         return ResponseEntity.ok(resources);

@@ -16,7 +16,6 @@ public class MemberSerializer extends JsonSerializer<Members> {
         jgen.writeStartObject();
         jgen.writeNumberField("MemberId", members.getId());
         jgen.writeStringField("MemberName", members.getName());
-        jgen.writeNumberField("StoreId", members.getStore().getId());
         jgen.writeEndObject();
     }
 }

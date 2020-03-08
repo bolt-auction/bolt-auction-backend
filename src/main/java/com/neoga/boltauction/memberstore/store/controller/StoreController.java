@@ -1,7 +1,7 @@
 package com.neoga.boltauction.memberstore.store.controller;
 
+import com.neoga.boltauction.memberstore.member.domain.Members;
 import com.neoga.boltauction.memberstore.member.service.MemberService;
-import com.neoga.boltauction.memberstore.store.domain.Store;
 import com.neoga.boltauction.memberstore.store.dto.StoreDto;
 import com.neoga.boltauction.memberstore.store.service.StoreService;
 import com.neoga.boltauction.security.service.AuthService;
@@ -30,33 +30,33 @@ public class StoreController {
     private final MemberService memberService;
 
     @ApiOperation(value = "상점 조회", notes = "해당 상점의 정보 조회")
-    @GetMapping("{store-id}")
-    public ResponseEntity getStore(@PathVariable(name = "store-id") Long storeId) {
+    @GetMapping("{member-id}")
+    public ResponseEntity getStore(@PathVariable(name = "member-id") Long memberId) {
 
-        StoreDto findStoreDto = storeService.getStore(storeId);
+        StoreDto findStoreDto = storeService.getStore(memberId);
 
-        Resource<Store> storeResource = new Resource(findStoreDto);
-        storeResource.add(linkTo(StoreController.class).slash(findStoreDto.getStoreId()).withSelfRel());
+        Resource storeResource = new Resource(findStoreDto);
+        storeResource.add(linkTo(StoreController.class).slash(findStoreDto.getMemberId()).withSelfRel());
         storeResource.add(new Link("/swagger-ui.html#/store-controller/getStoreUsingGET").withRel("profile"));
 
         return ResponseEntity.ok(storeResource);
     }
 
     @ApiOperation(value = "상점 수정", notes = "상점 설명 이미지 등록")
-    @PutMapping("{store-id}")
-    public ResponseEntity updateStore(@PathVariable(name = "store-id") Long storeId,
-                                      @RequestBody String description, @RequestBody String memberName, MultipartFile image) throws IOException {
+    @PutMapping("{member-id}")
+    public ResponseEntity updateStore(@PathVariable(name = "member-id") Long memberId,
+                                      String description, String memberName, MultipartFile image) throws IOException {
         // 해당 유저인지 체크
-        Long memberId = authService.getLoginInfo().getMemberId();
-        Store findStore = memberService.findMemberById(memberId).getStore();
-        if (findStore.getId() != storeId) {
+        Long currentMemberId = authService.getLoginInfo().getMemberId();
+        Members findMember = memberService.findMemberById(currentMemberId);
+        if (findMember.getId() != memberId) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        storeService.updateStore(findStore, description, memberName, image);
+        StoreDto storeDto = storeService.updateStore(findMember, description, memberName, image);
 
-        Resource<Store> storeResource = new Resource(findStore);
-        storeResource.add(linkTo(StoreController.class).slash(findStore.getId()).withSelfRel());
+        Resource storeResource = new Resource(storeDto);
+        storeResource.add(linkTo(StoreController.class).slash(findMember.getId()).withSelfRel());
         storeResource.add(new Link("/swagger-ui.html#/store-controller/updateStoreUsingPUT").withRel("profile"));
 
         return ResponseEntity.ok(storeResource);

@@ -23,7 +23,7 @@ public interface ItemService {
 
     ItemDto updateItem(Long id, UpdateItemDto updateItemDto, Long memberId, MultipartFile... images) throws IOException;
 
-    List<ItemDto> getItemsByStore(Long storeId);
+    List<ItemDto> getItemsByMemberId(Long memberId);
 
     Page<ItemDto> searchItem(String filter, String search, Pageable pageable);
 }
