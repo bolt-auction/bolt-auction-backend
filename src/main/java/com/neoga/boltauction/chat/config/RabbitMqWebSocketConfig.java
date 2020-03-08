@@ -28,10 +28,12 @@ public class RabbitMqWebSocketConfig implements WebSocketMessageBrokerConfigurer
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.enableStompBrokerRelay("/queue/", "/topic/")
-                .setRelayHost(relayHost)
+                .setRelayHost("18.190.79.25")
                 .setRelayPort(relayPort)
                 .setClientLogin("admin")
-                .setClientPasscode("admin");
+                .setClientPasscode("admin")
+                .setSystemLogin("admin")
+                .setSystemPasscode("admin");
         registry.setApplicationDestinationPrefixes("/app")
                 .setPathMatcher(new AntPathMatcher("."));
     }

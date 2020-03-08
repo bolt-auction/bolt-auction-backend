@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .authorizeRequests()
                         .antMatchers(HttpMethod.GET, "/api/member/**").hasRole("USER")
-                        .antMatchers("/api/auth/**","/api/social/**","/favicon.ico","ws-stomp","/api/chat/**","/chat.send.message","/app/**").permitAll()
+                        .antMatchers("/api/auth/**","/api/social/**","/favicon.ico","/ws-stomp/**","/api/chat/**","/chat.send.message/**","/app/**").permitAll()
                         .antMatchers(HttpMethod.GET, "/api/**","/exception/**","/*").permitAll()
                         .antMatchers(HttpMethod.POST, "/api/member/**", "/api/bid/**").permitAll()
                     .anyRequest().hasRole("USER")
@@ -62,8 +62,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // 프론트 엔드 개발을 위한 설정 (추후 삭제)
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("*");
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
+        configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        source.registerCorsConfiguration("/**", configuration);
         return source;
+
     }
 }
