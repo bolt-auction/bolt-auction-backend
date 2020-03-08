@@ -1,7 +1,6 @@
 package com.neoga.boltauction.memberstore.member.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.neoga.boltauction.memberstore.store.domain.Store;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -32,8 +31,8 @@ public class Members {
     private LocalDateTime createDt;
     @UpdateTimestamp
     private LocalDateTime changeDt;
-    @OneToOne
-    @JoinColumn(name = "store_id")
-    private Store store;
     private String provider;
+    private String storeName;
+    private String description;
+    private String imagePath;
 }

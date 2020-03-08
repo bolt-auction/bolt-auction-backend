@@ -3,7 +3,6 @@ package com.neoga.boltauction.chat.domain;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.neoga.boltauction.chat.util.ChatRoomSerializer;
-import com.neoga.boltauction.item.util.ItemSerializer;
 import com.neoga.boltauction.memberstore.member.domain.Members;
 import com.neoga.boltauction.memberstore.util.MemberSerializer;
 import lombok.*;

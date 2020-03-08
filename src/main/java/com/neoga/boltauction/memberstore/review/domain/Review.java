@@ -1,7 +1,6 @@
 package com.neoga.boltauction.memberstore.review.domain;
 
 import com.neoga.boltauction.memberstore.member.domain.Members;
-import com.neoga.boltauction.memberstore.store.domain.Store;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -24,7 +23,7 @@ public class Review {
     private Members register;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
-    private Store store;
+    private Members store;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @CreationTimestamp
     @Column(updatable = false)

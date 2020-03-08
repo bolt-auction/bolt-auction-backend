@@ -10,8 +10,8 @@ import com.neoga.boltauction.item.dto.InsertItemDto;
 import com.neoga.boltauction.item.dto.ItemDto;
 import com.neoga.boltauction.item.dto.UpdateItemDto;
 import com.neoga.boltauction.item.repository.ItemRepository;
+import com.neoga.boltauction.memberstore.member.domain.Members;
 import com.neoga.boltauction.memberstore.member.repository.MemberRepository;
-import com.neoga.boltauction.memberstore.store.domain.Store;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -82,13 +82,13 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto saveItem(InsertItemDto insertItemDto, Long memberId, MultipartFile... images) throws IOException {
 
         // find store
-        Store findStore = memberRepository.getOne(memberId).getStore();
+        Members findMembers = memberRepository.getOne(memberId);
 
         // map insertItemDto -> item
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         Item item = modelMapper.map(insertItemDto, Item.class);
         item.setCurrentPrice(insertItemDto.getStartPrice());
-        item.setStore(findStore);
+        item.setMembers(findMembers);
         Category findCategory = categoryRepository.findById(insertItemDto.getCategoryId()).orElseThrow(() -> new CCategoryNotFoundException("카테고리를 찾을 수 없습니다."));
         item.setCategory(findCategory);
         item.setBidCount(0);
@@ -132,8 +132,8 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> getItemsByStore(Long storeId) {
-        List<Item> findItems = itemRepository.findAllByStore_Id(storeId);
+    public List<ItemDto> getItemsByMemberId(Long memberId) {
+        List<Item> findItems = itemRepository.findAllByMembers_Id(memberId);
         return findItems.stream().map(item -> mapItemItemDto(item)).collect(Collectors.toList());
     }
 
@@ -141,8 +141,9 @@ public class ItemServiceImpl implements ItemService {
         ItemDto itemDto = modelMapper.map(item, ItemDto.class);
         itemDto.setItemId(item.getId());
         itemDto.setItemName(item.getName());
-        itemDto.setStoreId(item.getStore().getId());
-        itemDto.setSellerId(item.getStore().getMembers().getId());
+        itemDto.setSellerId(item.getMembers().getId());
+
+
 
         String[] pathArray = item.getImagePath().split(",");
         itemDto.setImagePath(pathArray);
