@@ -30,7 +30,7 @@ public class StoreController {
     private final MemberService memberService;
 
     @ApiOperation(value = "상점 조회", notes = "해당 상점의 정보 조회")
-    @GetMapping("{member-id}")
+    @GetMapping("/{member-id}")
     public ResponseEntity getStore(@PathVariable(name = "member-id") Long memberId) {
 
         StoreDto findStoreDto = storeService.getStore(memberId);
@@ -43,15 +43,10 @@ public class StoreController {
     }
 
     @ApiOperation(value = "상점 수정", notes = "상점 설명 이미지 등록")
-    @PutMapping("{member-id}")
-    public ResponseEntity updateStore(@PathVariable(name = "member-id") Long memberId,
-                                      String description, String memberName, MultipartFile image) throws IOException {
-        // 해당 유저인지 체크
-        Long currentMemberId = authService.getLoginInfo().getMemberId();
-        Members findMember = memberService.findMemberById(currentMemberId);
-        if (findMember.getId() != memberId) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    @PutMapping
+    public ResponseEntity updateStore(String description, String memberName, MultipartFile image) throws IOException {
+
+        Members findMember = memberService.findMemberById(authService.getLoginInfo().getMemberId());
 
         StoreDto storeDto = storeService.updateStore(findMember, description, memberName, image);
 
@@ -62,9 +57,4 @@ public class StoreController {
         return ResponseEntity.ok(storeResource);
     }
 
-    // 이미지 null 값
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(MultipartFile.class, "image",new StringTrimmerEditor(true));
-    }
 }

@@ -57,7 +57,7 @@ public class ItemController {
                             "낮은가격순 : currentPrice,asc\n" +
                             "높은가격순 : currentPrice,desc\n")
     })
-    @GetMapping("category/{category-id}")
+    @GetMapping("/category/{category-id}")
     public ResponseEntity getItems(@PathVariable(name = "category-id") Long categoryId, @ApiIgnore Pageable pageable,
                                    @ApiIgnore PagedResourcesAssembler<ItemDto> assembler) {
         // 권한체크 추가
@@ -171,7 +171,7 @@ public class ItemController {
         return ResponseEntity.ok(resources);
     }
 
-    @GetMapping("store/{member-id}")
+    @GetMapping("/store/{member-id}")
     public ResponseEntity getStoreItems(@PathVariable(name = "member-id") Long memberId){
         List<ItemDto> itemDtoList = itemService.getItemsByMemberId(memberId);
 
