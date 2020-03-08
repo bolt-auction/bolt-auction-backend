@@ -65,7 +65,7 @@ public class BidServiceImpl implements BidService {
         BidDto bidDto = modelMapper.map(bid, BidDto.class);
         bidDto.setBidId(bid.getId());
         bidDto.setMemberId(bid.getMembers().getId());
-        bidDto.setStoreId(bid.getMembers().getStore().getId());
+        bidDto.setStoreId(bid.getMembers().getId());
 
         return bidDto;
     }

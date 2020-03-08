@@ -4,7 +4,6 @@ import com.neoga.boltauction.exception.custom.CEmailLoginFailedException;
 import com.neoga.boltauction.exception.custom.CMemberNotFoundException;
 import com.neoga.boltauction.memberstore.member.domain.Members;
 import com.neoga.boltauction.memberstore.member.repository.MemberRepository;
-import com.neoga.boltauction.memberstore.store.service.StoreService;
 import com.neoga.boltauction.security.dto.KakaoProfile;
 import com.neoga.boltauction.security.dto.LoginRequestDto;
 import com.neoga.boltauction.security.dto.LoginInfo;
@@ -59,7 +58,6 @@ public class AuthService{
         Map<String, Object> detail = ((Map<String, Object>)authentication.getDetails());
         LoginInfo logininfo = LoginInfo.builder()
                 .memberId(Long.valueOf(String.valueOf(detail.get("id"))))
-                .storeId(Long.valueOf(String.valueOf(detail.get("storeId"))))
                 .uid(String.valueOf(detail.get("uid")))
                 .name(String.valueOf(detail.get("name")))
                 .role((List)detail.get("authorities")).build();
@@ -70,7 +68,6 @@ public class AuthService{
     public LoginResponseDto loginResponseBuilder(String accessToken, Members findMember){
         LoginResponseDto loginResponse = LoginResponseDto.builder()
                 .memberId((findMember.getId()))
-                .storeId(findMember.getStore().getId())
                 .uid(findMember.getUid())
                 .name(findMember.getName())
                 .tokenType("Bearer")

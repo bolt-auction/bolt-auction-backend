@@ -34,7 +34,6 @@ public class JwtTokenService {
         Claims claims = Jwts.claims().setSubject(String.valueOf(member.getId()));
         claims.put("name", member.getName());
         claims.put("uid", member.getUid());
-        claims.put("storeId", member.getStore().getId());
         claims.put("roles", member.getRole());
         Date now = new Date();
         return Jwts.builder()
@@ -64,7 +63,6 @@ public class JwtTokenService {
         result.put("id", parseInfo.getBody().getSubject());
         result.put("name", parseInfo.getBody().get("name"));
         result.put("uid", parseInfo.getBody().get("uid"));
-        result.put("storeId", parseInfo.getBody().get("storeId"));
         result.put("authorities", parseInfo.getBody().get("roles", List.class));
         return result;
     }

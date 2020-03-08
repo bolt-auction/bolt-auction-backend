@@ -1,7 +1,9 @@
 package com.neoga.boltauction.item.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.neoga.boltauction.category.domain.Category;
-import com.neoga.boltauction.memberstore.store.domain.Store;
+import com.neoga.boltauction.memberstore.member.domain.Members;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -34,8 +36,8 @@ public class Item {
     @JoinColumn(name = "category_id")
     private Category category;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_id")
-    private Store store;
+    @JoinColumn(name = "member_id")
+    private Members members;
     private String imagePath;
     private int bidCount;
 }
