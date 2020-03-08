@@ -12,7 +12,7 @@ public class Category {
     @Id
     private Long id;
     private String name;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "sub_category")
     private Category supCategory;
 }

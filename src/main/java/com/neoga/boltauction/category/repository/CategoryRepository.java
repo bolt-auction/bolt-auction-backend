@@ -1,7 +1,9 @@
 package com.neoga.boltauction.category.repository;
 
 import com.neoga.boltauction.category.domain.Category;
+import com.neoga.boltauction.category.dto.CategoryDto;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
