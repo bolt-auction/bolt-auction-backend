@@ -6,6 +6,6 @@ import lombok.Data;
 public class StoreDto {
     private Long memberId;
     private String description;
-    private String storeName;
+    private String memberName;
     private String imagePath;
 }
