@@ -8,6 +8,5 @@ import lombok.Setter;
 @Setter
 public class SendMessageDto {
     private String content;
-    private Long chatRoomId;
     private Long senderId;
 }

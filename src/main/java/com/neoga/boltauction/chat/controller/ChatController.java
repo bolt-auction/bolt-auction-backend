@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -15,8 +16,10 @@ import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.Message;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +31,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequiredArgsConstructor
 @RequestMapping
 @RestController
+@Slf4j
 public class ChatController {
     private final ChatMessageService chatMessageService;
 
@@ -52,8 +56,10 @@ public class ChatController {
         return ResponseEntity.ok(resources);
     }
 
-    @MessageMapping("/chat.send.message")
-    public void sendMessage(@Payload SendMessageDto sendMessageDto){
-        chatMessageService.sendMessage(sendMessageDto);
+    @MessageMapping("/chat.send.message.{chatRoomId}")
+    @SendTo("/topic/chatRoom.{chatRoomId}")
+    public ChatMessage sendMessage(@Payload SendMessageDto sendMessageDto, @DestinationVariable Long chatRoomId){
+        log.info("recevied message : + " + sendMessageDto.getContent());
+        return chatMessageService.sendMessage(chatRoomId, sendMessageDto);
     }
 }
