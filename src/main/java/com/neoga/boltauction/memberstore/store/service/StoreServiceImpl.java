@@ -24,7 +24,7 @@ public class StoreServiceImpl implements StoreService {
     public StoreDto updateStore(Members members, String description, String memberName, MultipartFile image) throws IOException {
 
         members.setDescription(description);
-        members.setStoreName(memberName);
+        members.setName(memberName);
         imageService.saveStoreImage(members, image);
 
         Members saveMember = memberRepository.save(members);
@@ -42,6 +42,7 @@ public class StoreServiceImpl implements StoreService {
     private StoreDto mapMemberStoreDto(Members members) {
         StoreDto storeDto = modelMapper.map(members, StoreDto.class);
         storeDto.setMemberId(members.getId());
+        storeDto.setMemberName(members.getName());
 
         return storeDto;
     }

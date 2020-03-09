@@ -32,7 +32,6 @@ public class Members {
     @UpdateTimestamp
     private LocalDateTime changeDt;
     private String provider;
-    private String storeName;
     private String description;
     private String imagePath;
 }
