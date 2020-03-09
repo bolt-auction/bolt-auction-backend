@@ -6,7 +6,6 @@ import lombok.Data;
 public class BidDto {
     private Long bidId;
     private Long memberId;
-    private Long storeId;
     private Long itemId;
     private int price;
 }
