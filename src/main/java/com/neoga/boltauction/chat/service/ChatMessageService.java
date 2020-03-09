@@ -8,6 +8,7 @@ import com.neoga.boltauction.memberstore.member.domain.Members;
 import com.neoga.boltauction.security.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -20,11 +21,11 @@ import java.lang.reflect.Member;
 @Service
 public class ChatMessageService {
     private final EntityManager em;
-    private final SimpMessagingTemplate webSocketMessagingTemplate;
+    private final RabbitTemplate rabbitTemplate;
     private final ChatMessageRepository chatMessageRepository;
     private final ModelMapper modelMapper;
 
-    public ChatMessage sendMessage(Long chatRoomId, SendMessageDto sendMessageDto){
+    public void sendMessage(Long chatRoomId, SendMessageDto sendMessageDto){
         ChatRoom chatRoom = em.getReference(ChatRoom.class, chatRoomId);
         Members sender = em.getReference(Members.class,sendMessageDto.getSenderId());
 
@@ -34,8 +35,7 @@ public class ChatMessageService {
 
         ChatMessage newMessage = chatMessageRepository.save(chatMessage);
 
-        return newMessage;
-        //webSocketMessagingTemplate.convertAndSend("/topic/chatRoom."+ newMessage.getChatRoom().getId(), newMessage);
+        rabbitTemplate.convertAndSend("/topic/chatRoom."+ chatRoomId, newMessage);
     }
 
     public Page<ChatMessage> findMessageByChatRoom(Long chatRoomId, Pageable pageable){
