@@ -28,7 +28,7 @@ public class ReviewController {
     private final ReviewServiceImpl reviewService;
 
     @ApiOperation(value = "상점 리뷰조회")
-    @ApiImplicitParam(name = "store-id", value = "상품 id", dataType = "long")
+    @ApiImplicitParam(name = "member-id", value = "상품 id", dataType = "long")
     @GetMapping("/store/{member-id}")
     public ResponseEntity getReviews(@PathVariable(name = "member-id") Long memberId) {
         List<ReviewDto> reviews = reviewService.getReviews(memberId);
