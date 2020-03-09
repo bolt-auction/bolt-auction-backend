@@ -2,6 +2,7 @@ package com.neoga.boltauction.bid.service;
 
 import com.neoga.boltauction.bid.domain.Bid;
 import com.neoga.boltauction.bid.dto.BidDto;
+import com.neoga.boltauction.bid.dto.Register;
 import com.neoga.boltauction.bid.repository.BidRepository;
 import com.neoga.boltauction.exception.custom.CItemNotFoundException;
 import com.neoga.boltauction.exception.custom.CMemberNotFoundException;
@@ -64,7 +65,14 @@ public class BidServiceImpl implements BidService {
     private BidDto mapBidBidDto(Bid bid) {
         BidDto bidDto = modelMapper.map(bid, BidDto.class);
         bidDto.setBidId(bid.getId());
-        bidDto.setMemberId(bid.getMembers().getId());
+
+        Members members = bid.getMembers();
+        Register register = new Register();
+        register.setMemberId(members.getId());
+        register.setMemberName(members.getName());
+        register.setMemberImagePath(members.getImagePath());
+
+        bidDto.setMember(register);
 
         return bidDto;
     }

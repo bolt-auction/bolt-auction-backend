@@ -132,7 +132,7 @@ public class ItemController {
         Members findMember = memberService.findMemberById(memberId);
         ItemDto findItem = itemService.getItem(id);
 
-        if (findItem.getSellerId() != findMember.getId()) {
+        if (findItem.getSeller().getSellerId() != findMember.getId()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
