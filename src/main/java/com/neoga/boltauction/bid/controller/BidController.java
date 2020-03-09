@@ -34,7 +34,11 @@ public class BidController {
 
     @ApiOperation(value = "입찰 등록", notes = "해당 상품에 입찰 등록")
     @PostMapping("/{item-id}")
-    public ResponseEntity registerBidItem(@PathVariable(name = "item-id") Long itemId, @RequestBody int price) {
+    public ResponseEntity registerBidItem(@PathVariable(name = "item-id") Long itemId, int price) {
+
+        // 상품 시간 지났는지 체크
+
+
         Long memberId = authService.getLoginInfo().getMemberId();
         BidDto bidDto = bidService.saveBid(itemId, price, memberId);
 

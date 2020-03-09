@@ -149,11 +149,11 @@ public class ItemController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "filter", value = "검색조건 ex)name", dataType = "string"),
             @ApiImplicitParam(name = "keyword", value = "검색 키워드", dataType = "string"),
-            @ApiImplicitParam(name = "page" ,dataType = "integer", paramType = "query",
+            @ApiImplicitParam(name = "page" ,dataType = "integer", paramType = "form-data",
                     value = "페이지 번호 (0..N)", defaultValue = "0"),
-            @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query",
+            @ApiImplicitParam(name = "size", dataType = "integer", paramType = "form-data",
                     value = "페이지의 아이템 수", defaultValue = "20"),
-            @ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query",
+            @ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "form-data",
                     value = "인기순 : bidCount,asc\n" +
                             "최신순 : createDt,asc\n" +
                             "낮은가격순 : currentPrice,asc\n" +

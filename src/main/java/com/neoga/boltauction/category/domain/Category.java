@@ -1,5 +1,6 @@
 package com.neoga.boltauction.category.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,5 +15,6 @@ public class Category {
     private String name;
     @ManyToOne
     @JoinColumn(name = "sub_category")
+    @JsonIgnore
     private Category supCategory;
 }
