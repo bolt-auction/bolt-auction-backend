@@ -29,6 +29,6 @@ public class ItemDto {
     private LocalDateTime endDt;
     private Category category;
     private String[] imagePath;
-    private Long sellerId;
+    private Seller seller;
     private Long bidCount;
 }
