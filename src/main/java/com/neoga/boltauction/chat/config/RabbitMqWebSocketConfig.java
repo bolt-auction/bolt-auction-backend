@@ -1,5 +1,6 @@
 package com.neoga.boltauction.chat.config;
 
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,10 +31,25 @@ public class RabbitMqWebSocketConfig implements WebSocketMessageBrokerConfigurer
         registry.enableStompBrokerRelay("/queue/", "/topic/")
                 .setRelayHost("18.190.79.25")
                 .setRelayPort(relayPort)
+                .setUserDestinationBroadcast("/topic/unresolved.user.dest")
+                .setUserRegistryBroadcast("/topic/registry.broadcast")
                 .setClientLogin("admin")
                 .setClientPasscode("admin")
                 .setSystemLogin("admin")
                 .setSystemPasscode("admin");
         registry.setApplicationDestinationPrefixes("/app");
+    }
+
+    @Bean
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory){
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+        rabbitTemplate.setMessageConverter(jsonMessageConverter());
+
+        return rabbitTemplate;
+    }
+
+    @Bean
+    public Jackson2JsonMessageConverter jsonMessageConverter(){
+        return new Jackson2JsonMessageConverter();
     }
 }

@@ -1,5 +1,6 @@
 package com.neoga.boltauction.chat.controller;
 
+import com.google.gson.Gson;
 import com.neoga.boltauction.chat.domain.ChatMessage;
 import com.neoga.boltauction.chat.dto.SendMessageDto;
 import com.neoga.boltauction.chat.service.ChatMessageService;
@@ -57,9 +58,8 @@ public class ChatController {
     }
 
     @MessageMapping("/chat.send.message.{chatRoomId}")
-    @SendTo("/topic/chatRoom.{chatRoomId}")
-    public ChatMessage sendMessage(@Payload SendMessageDto sendMessageDto, @DestinationVariable Long chatRoomId){
+    public void sendMessage(@Payload SendMessageDto sendMessageDto, @DestinationVariable Long chatRoomId){
         log.info("recevied message : + " + sendMessageDto.getContent());
-        return chatMessageService.sendMessage(chatRoomId, sendMessageDto);
+        chatMessageService.sendMessage(chatRoomId, sendMessageDto);
     }
 }
