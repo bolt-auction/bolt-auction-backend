@@ -8,6 +8,7 @@ import com.neoga.boltauction.image.service.ImageService;
 import com.neoga.boltauction.item.domain.Item;
 import com.neoga.boltauction.item.dto.InsertItemDto;
 import com.neoga.boltauction.item.dto.ItemDto;
+import com.neoga.boltauction.item.dto.Seller;
 import com.neoga.boltauction.item.dto.UpdateItemDto;
 import com.neoga.boltauction.item.repository.ItemRepository;
 import com.neoga.boltauction.memberstore.member.domain.Members;
@@ -46,7 +47,7 @@ public class ItemServiceImpl implements ItemService {
         findItem = itemRepository.findById(id).orElseThrow(CItemNotFoundException::new);
 
         // map findItem -> itemDto
-        ItemDto itemDto = modelMapper.map(findItem, ItemDto.class);
+        ItemDto itemDto = mapItemItemDto(findItem);
 
         return itemDto;
     }
@@ -141,9 +142,13 @@ public class ItemServiceImpl implements ItemService {
         ItemDto itemDto = modelMapper.map(item, ItemDto.class);
         itemDto.setItemId(item.getId());
         itemDto.setItemName(item.getName());
-        itemDto.setSellerId(item.getMembers().getId());
 
-
+        Members members = item.getMembers();
+        Seller seller = new Seller();
+        seller.setSellerId(members.getId());
+        seller.setSellerName(members.getName());
+        seller.setSellerImagePath(members.getImagePath());
+        itemDto.setSeller(seller);
 
         String[] pathArray = item.getImagePath().split(",");
         itemDto.setImagePath(pathArray);

@@ -4,8 +4,11 @@ import com.neoga.boltauction.item.domain.Item;
 import com.neoga.boltauction.memberstore.member.domain.Members;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -21,4 +24,8 @@ public class Bid {
     @JoinColumn(name = "item_id")
     private Item item;
     private int price;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createDt;
 }

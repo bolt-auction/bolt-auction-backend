@@ -13,7 +13,10 @@ import java.util.List;
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
     Page<Item> findAllByNameIsContaining(Pageable pageable, String string);
-    @Query(value = "select i from Item i where i.category=:category or i.category.supCategory=:category")
+    @Query(value = "select i from Item i " +
+            "where i.category=:category or i.category.supCategory=:category",
+            countQuery = "select count(i) from Item i where i.category=:category or i.category.supCategory=:category"
+    )
     Page<Item> findAllByCategoryEquals(Pageable pageable, Category category);
     List<Item> findAllByMembers_Id(Long memberId);
 }
