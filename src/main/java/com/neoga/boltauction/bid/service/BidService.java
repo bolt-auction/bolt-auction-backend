@@ -13,4 +13,6 @@ public interface BidService {
     Long getMemberId(Long bidId);
 
     void deleteBid(Long bidId);
+
+    boolean hasValue(Long itemId, Long memberId);
 }
