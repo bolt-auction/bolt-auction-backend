@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,6 +61,15 @@ public class BidServiceImpl implements BidService {
     @Override
     public void deleteBid(Long bidId) {
         bidRepository.deleteById(bidId);
+    }
+
+    @Override
+    public boolean hasValue(Long itemId, Long memberId) {
+        Optional<Bid> findBid = bidRepository.findBidByItem_IdAndMembers_Id(itemId, memberId);
+        if (findBid.isPresent())
+            return true;
+        else
+            return false;
     }
 
     private BidDto mapBidBidDto(Bid bid) {
