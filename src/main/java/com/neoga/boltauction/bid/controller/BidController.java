@@ -49,10 +49,6 @@ public class BidController {
 
         // 입찰이 미이 되있는지 체크
         Long memberId = authService.getLoginInfo().getMemberId();
-        if(bidService.hasValue(itemId, memberId)) {
-            throw new CBidExistException("이미 경매에 참여하였습니다.");
-        }
-
 
         BidDto bidDto = bidService.saveBid(itemId, price, memberId);
 
