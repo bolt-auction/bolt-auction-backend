@@ -8,6 +8,7 @@ import com.neoga.boltauction.category.dto.CategoryListDto;
 import com.neoga.boltauction.item.controller.ItemController;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
@@ -85,7 +86,7 @@ public class CategoryController {
         categoryListDto.setSupCategoryList(supCategoryEntityModelList);
         // make category list dto entity model
         Resource resource = new Resource(categoryListDto);
-        resource.add(new Link("/").withRel("profile"));
+        resource.add(new Link("/swagger-ui.html#/category-controller/getCategoryUsingGET").withRel("profile"));
 
         return ResponseEntity.ok(resource);
     }
