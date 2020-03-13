@@ -61,7 +61,6 @@ public class ItemController {
     public ResponseEntity getItems(@PathVariable(name = "category-id") Long categoryId, @ApiIgnore Pageable pageable,
                                    @ApiIgnore PagedResourcesAssembler<ItemDto> assembler) {
         // 권한체크 추가
-
         Page<ItemDto> itemDtoPage = itemService.getItems(categoryId, pageable);
 
         PagedResources<Resource<ItemDto>> resources = assembler.toResource(itemDtoPage, i -> new Resource<>(i));
