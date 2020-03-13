@@ -1,0 +1,49 @@
+spring:
+  profiles:
+    active: local
+
+---
+spring.profiles: server
+spring.profiles.include: server-secret
+
+#Server Setting
+server:
+  port: 8080
+
+#base URL
+base:
+  addr: 18.190.79.25
+  URL: http://${base.addr}:${server.port}
+
+---
+spring:
+  profiles: local
+  # DataSource Setting
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: 1234
+    url: 'jdbc:mysql://localhost:3306/auctionnara?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&characterSetResults=UTF-8&useSSL=true&serverTimezone=UTC '
+    username: root
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+  # JPA Setting
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    generate-ddl: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
+#Server Setting
+server:
+  port: 8010
+
+#base URL
+base:
+  addr: localhost
+  URL: http://${base.addr}:${server.port}
+

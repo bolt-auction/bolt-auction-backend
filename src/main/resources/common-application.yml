@@ -1,0 +1,62 @@
+spring:
+  profiles: common
+  #jwt
+  jwt:
+    secret: govlepel@$&amp
+  main:
+    banner-mode: 'off'
+  #Redis specific configurations
+  redis:
+    host: 127.0.0.1
+    lettuce:
+      pool:
+        max-active: 10
+        max-idle: 10
+        min-idle: 2
+    port: 6379
+  resources:
+    static-locations: classpath:/resources/aws.yml
+  servlet:
+    multipart:
+      enabled: true
+
+#kakao Login
+kakao:
+  clientId: 33cf22c44273a06d1ef702275f2a2c54
+  clientSecret: a0bbd7d93b2dfebebd5ef11adb5e3329
+  loginURL: https://kauth.kakao.com/oauth/authorize
+  profileURL: https://kapi.kakao.com/v2/user/me
+  redirectURI: /api/social/kakao
+  tokenURL: https://kauth.kakao.com/oauth/token
+
+# Security log level Setting
+logging:
+  level:
+    org:
+      hibernate: info
+      springframework:
+        security: debug
+
+rabbitmq:
+  relay:
+    port: 61613
+
+#rest template Connection Pool
+rest:
+  connPool:
+    MaxConnPerRoute: 20
+    MaxConnTotal: 50
+  factory:
+    setConnectTimeout: 2000
+    setReadTimeout: 5000
+
+cloud:
+  aws:
+    credentials:
+      instance-profile: true
+    region:
+      static: us-east-2
+    s3:
+      bucket: boltauction
+    stack:
+      auto: false

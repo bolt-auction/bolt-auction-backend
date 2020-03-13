@@ -11,7 +11,6 @@ import redis.embedded.RedisServer;
 import java.util.Optional;
 
 @Slf4j
-@Profile("local")
 @Configuration
 public class EmbeddedRedisConfig implements InitializingBean, DisposableBean {
 

@@ -12,7 +12,9 @@ import java.util.TimeZone;
 public class AutionnaraApplication {
 
     public static final String APPLICATION_LOCATIONS = "spring.config.location="
-            + "classpath:application.properties,"
+            + "classpath:common-application.yml,"
+            + "classpath:application.yml,"
+            + "/app/config/boltauction/real-application.yml,"
             + "classpath:aws.yml";
 
     @PostConstruct
