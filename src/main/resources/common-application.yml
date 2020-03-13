@@ -1,5 +1,4 @@
 spring:
-  profiles: common
   #jwt
   jwt:
     secret: govlepel@$&amp
