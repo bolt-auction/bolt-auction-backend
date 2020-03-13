@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,7 +53,7 @@ public class BidServiceImpl implements BidService {
     }
 
     @Override
-    public Long getMemberId(Long bidId) {
+    public Long getMemberByBidId(Long bidId) {
         return bidRepository.getOne(bidId).getMembers().getId();
     }
 

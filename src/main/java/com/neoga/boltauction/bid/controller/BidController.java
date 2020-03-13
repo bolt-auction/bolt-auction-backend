@@ -42,13 +42,15 @@ public class BidController {
     @PostMapping("/{item-id}")
     public ResponseEntity registerBidItem(@PathVariable(name = "item-id") Long itemId, int price) {
 
-        // 상품 시간 지났는지 체크
-        if (itemService.getItem(itemId).getEndDt().isBefore(LocalDateTime.now())) {
-            throw new CItemEndException("상품이 종료되었습니다.");
-        }
-
-        // 입찰이 미이 되있는지 체크
+        // 본인의 상품인지 체크
         Long memberId = authService.getLoginInfo().getMemberId();
+        Long sellerId = itemService.getItem(itemId).getSeller().getSellerId();
+        if (sellerId == memberId)
+            throw new RuntimeException("본인의 상품입니다.");
+
+        // 상품 시간 지났는지 체크
+        if (itemService.getItem(itemId).getEndDt().isBefore(LocalDateTime.now()))
+            throw new CItemEndException("상품이 종료되었습니다.");
 
         BidDto bidDto = bidService.saveBid(itemId, price, memberId);
 
@@ -63,7 +65,7 @@ public class BidController {
     @DeleteMapping("/{item-id}")
     public ResponseEntity deleteBidItem(@PathVariable(name = "item-id") Long itemId, @RequestBody Long bidId) {
         Long memberId = authService.getLoginInfo().getMemberId();
-        Long findMemberId = bidService.getMemberId(bidId);
+        Long findMemberId = bidService.getMemberByBidId(bidId);
 
         if (memberId == findMemberId){
             bidService.deleteBid(bidId);

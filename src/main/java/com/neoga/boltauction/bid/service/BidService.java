@@ -10,7 +10,7 @@ public interface BidService {
 
     BidDto saveBid(Long itemId, int price, Long memberId);
 
-    Long getMemberId(Long bidId);
+    Long getMemberByBidId(Long bidId);
 
     void deleteBid(Long bidId);
 }
