@@ -1,6 +1,5 @@
 package com.neoga.boltauction.item.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.neoga.boltauction.category.domain.Category;
 import com.neoga.boltauction.memberstore.member.domain.Members;
@@ -18,7 +17,9 @@ import java.time.LocalDateTime;
 public class Item {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
+    @JsonProperty("itemId")
     private Long id;
+    @JsonProperty("itemName")
     private String name;
     private String description;
     private int quickPrice;
@@ -37,6 +38,7 @@ public class Item {
     private Category category;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
+    @JsonProperty("seller")
     private Members members;
     private String imagePath;
     private int bidCount;

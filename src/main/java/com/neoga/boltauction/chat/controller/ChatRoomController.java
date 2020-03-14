@@ -5,7 +5,6 @@ import com.neoga.boltauction.chat.domain.ChatRoom;
 import com.neoga.boltauction.chat.dto.CreateRoomRequestDto;
 import com.neoga.boltauction.chat.service.ChatRoomService;
 import com.neoga.boltauction.item.controller.ItemController;
-import com.neoga.boltauction.item.dto.ItemDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
