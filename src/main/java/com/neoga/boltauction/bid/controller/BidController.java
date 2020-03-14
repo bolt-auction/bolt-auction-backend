@@ -2,9 +2,7 @@ package com.neoga.boltauction.bid.controller;
 
 import com.neoga.boltauction.bid.dto.BidDto;
 import com.neoga.boltauction.bid.service.BidService;
-import com.neoga.boltauction.exception.custom.CBidExistException;
 import com.neoga.boltauction.exception.custom.CItemEndException;
-import com.neoga.boltauction.item.dto.ItemDto;
 import com.neoga.boltauction.item.service.ItemService;
 import com.neoga.boltauction.security.service.AuthService;
 import io.swagger.annotations.ApiOperation;
@@ -44,7 +42,7 @@ public class BidController {
 
         // 본인의 상품인지 체크
         Long memberId = authService.getLoginInfo().getMemberId();
-        Long sellerId = itemService.getItem(itemId).getSeller().getSellerId();
+        Long sellerId = itemService.getItem(itemId).getMembers().getId();
         if (sellerId == memberId)
             throw new RuntimeException("본인의 상품입니다.");
 

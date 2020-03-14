@@ -7,8 +7,6 @@ import com.neoga.boltauction.exception.custom.CItemNotFoundException;
 import com.neoga.boltauction.image.service.ImageService;
 import com.neoga.boltauction.item.domain.Item;
 import com.neoga.boltauction.item.dto.InsertItemDto;
-import com.neoga.boltauction.item.dto.ItemDto;
-import com.neoga.boltauction.item.dto.Seller;
 import com.neoga.boltauction.item.dto.UpdateItemDto;
 import com.neoga.boltauction.item.repository.ItemRepository;
 import com.neoga.boltauction.memberstore.member.domain.Members;
@@ -39,29 +37,29 @@ public class ItemServiceImpl implements ItemService {
     private static final int LAST_CATEGORY = 53;
 
     @Override
-    public ItemDto getItem(Long id) {
+    public Item getItem(Long id) {
 
         Item findItem;
 
         // get item entity
-        findItem = itemRepository.findById(id).orElseThrow(CItemNotFoundException::new);
+        findItem = itemRepository.findById(id).orElseThrow(() -> new CItemNotFoundException("상품이 존재하지 않습니다."));
 
         // map findItem -> itemDto
-        ItemDto itemDto = mapItemItemDto(findItem);
+        //ItemDto itemDto = mapItemItemDto(findItem);
 
-        return itemDto;
+        return findItem;
     }
 
     @Override
     public Item deleteItem(Long id) {
-        Item item = itemRepository.findById(id).orElseThrow(CItemNotFoundException::new);
+        Item item = itemRepository.findById(id).orElseThrow(() -> new CItemNotFoundException("상품이 존재하지 않습니다."));
         itemRepository.delete(item);
 
         return item;
     }
 
     @Override
-    public Page<ItemDto> getItems(Long categoryId, Pageable pageable) {
+    public Page<Item> getItems(Long categoryId, Pageable pageable) {
 
         Page<Item> itemPage;
 
@@ -69,18 +67,17 @@ public class ItemServiceImpl implements ItemService {
         if (categoryId == NO_CATEGORY) {
             itemPage = itemRepository.findAll(pageable);
         } else if (categoryId >= FIRST_CATEGORY && categoryId <= LAST_CATEGORY) {
-            Category findCategory = categoryRepository.findById(categoryId).orElseThrow(() -> new CCategoryNotFoundException("카테고리를 찾을 수 없습니다."));
-            itemPage = itemRepository.findAllByCategoryEquals(pageable, findCategory);
+            itemPage = itemRepository.findAllByCategory_IdEquals(pageable, categoryId);
         } else {
             throw new CCategoryNotFoundException("존제하지 않는 카테고리 입니다");
         }
 
         // map item -> itemDto
-        return itemPage.map(item -> mapItemItemDto(item));
+        return itemPage;
     }
 
     @Override
-    public ItemDto saveItem(InsertItemDto insertItemDto, Long memberId, MultipartFile... images) throws IOException {
+    public Item saveItem(InsertItemDto insertItemDto, Long memberId, MultipartFile... images) throws IOException {
 
         // find store
         Members findMembers = memberRepository.getOne(memberId);
@@ -98,16 +95,16 @@ public class ItemServiceImpl implements ItemService {
 
         imageService.saveItemImages(saveItem, images);
 
-        return mapItemItemDto(saveItem);
+        return saveItem;
     }
 
     @Override
-    public ItemDto updateItem(Long id, UpdateItemDto updateItemDto, Long memberId, MultipartFile... images) throws IOException {
+    public Item updateItem(Long id, UpdateItemDto updateItemDto, Long memberId, MultipartFile... images) throws IOException {
 
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
         // find Item
-        Item findItem = itemRepository.findById(id).orElseThrow(CItemNotFoundException::new);
+        Item findItem = itemRepository.findById(id).orElseThrow(() -> new CItemNotFoundException("상품이 존재하지 않습니다."));
 
         modelMapper.map(updateItemDto, findItem);
         Category findCategory = categoryRepository.findById(updateItemDto.getCategoryId()).orElseThrow(() -> new CCategoryNotFoundException("카테고리를 찾을 수 없습니다."));
@@ -119,40 +116,22 @@ public class ItemServiceImpl implements ItemService {
         // save item
         itemRepository.save(findItem);
 
-        return mapItemItemDto(findItem);
+        return findItem;
     }
 
     @Override
-    public Page<ItemDto> searchItem(String filter, String search, Pageable pageable){
+    public Page<Item> searchItem(String filter, String search, Pageable pageable){
 
         Page<Item> searchItems = null;
         if (filter.equals("name")) {
             searchItems = itemRepository.findAllByNameIsContaining(pageable, search);
         }
-        return searchItems.map(item -> mapItemItemDto(item));
+        return searchItems;
     }
 
     @Override
-    public List<ItemDto> getItemsByMemberId(Long memberId) {
+    public List getItemsByMemberId(Long memberId) {
         List<Item> findItems = itemRepository.findAllByMembers_Id(memberId);
-        return findItems.stream().map(item -> mapItemItemDto(item)).collect(Collectors.toList());
-    }
-
-    private ItemDto mapItemItemDto(Item item) {
-        ItemDto itemDto = modelMapper.map(item, ItemDto.class);
-        itemDto.setItemId(item.getId());
-        itemDto.setItemName(item.getName());
-
-        Members members = item.getMembers();
-        Seller seller = new Seller();
-        seller.setSellerId(members.getId());
-        seller.setSellerName(members.getName());
-        seller.setSellerImagePath(members.getImagePath());
-        itemDto.setSeller(seller);
-
-        String[] pathArray = item.getImagePath().split(",");
-        itemDto.setImagePath(pathArray);
-
-        return itemDto;
+        return findItems;
     }
 }

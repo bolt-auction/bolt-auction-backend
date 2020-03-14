@@ -24,9 +24,6 @@ spring:
     password: 1234
     url: 'jdbc:mysql://localhost:3306/auctionnara?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&characterSetResults=UTF-8&useSSL=true&serverTimezone=UTC '
     username: root
-  jackson:
-    serialization:
-      fail-on-empty-beans: false
   # JPA Setting
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
