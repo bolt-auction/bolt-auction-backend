@@ -14,8 +14,8 @@ public class MemberSerializer extends JsonSerializer<Members> {
     @Override
     public void serialize(Members members, JsonGenerator jgen, SerializerProvider serializerProvider) throws IOException {
         jgen.writeStartObject();
-        jgen.writeNumberField("MemberId", members.getId());
-        jgen.writeStringField("MemberName", members.getName());
+        jgen.writeNumberField("memberId", members.getId());
+        jgen.writeStringField("memberName", members.getName());
         jgen.writeEndObject();
     }
 }
