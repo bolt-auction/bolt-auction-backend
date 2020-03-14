@@ -1,8 +1,10 @@
 package com.neoga.boltauction.item.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.neoga.boltauction.category.domain.Category;
 import com.neoga.boltauction.memberstore.member.domain.Members;
+import com.neoga.boltauction.memberstore.util.MemberSerializer;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -39,6 +41,7 @@ public class Item {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     @JsonProperty("seller")
+    @JsonSerialize(using = MemberSerializer.class)
     private Members members;
     private String imagePath;
     private int bidCount;
