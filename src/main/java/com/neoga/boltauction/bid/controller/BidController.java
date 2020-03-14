@@ -2,6 +2,7 @@ package com.neoga.boltauction.bid.controller;
 
 import com.neoga.boltauction.bid.dto.BidDto;
 import com.neoga.boltauction.bid.service.BidService;
+import com.neoga.boltauction.exception.custom.CBidException;
 import com.neoga.boltauction.exception.custom.CItemEndException;
 import com.neoga.boltauction.item.domain.Item;
 import com.neoga.boltauction.item.service.ItemService;
@@ -46,8 +47,8 @@ public class BidController {
         // 본인의 상품인지 체크
         Long memberId = authService.getLoginInfo().getMemberId();
         Long sellerId = findItem.getMembers().getId();
-        if (sellerId == memberId)
-            throw new RuntimeException("본인의 상품입니다.");
+        if (sellerId.equals(memberId))
+            throw new CBidException("본인의 상품입니다.");
 
         // 상품 시간 지났는지 체크
         if (findItem.getEndDt().isBefore(LocalDateTime.now()))
@@ -55,7 +56,7 @@ public class BidController {
 
         // 가격 비교
         if (findItem.getStartPrice() > price || findItem.getCurrentPrice() >= price )
-            throw new RuntimeException("입찰 가격이 낮습니다.");
+            throw new CBidException("입찰 가격이 낮습니다.");
 
         BidDto bidDto = bidService.saveBid(itemId, price, memberId);
 
@@ -72,7 +73,7 @@ public class BidController {
         Long memberId = authService.getLoginInfo().getMemberId();
         Long findMemberId = bidService.getMemberByBidId(bidId);
 
-        if (memberId == findMemberId){
+        if (memberId.equals(findMemberId)){
             bidService.deleteBid(bidId);
         }
 

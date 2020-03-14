@@ -55,7 +55,7 @@ public class CategoryController {
             List<Category> subCategoryList = new ArrayList<>();
             for (Category category : categoryList) {
                 if (category.getSupCategory() != null &&
-                        category.getSupCategory().getId() == supCategoryDto.getId()) {
+                        category.getSupCategory().getId().equals(supCategoryDto.getId())) {
                     subCategoryList.add(category);
                 }
             }

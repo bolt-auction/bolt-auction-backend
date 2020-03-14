@@ -31,9 +31,8 @@ public class BidServiceImpl implements BidService {
                 .orElseThrow(() -> new CItemNotFoundException("상품이 존재하지 않습니다."));
 
         List<Bid> findBidList = bidRepository.findAllByItemOrderByPriceAsc(findItem);
-        List<BidDto> bidDtoList = findBidList.stream().map(bid -> mapBidBidDto(bid)).collect(Collectors.toList());
 
-        return bidDtoList;
+        return findBidList.stream().map(this::mapBidBidDto).collect(Collectors.toList());
     }
 
     @Override

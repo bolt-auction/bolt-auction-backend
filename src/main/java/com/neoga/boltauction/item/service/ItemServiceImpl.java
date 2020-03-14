@@ -34,6 +34,7 @@ public class ItemServiceImpl implements ItemService {
     private static final int NO_CATEGORY = 0;
     private static final int FIRST_CATEGORY = 1;
     private static final int LAST_CATEGORY = 53;
+    private static final String NO_ITEM = "상품이 존재하지 않습니다.";
 
     @Override
     public Item getItem(Long id) {
@@ -41,17 +42,14 @@ public class ItemServiceImpl implements ItemService {
         Item findItem;
 
         // get item entity
-        findItem = itemRepository.findById(id).orElseThrow(() -> new CItemNotFoundException("상품이 존재하지 않습니다."));
-
-        // map findItem -> itemDto
-        //ItemDto itemDto = mapItemItemDto(findItem);
+        findItem = itemRepository.findById(id).orElseThrow(() -> new CItemNotFoundException(NO_ITEM));
 
         return findItem;
     }
 
     @Override
     public Item deleteItem(Long id) {
-        Item item = itemRepository.findById(id).orElseThrow(() -> new CItemNotFoundException("상품이 존재하지 않습니다."));
+        Item item = itemRepository.findById(id).orElseThrow(() -> new CItemNotFoundException(NO_ITEM));
         itemRepository.delete(item);
 
         return item;
@@ -103,7 +101,7 @@ public class ItemServiceImpl implements ItemService {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
         // find Item
-        Item findItem = itemRepository.findById(id).orElseThrow(() -> new CItemNotFoundException("상품이 존재하지 않습니다."));
+        Item findItem = itemRepository.findById(id).orElseThrow(() -> new CItemNotFoundException(NO_ITEM));
 
         modelMapper.map(updateItemDto, findItem);
         Category findCategory = categoryRepository.findById(updateItemDto.getCategoryId()).orElseThrow(() -> new CCategoryNotFoundException("카테고리를 찾을 수 없습니다."));
@@ -130,7 +128,6 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List getItemsByMemberId(Long memberId) {
-        List<Item> findItems = itemRepository.findAllByMembers_Id(memberId);
-        return findItems;
+        return itemRepository.findAllByMembers_Id(memberId);
     }
 }

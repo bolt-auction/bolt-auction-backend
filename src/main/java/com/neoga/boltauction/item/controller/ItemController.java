@@ -45,6 +45,9 @@ public class ItemController {
     private final AuthService authService;
     private final MemberService memberService;
 
+    private static final String ITEM_DETAIL = "item-detail";
+    private static final String PROFILE = "profile";
+
     @ApiOperation(value = "카테고리별 상품조회", notes = "sort=creatDt,ASC 등으로 정렬방식 선택 가능")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page" ,dataType = "integer", paramType = "query",
@@ -64,8 +67,8 @@ public class ItemController {
         Page<Item> itemPage = itemService.getItems(categoryId, pageable);
 
         PagedResources<Resource<Item>> resources = assembler.toResource(itemPage);
-        resources.forEach(resource -> resource.add(linkTo(methodOn(ItemController.class).getItem(resource.getContent().getId())).withRel("item-detail")));
-        resources.add(new Link("/swagger-ui.html#/item-controller/getItemsUsingGET").withRel("profile"));
+        resources.forEach(resource -> resource.add(linkTo(methodOn(ItemController.class).getItem(resource.getContent().getId())).withRel(ITEM_DETAIL)));
+        resources.add(new Link("/swagger-ui.html#/item-controller/getItemsUsingGET").withRel(PROFILE));
 
         return ResponseEntity.ok(resources);
     }
@@ -84,10 +87,10 @@ public class ItemController {
         URI createdUri = selfLinkBuilder.toUri();
         Resource resource = new Resource(saveItem);
 
-        resource.add(linkTo(methodOn(ItemController.class).getItem(saveItem.getId())).withRel("item-detail"));
+        resource.add(linkTo(methodOn(ItemController.class).getItem(saveItem.getId())).withRel(ITEM_DETAIL));
         resource.add(linkTo(ItemController.class).withRel("query-events"));
         resource.add(selfLinkBuilder.withRel("update-event"));
-        resource.add(new Link("/swagger-ui.html#/item-controller/insertItemUsingPOST").withRel("profile"));
+        resource.add(new Link("/swagger-ui.html#/item-controller/insertItemUsingPOST").withRel(PROFILE));
 
         return ResponseEntity.created(createdUri).body(resource);
     }
@@ -101,7 +104,7 @@ public class ItemController {
 
         Resource resource = new Resource(findItem);
         resource.add(linkTo(ItemController.class).slash(findItem.getId()).withSelfRel());
-        resource.add(new Link("/swagger-ui.html#/item-controller/getItemUsingGET").withRel("profile"));
+        resource.add(new Link("/swagger-ui.html#/item-controller/getItemUsingGET").withRel(PROFILE));
 
         return ResponseEntity.ok(resource);
     }
@@ -131,7 +134,7 @@ public class ItemController {
         Members findMember = memberService.findMemberById(memberId);
         Item findItem = itemService.getItem(id);
 
-        if (findItem.getMembers().getId() != findMember.getId()) {
+        if (findItem.getMembers().getId().equals(findMember.getId())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
@@ -139,7 +142,7 @@ public class ItemController {
 
         Resource resource = new Resource(updateItem);
         resource.add(linkTo(ItemController.class).slash(updateItem.getId()).withSelfRel());
-        resource.add(new Link("/swagger-ui.html#/item-controller/updateItemUsingPUT").withRel("profile"));
+        resource.add(new Link("/swagger-ui.html#/item-controller/updateItemUsingPUT").withRel(PROFILE));
 
         return ResponseEntity.ok(resource);
     }
@@ -163,9 +166,9 @@ public class ItemController {
                                                                         @ApiIgnore PagedResourcesAssembler<Item> assembler) {
         Page<Item> itemDtoPage = itemService.searchItem(filter, keyword, pageable);
 
-        PagedResources<Resource<Item>> resources = assembler.toResource(itemDtoPage, i -> new Resource<>(i));
-        resources.forEach(resource -> resource.add(linkTo(methodOn(ItemController.class).getItem(resource.getContent().getId())).withRel("item-detail")));
-        resources.add(new Link("/swagger-ui.html#/item-controller/searchItemUsingGET").withRel("profile"));
+        PagedResources<Resource<Item>> resources = assembler.toResource(itemDtoPage, Resource::new);
+        resources.forEach(resource -> resource.add(linkTo(methodOn(ItemController.class).getItem(resource.getContent().getId())).withRel(ITEM_DETAIL)));
+        resources.add(new Link("/swagger-ui.html#/item-controller/searchItemUsingGET").withRel(PROFILE));
 
         return ResponseEntity.ok(resources);
     }
@@ -182,7 +185,7 @@ public class ItemController {
 
         Resources resources = new Resources(resourceList);
         resources.add(linkTo(StoreController.class).slash("store/" + memberId).withSelfRel());
-        resources.add(new Link("/swagger-ui.html#/item-controller/getStoreItemsUsingGET").withRel("profile"));
+        resources.add(new Link("/swagger-ui.html#/item-controller/getStoreItemsUsingGET").withRel(PROFILE));
 
         return ResponseEntity.ok(resources);
     }

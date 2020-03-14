@@ -20,8 +20,10 @@ public class ImageServiceImpl implements ImageService {
 
     private final ItemRepository itemRepository;
     private final S3Uploader s3Uploader;
-    private final static String pathUrl = "https://bolt-auction-image.s3.ap-northeast-2.amazonaws.com/";
     private final MemberRepository memberRepository;
+    private static final String PATH_URI = "https://bolt-auction-image.s3.ap-northeast-2.amazonaws.com/";
+
+    private static final String NOT_IMAGE = "이미지가 아닙니다.";
 
     @Override
     public void saveItemImages(Item item, MultipartFile... images) throws IOException {
@@ -37,7 +39,7 @@ public class ImageServiceImpl implements ImageService {
                 if ( i+1 < images.length)
                     stringBuilder.append(",");
             } else {
-                throw new CNotImageException("이미지가 아닙니다.");
+                throw new CNotImageException(NOT_IMAGE);
             }
         }
 
@@ -49,8 +51,6 @@ public class ImageServiceImpl implements ImageService {
             item.setImagePath(imagePath);
 
         itemRepository.save(item);
-
-        return;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class ImageServiceImpl implements ImageService {
         if (item.getImagePath() != null){
             String[] pathList = item.getImagePath().split(",");
             for (int i = 0; i < pathList.length; i++) {
-                String dirFile = pathList[i].substring(pathUrl.length());
+                String dirFile = pathList[i].substring(PATH_URI.length());
                 s3Uploader.removeS3File(dirFile);
             }
         }
@@ -76,7 +76,7 @@ public class ImageServiceImpl implements ImageService {
                 if ( i+1 < images.length)
                     stringBuilder.append(",");
             } else {
-                throw new CNotImageException("이미지가 아닙니다.");
+                throw new CNotImageException(NOT_IMAGE);
             }
         }
 
@@ -88,8 +88,6 @@ public class ImageServiceImpl implements ImageService {
             item.setImagePath(imagePath);
 
         itemRepository.save(item);
-
-        return;
     }
 
     @Override
@@ -98,7 +96,7 @@ public class ImageServiceImpl implements ImageService {
         // 기존의 이미지 삭제
         String oldPath = members.getImagePath();
         if (oldPath != null) {
-            String dirFile = oldPath.substring(pathUrl.length());
+            String dirFile = oldPath.substring(PATH_URI.length());
             s3Uploader.removeS3File(dirFile);
         }
 
@@ -114,11 +112,9 @@ public class ImageServiceImpl implements ImageService {
             String path = s3Uploader.upload(image, "image/store/" + members.getId().toString());
             members.setImagePath(path);
         } else {
-            throw new CNotImageException("이미지가 아닙니다.");
+            throw new CNotImageException(NOT_IMAGE);
         }
 
         memberRepository.save(members);
-
-        return;
     }
 }
