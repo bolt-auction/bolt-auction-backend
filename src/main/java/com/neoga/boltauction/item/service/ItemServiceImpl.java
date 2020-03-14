@@ -42,7 +42,7 @@ public class ItemServiceImpl implements ItemService {
         Item findItem;
 
         // get item entity
-        findItem = itemRepository.findById(id).orElseThrow(CItemNotFoundException::new);
+        findItem = itemRepository.findById(id).orElseThrow(() -> new CItemNotFoundException("상품이 존재하지 않습니다."));
 
         // map findItem -> itemDto
         //ItemDto itemDto = mapItemItemDto(findItem);
@@ -52,7 +52,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item deleteItem(Long id) {
-        Item item = itemRepository.findById(id).orElseThrow(CItemNotFoundException::new);
+        Item item = itemRepository.findById(id).orElseThrow(() -> new CItemNotFoundException("상품이 존재하지 않습니다."));
         itemRepository.delete(item);
 
         return item;
@@ -104,7 +104,7 @@ public class ItemServiceImpl implements ItemService {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
         // find Item
-        Item findItem = itemRepository.findById(id).orElseThrow(CItemNotFoundException::new);
+        Item findItem = itemRepository.findById(id).orElseThrow(() -> new CItemNotFoundException("상품이 존재하지 않습니다."));
 
         modelMapper.map(updateItemDto, findItem);
         Category findCategory = categoryRepository.findById(updateItemDto.getCategoryId()).orElseThrow(() -> new CCategoryNotFoundException("카테고리를 찾을 수 없습니다."));
