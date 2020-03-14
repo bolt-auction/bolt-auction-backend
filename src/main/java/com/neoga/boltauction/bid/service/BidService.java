@@ -1,7 +1,6 @@
 package com.neoga.boltauction.bid.service;
 
 import com.neoga.boltauction.bid.dto.BidDto;
-import org.springframework.hateoas.Resource;
 
 import java.util.List;
 

@@ -1,6 +1,5 @@
 package com.neoga.boltauction.chat.domain;
 
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.neoga.boltauction.memberstore.member.domain.Members;
 import lombok.*;

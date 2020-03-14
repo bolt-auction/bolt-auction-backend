@@ -1,8 +1,6 @@
 package com.neoga.boltauction.security.controller;
 
-
 import com.neoga.boltauction.memberstore.member.controller.MemberController;
-import com.neoga.boltauction.security.dto.LoginResponseDto;
 import com.neoga.boltauction.security.dto.RetKakaoAuth;
 import com.neoga.boltauction.security.service.KakaoService;
 import io.swagger.annotations.ApiOperation;
@@ -11,12 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.Resource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
