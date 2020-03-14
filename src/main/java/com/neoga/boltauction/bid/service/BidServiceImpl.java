@@ -27,7 +27,8 @@ public class BidServiceImpl implements BidService {
 
     @Override
     public List<BidDto> getBidList(Long itemId) {
-        Item findItem = itemRepository.findById(itemId).orElseThrow(CItemNotFoundException::new);
+        Item findItem = itemRepository.findById(itemId)
+                .orElseThrow(() -> new CItemNotFoundException("상품이 존재하지 않습니다."));
 
         List<Bid> findBidList = bidRepository.findAllByItemOrderByPriceAsc(findItem);
         List<BidDto> bidDtoList = findBidList.stream().map(bid -> mapBidBidDto(bid)).collect(Collectors.toList());
@@ -73,6 +74,8 @@ public class BidServiceImpl implements BidService {
         register.setMemberImagePath(members.getImagePath());
 
         bidDto.setMember(register);
+
+        bidDto.setItemId(bid.getItem().getId());
 
         return bidDto;
     }
