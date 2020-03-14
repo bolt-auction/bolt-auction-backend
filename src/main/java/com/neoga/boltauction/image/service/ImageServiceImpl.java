@@ -41,7 +41,12 @@ public class ImageServiceImpl implements ImageService {
             }
         }
 
-        item.setImagePath(stringBuilder.toString());
+        String imagePath = stringBuilder.toString();
+
+        if (imagePath.equals(""))
+            item.setImagePath(null);
+        else
+            item.setImagePath(imagePath);
 
         itemRepository.save(item);
 

@@ -150,8 +150,12 @@ public class ItemServiceImpl implements ItemService {
         seller.setSellerImagePath(members.getImagePath());
         itemDto.setSeller(seller);
 
+        if (item.getImagePath() == null) {
+            itemDto.setImagePath(null);
+        } else {
         String[] pathArray = item.getImagePath().split(",");
         itemDto.setImagePath(pathArray);
+        }
 
         return itemDto;
     }
