@@ -3,6 +3,7 @@ package com.neoga.boltauction.bid.controller;
 import com.neoga.boltauction.bid.dto.BidDto;
 import com.neoga.boltauction.bid.service.BidService;
 import com.neoga.boltauction.exception.custom.CItemEndException;
+import com.neoga.boltauction.item.domain.Item;
 import com.neoga.boltauction.item.service.ItemService;
 import com.neoga.boltauction.security.service.AuthService;
 import io.swagger.annotations.ApiOperation;
@@ -40,15 +41,21 @@ public class BidController {
     @PostMapping("/{item-id}")
     public ResponseEntity registerBidItem(@PathVariable(name = "item-id") Long itemId, int price) {
 
+        Item findItem = itemService.getItem(itemId);
+
         // 본인의 상품인지 체크
         Long memberId = authService.getLoginInfo().getMemberId();
-        Long sellerId = itemService.getItem(itemId).getMembers().getId();
+        Long sellerId = findItem.getMembers().getId();
         if (sellerId == memberId)
             throw new RuntimeException("본인의 상품입니다.");
 
         // 상품 시간 지났는지 체크
-        if (itemService.getItem(itemId).getEndDt().isBefore(LocalDateTime.now()))
+        if (findItem.getEndDt().isBefore(LocalDateTime.now()))
             throw new CItemEndException("상품이 종료되었습니다.");
+
+        // 가격 비교
+        if (findItem.getStartPrice() > price || findItem.getCurrentPrice() >= price )
+            throw new RuntimeException("입찰 가격이 낮습니다.");
 
         BidDto bidDto = bidService.saveBid(itemId, price, memberId);
 

@@ -41,6 +41,7 @@ public class BidServiceImpl implements BidService {
 
         Bid bid = new Bid();
         Item item = itemRepository.getOne(itemId);
+        item.setCurrentPrice(price);
 
         bid.setItem(item);
         Members findMember = memberRepository.findById(memberId).orElseThrow(CMemberNotFoundException::new);
@@ -49,6 +50,7 @@ public class BidServiceImpl implements BidService {
         bid.setPrice(price);
 
         bidRepository.save(bid);
+        itemRepository.save(item);
 
         return mapBidBidDto(bid);
     }
