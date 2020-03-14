@@ -57,10 +57,12 @@ public class ImageServiceImpl implements ImageService {
     public void updateItemImages(Item item, MultipartFile... images) throws IOException {
 
         // 기존의 이미지 삭제
-        String[] pathList = item.getImagePath().split(",");
-        for (int i = 0; i < pathList.length; i++) {
-            String dirFile = pathList[i].substring(pathUrl.length());
-            s3Uploader.removeS3File(dirFile);
+        if (item.getImagePath() != null){
+            String[] pathList = item.getImagePath().split(",");
+            for (int i = 0; i < pathList.length; i++) {
+                String dirFile = pathList[i].substring(pathUrl.length());
+                s3Uploader.removeS3File(dirFile);
+            }
         }
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -78,7 +80,12 @@ public class ImageServiceImpl implements ImageService {
             }
         }
 
-        item.setImagePath(stringBuilder.toString());
+        String imagePath = stringBuilder.toString();
+
+        if (imagePath.equals(""))
+            item.setImagePath(null);
+        else
+            item.setImagePath(imagePath);
 
         itemRepository.save(item);
 
