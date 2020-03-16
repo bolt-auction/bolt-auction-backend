@@ -8,10 +8,8 @@ import com.neoga.boltauction.category.dto.CategoryListDto;
 import com.neoga.boltauction.item.controller.ItemController;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,7 +55,7 @@ public class CategoryController {
             List<Category> subCategoryList = new ArrayList<>();
             for (Category category : categoryList) {
                 if (category.getSupCategory() != null &&
-                        category.getSupCategory().getId() == supCategoryDto.getId()) {
+                        category.getSupCategory().getId().equals(supCategoryDto.getId())) {
                     subCategoryList.add(category);
                 }
             }

@@ -13,7 +13,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-
 public class JwtAuthenticationFilter extends GenericFilterBean {
 
     private JwtTokenService jwtTokenService;

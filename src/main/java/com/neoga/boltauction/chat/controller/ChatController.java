@@ -1,6 +1,5 @@
 package com.neoga.boltauction.chat.controller;
 
-import com.google.gson.Gson;
 import com.neoga.boltauction.chat.domain.ChatMessage;
 import com.neoga.boltauction.chat.dto.SendMessageDto;
 import com.neoga.boltauction.chat.service.ChatMessageService;
@@ -16,12 +15,9 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

@@ -10,9 +10,6 @@ import com.neoga.boltauction.security.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import java.util.List;
-
 @RequiredArgsConstructor
 @Service
 public class ChatRoomJoinService {

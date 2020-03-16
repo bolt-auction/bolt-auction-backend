@@ -64,7 +64,7 @@ public class ReviewController {
         Long memberId = authService.getLoginInfo().getMemberId();
         Review findReview = reviewService.getReview(reviewId);
 
-        if (memberId != findReview.getRegister().getId()) {
+        if (findReview.getRegister().getId().equals(memberId)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 

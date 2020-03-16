@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +42,7 @@ public class ReviewServiceImpl implements ReviewService {
     public List<ReviewDto> getReviews(Long storeId) {
         List<Review> reviewList = reviewRepository.findAllByStore_IdOrderByCreateDtDesc(storeId);
 
-        return reviewList.stream().map(review -> mapReviewReviewDto(review)).collect(Collectors.toList());
+        return reviewList.stream().map(this::mapReviewReviewDto).collect(Collectors.toList());
     }
 
     @Override

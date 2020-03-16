@@ -31,9 +31,8 @@ public class BidServiceImpl implements BidService {
                 .orElseThrow(() -> new CItemNotFoundException("상품이 존재하지 않습니다."));
 
         List<Bid> findBidList = bidRepository.findAllByItemOrderByPriceAsc(findItem);
-        List<BidDto> bidDtoList = findBidList.stream().map(bid -> mapBidBidDto(bid)).collect(Collectors.toList());
 
-        return bidDtoList;
+        return findBidList.stream().map(this::mapBidBidDto).collect(Collectors.toList());
     }
 
     @Override
@@ -41,6 +40,7 @@ public class BidServiceImpl implements BidService {
 
         Bid bid = new Bid();
         Item item = itemRepository.getOne(itemId);
+        item.setCurrentPrice(price);
 
         bid.setItem(item);
         Members findMember = memberRepository.findById(memberId).orElseThrow(CMemberNotFoundException::new);
@@ -49,6 +49,7 @@ public class BidServiceImpl implements BidService {
         bid.setPrice(price);
 
         bidRepository.save(bid);
+        itemRepository.save(item);
 
         return mapBidBidDto(bid);
     }

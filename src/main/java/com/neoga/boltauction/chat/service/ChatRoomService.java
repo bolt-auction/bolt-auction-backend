@@ -12,13 +12,11 @@ import com.neoga.boltauction.memberstore.member.repository.MemberRepository;
 import com.neoga.boltauction.security.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
