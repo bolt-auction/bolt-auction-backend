@@ -5,6 +5,7 @@ import com.neoga.boltauction.bid.service.BidService;
 import com.neoga.boltauction.exception.custom.CBidException;
 import com.neoga.boltauction.exception.custom.CItemEndException;
 import com.neoga.boltauction.item.domain.Item;
+import com.neoga.boltauction.item.dto.ItemDto;
 import com.neoga.boltauction.item.service.ItemService;
 import com.neoga.boltauction.security.service.AuthService;
 import io.swagger.annotations.ApiOperation;
@@ -42,11 +43,11 @@ public class BidController {
     @PostMapping("/{item-id}")
     public ResponseEntity registerBidItem(@PathVariable(name = "item-id") Long itemId, int price) {
 
-        Item findItem = itemService.getItem(itemId);
+        ItemDto findItem = itemService.getItem(itemId);
 
         // 본인의 상품인지 체크
         Long memberId = authService.getLoginInfo().getMemberId();
-        Long sellerId = findItem.getMembers().getId();
+        Long sellerId = findItem.getSeller().getId();
         if (sellerId.equals(memberId))
             throw new CBidException("본인의 상품입니다.");
 

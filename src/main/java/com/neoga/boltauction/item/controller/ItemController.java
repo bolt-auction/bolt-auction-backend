@@ -3,6 +3,7 @@ package com.neoga.boltauction.item.controller;
 import com.neoga.boltauction.exception.custom.CItemNotFoundException;
 import com.neoga.boltauction.item.domain.Item;
 import com.neoga.boltauction.item.dto.InsertItemDto;
+import com.neoga.boltauction.item.dto.ItemDto;
 import com.neoga.boltauction.item.dto.UpdateItemDto;
 import com.neoga.boltauction.item.service.ItemService;
 import com.neoga.boltauction.memberstore.member.domain.Members;
@@ -62,12 +63,12 @@ public class ItemController {
     })
     @GetMapping("/category/{category-id}")
     public ResponseEntity getItems(@PathVariable(name = "category-id") Long categoryId, @ApiIgnore Pageable pageable,
-                                   @ApiIgnore PagedResourcesAssembler<Item> assembler) {
+                                   @ApiIgnore PagedResourcesAssembler<ItemDto> assembler) {
         // 권한체크 추가
-        Page<Item> itemPage = itemService.getItems(categoryId, pageable);
+        Page<ItemDto> itemPage = itemService.getItems(categoryId, pageable);
 
-        PagedResources<Resource<Item>> resources = assembler.toResource(itemPage);
-        resources.forEach(resource -> resource.add(linkTo(methodOn(ItemController.class).getItem(resource.getContent().getId())).withRel(ITEM_DETAIL)));
+        PagedResources<Resource<ItemDto>> resources = assembler.toResource(itemPage);
+        resources.forEach(resource -> resource.add(linkTo(methodOn(ItemController.class).getItem(resource.getContent().getItemId())).withRel(ITEM_DETAIL)));
         resources.add(new Link("/swagger-ui.html#/item-controller/getItemsUsingGET").withRel(PROFILE));
 
         return ResponseEntity.ok(resources);
@@ -81,13 +82,13 @@ public class ItemController {
         Long memberId = authService.getLoginInfo().getMemberId();
 
         // save item
-        Item saveItem = itemService.saveItem(insertItemDto, memberId, images);
+        ItemDto saveItem = itemService.saveItem(insertItemDto, memberId, images);
 
-        ControllerLinkBuilder selfLinkBuilder =linkTo(ItemController.class).slash(saveItem.getId());
+        ControllerLinkBuilder selfLinkBuilder =linkTo(ItemController.class).slash(saveItem.getItemId());
         URI createdUri = selfLinkBuilder.toUri();
         Resource resource = new Resource(saveItem);
 
-        resource.add(linkTo(methodOn(ItemController.class).getItem(saveItem.getId())).withRel(ITEM_DETAIL));
+        resource.add(linkTo(methodOn(ItemController.class).getItem(saveItem.getItemId())).withRel(ITEM_DETAIL));
         resource.add(linkTo(ItemController.class).withRel("query-events"));
         resource.add(selfLinkBuilder.withRel("update-event"));
         resource.add(new Link("/swagger-ui.html#/item-controller/insertItemUsingPOST").withRel(PROFILE));
@@ -100,10 +101,10 @@ public class ItemController {
     public ResponseEntity getItem(@PathVariable(name = "item-id") Long id) {
         // 권한 체크
 
-        Item findItem = itemService.getItem(id);
+        ItemDto findItem = itemService.getItem(id);
 
         Resource resource = new Resource(findItem);
-        resource.add(linkTo(ItemController.class).slash(findItem.getId()).withSelfRel());
+        resource.add(linkTo(ItemController.class).slash(findItem.getItemId()).withSelfRel());
         resource.add(new Link("/swagger-ui.html#/item-controller/getItemUsingGET").withRel(PROFILE));
 
         return ResponseEntity.ok(resource);
@@ -132,16 +133,16 @@ public class ItemController {
 
         Long memberId = authService.getLoginInfo().getMemberId();
         Members findMember = memberService.findMemberById(memberId);
-        Item findItem = itemService.getItem(id);
+        ItemDto findItem = itemService.getItem(id);
 
-        if (findItem.getMembers().getId().equals(findMember.getId())) {
+        if (!findItem.getSeller().getId().equals(findMember.getId())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        Item updateItem = itemService.updateItem(id, updateItemDto, memberId, images);
+        ItemDto updateItem = itemService.updateItem(id, updateItemDto, memberId, images);
 
         Resource resource = new Resource(updateItem);
-        resource.add(linkTo(ItemController.class).slash(updateItem.getId()).withSelfRel());
+        resource.add(linkTo(ItemController.class).slash(updateItem.getItemId()).withSelfRel());
         resource.add(new Link("/swagger-ui.html#/item-controller/updateItemUsingPUT").withRel(PROFILE));
 
         return ResponseEntity.ok(resource);
@@ -162,12 +163,12 @@ public class ItemController {
                             "높은가격순 : currentPrice,desc\n")
     })
     @GetMapping
-    public ResponseEntity<PagedResources<Resource<Item>>> searchItem(@RequestParam String filter,@RequestParam String keyword, @ApiIgnore Pageable pageable,
-                                                                        @ApiIgnore PagedResourcesAssembler<Item> assembler) {
-        Page<Item> itemDtoPage = itemService.searchItem(filter, keyword, pageable);
+    public ResponseEntity<PagedResources<Resource<ItemDto>>> searchItem(@RequestParam String filter,@RequestParam String keyword, @ApiIgnore Pageable pageable,
+                                                                        @ApiIgnore PagedResourcesAssembler<ItemDto> assembler) {
+        Page<ItemDto> itemDtoPage = itemService.searchItem(filter, keyword, pageable);
 
-        PagedResources<Resource<Item>> resources = assembler.toResource(itemDtoPage, Resource::new);
-        resources.forEach(resource -> resource.add(linkTo(methodOn(ItemController.class).getItem(resource.getContent().getId())).withRel(ITEM_DETAIL)));
+        PagedResources<Resource<ItemDto>> resources = assembler.toResource(itemDtoPage, Resource::new);
+        resources.forEach(resource -> resource.add(linkTo(methodOn(ItemController.class).getItem(resource.getContent().getItemId())).withRel(ITEM_DETAIL)));
         resources.add(new Link("/swagger-ui.html#/item-controller/searchItemUsingGET").withRel(PROFILE));
 
         return ResponseEntity.ok(resources);
@@ -175,11 +176,11 @@ public class ItemController {
 
     @GetMapping("/store/{member-id}")
     public ResponseEntity getStoreItems(@PathVariable(name = "member-id") Long memberId){
-        List<Item> itemDtoList = itemService.getItemsByMemberId(memberId);
+        List<ItemDto> itemDtoList = itemService.getItemsByMemberId(memberId);
 
         List<Resource> resourceList = itemDtoList.stream().map(itemDto -> {
             Resource resource = new Resource(itemDto);
-            resource.add(linkTo(ItemController.class).slash(itemDto.getId()).withSelfRel());
+            resource.add(linkTo(ItemController.class).slash(itemDto.getItemId()).withSelfRel());
             return resource;
         }).collect(Collectors.toList());
 

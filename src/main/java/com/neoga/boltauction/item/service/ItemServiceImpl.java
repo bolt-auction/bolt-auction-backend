@@ -7,6 +7,7 @@ import com.neoga.boltauction.exception.custom.CItemNotFoundException;
 import com.neoga.boltauction.image.service.ImageService;
 import com.neoga.boltauction.item.domain.Item;
 import com.neoga.boltauction.item.dto.InsertItemDto;
+import com.neoga.boltauction.item.dto.ItemDto;
 import com.neoga.boltauction.item.dto.UpdateItemDto;
 import com.neoga.boltauction.item.repository.ItemRepository;
 import com.neoga.boltauction.memberstore.member.domain.Members;
@@ -37,26 +38,26 @@ public class ItemServiceImpl implements ItemService {
     private static final String NO_ITEM = "상품이 존재하지 않습니다.";
 
     @Override
-    public Item getItem(Long id) {
+    public ItemDto getItem(Long id) {
 
         Item findItem;
 
         // get item entity
         findItem = itemRepository.findById(id).orElseThrow(() -> new CItemNotFoundException(NO_ITEM));
 
-        return findItem;
+        return mapItemItemDto(findItem);
     }
 
     @Override
-    public Item deleteItem(Long id) {
+    public ItemDto deleteItem(Long id) {
         Item item = itemRepository.findById(id).orElseThrow(() -> new CItemNotFoundException(NO_ITEM));
         itemRepository.delete(item);
 
-        return item;
+        return mapItemItemDto(item);
     }
 
     @Override
-    public Page<Item> getItems(Long categoryId, Pageable pageable) {
+    public Page<ItemDto> getItems(Long categoryId, Pageable pageable) {
 
         Page<Item> itemPage;
 
@@ -70,11 +71,11 @@ public class ItemServiceImpl implements ItemService {
         }
 
         // map item -> itemDto
-        return itemPage;
+        return itemPage.map(this::mapItemItemDto);
     }
 
     @Override
-    public Item saveItem(InsertItemDto insertItemDto, Long memberId, MultipartFile... images) throws IOException {
+    public ItemDto saveItem(InsertItemDto insertItemDto, Long memberId, MultipartFile... images) throws IOException {
 
         // find store
         Members findMembers = memberRepository.getOne(memberId);
@@ -92,11 +93,11 @@ public class ItemServiceImpl implements ItemService {
 
         imageService.saveItemImages(saveItem, images);
 
-        return saveItem;
+        return mapItemItemDto(saveItem);
     }
 
     @Override
-    public Item updateItem(Long id, UpdateItemDto updateItemDto, Long memberId, MultipartFile... images) throws IOException {
+    public ItemDto updateItem(Long id, UpdateItemDto updateItemDto, Long memberId, MultipartFile... images) throws IOException {
 
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
@@ -113,21 +114,34 @@ public class ItemServiceImpl implements ItemService {
         // save item
         itemRepository.save(findItem);
 
-        return findItem;
+        return mapItemItemDto(findItem);
     }
 
     @Override
-    public Page<Item> searchItem(String filter, String search, Pageable pageable){
+    public Page<ItemDto> searchItem(String filter, String search, Pageable pageable){
 
         Page<Item> searchItems = null;
         if (filter.equals("name")) {
             searchItems = itemRepository.findAllByNameIsContaining(pageable, search);
         }
-        return searchItems;
+        return searchItems.map(this::mapItemItemDto);
     }
 
     @Override
     public List getItemsByMemberId(Long memberId) {
         return itemRepository.findAllByMembers_Id(memberId);
+    }
+
+    private ItemDto mapItemItemDto(Item item) {
+        ItemDto itemDto = modelMapper.map(item, ItemDto.class);
+
+        if (item.getImagePath() == null) {
+            itemDto.setImagePath(null);
+        } else {
+            String[] pathArray = item.getImagePath().split(",");
+            itemDto.setImagePath(pathArray);
+        }
+
+        return itemDto;
     }
 }
