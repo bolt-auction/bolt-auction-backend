@@ -4,7 +4,6 @@ import com.neoga.boltauction.bid.dto.BidDto;
 import com.neoga.boltauction.bid.service.BidService;
 import com.neoga.boltauction.exception.custom.CBidException;
 import com.neoga.boltauction.exception.custom.CItemEndException;
-import com.neoga.boltauction.item.domain.Item;
 import com.neoga.boltauction.item.dto.ItemDto;
 import com.neoga.boltauction.item.service.ItemService;
 import com.neoga.boltauction.security.service.AuthService;
@@ -59,10 +58,10 @@ public class BidController {
         if (findItem.getStartPrice() > price || findItem.getCurrentPrice() >= price )
             throw new CBidException("입찰 가격이 낮습니다.");
 
-        BidDto bidDto = bidService.saveBid(itemId, price, memberId);
+        BidDto bid = bidService.saveBid(itemId, price, memberId);
 
-        Resource resource = new Resource(bidDto);
-        resource.add(linkTo(BidController.class).slash(bidDto.getBidId()).withSelfRel());
+        Resource resource = new Resource(bid);
+        resource.add(linkTo(BidController.class).slash(bid.getBidId()).withSelfRel());
         resource.add(new Link("/swagger-ui.html#/bid-controller/registerBidItemUsingGET").withRel("profile"));
 
         return ResponseEntity.ok(resource);

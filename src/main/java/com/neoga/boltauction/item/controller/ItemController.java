@@ -1,7 +1,6 @@
 package com.neoga.boltauction.item.controller;
 
 import com.neoga.boltauction.exception.custom.CItemNotFoundException;
-import com.neoga.boltauction.item.domain.Item;
 import com.neoga.boltauction.item.dto.InsertItemDto;
 import com.neoga.boltauction.item.dto.ItemDto;
 import com.neoga.boltauction.item.dto.UpdateItemDto;
@@ -165,9 +164,9 @@ public class ItemController {
     @GetMapping
     public ResponseEntity<PagedResources<Resource<ItemDto>>> searchItem(@RequestParam String filter,@RequestParam String keyword, @ApiIgnore Pageable pageable,
                                                                         @ApiIgnore PagedResourcesAssembler<ItemDto> assembler) {
-        Page<ItemDto> itemDtoPage = itemService.searchItem(filter, keyword, pageable);
+        Page<ItemDto> itemPage = itemService.searchItem(filter, keyword, pageable);
 
-        PagedResources<Resource<ItemDto>> resources = assembler.toResource(itemDtoPage, Resource::new);
+        PagedResources<Resource<ItemDto>> resources = assembler.toResource(itemPage, Resource::new);
         resources.forEach(resource -> resource.add(linkTo(methodOn(ItemController.class).getItem(resource.getContent().getItemId())).withRel(ITEM_DETAIL)));
         resources.add(new Link("/swagger-ui.html#/item-controller/searchItemUsingGET").withRel(PROFILE));
 
@@ -176,9 +175,9 @@ public class ItemController {
 
     @GetMapping("/store/{member-id}")
     public ResponseEntity getStoreItems(@PathVariable(name = "member-id") Long memberId){
-        List<ItemDto> itemDtoList = itemService.getItemsByMemberId(memberId);
+        List<ItemDto> itemList = itemService.getItemsByMemberId(memberId);
 
-        List<Resource> resourceList = itemDtoList.stream().map(itemDto -> {
+        List<Resource> resourceList = itemList.stream().map(itemDto -> {
             Resource resource = new Resource(itemDto);
             resource.add(linkTo(ItemController.class).slash(itemDto.getItemId()).withSelfRel());
             return resource;
