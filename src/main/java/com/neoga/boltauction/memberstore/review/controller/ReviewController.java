@@ -31,9 +31,9 @@ public class ReviewController {
     @ApiImplicitParam(name = "member-id", value = "상품 id", dataType = "long")
     @GetMapping("/store/{member-id}")
     public ResponseEntity getReviews(@PathVariable(name = "member-id") Long memberId) {
-        List<ReviewDto> reviews = reviewService.getReviews(memberId);
+        List<ReviewDto> reviewList = reviewService.getReviews(memberId);
 
-        Resources resources = new Resources(reviews);
+        Resources resources = new Resources(reviewList);
         resources.add(linkTo(Review.class).slash("store/" + memberId).withSelfRel());
         resources.add(new Link("/swagger-ui.html#/review-controller/getReviewsUsingGET").withRel("profile"));
 
@@ -48,9 +48,9 @@ public class ReviewController {
     @PostMapping("/store/{member-id}")
     public ResponseEntity addReview(@PathVariable(name = "member-id") Long memberId, @RequestBody String content) {
         Long currentMemberId = authService.getLoginInfo().getMemberId();
-        ReviewDto reviewDto = reviewService.addReview(memberId, currentMemberId, content);
+        ReviewDto review = reviewService.addReview(memberId, currentMemberId, content);
 
-        Resource resource = new Resource(reviewDto);
+        Resource resource = new Resource(review);
         resource.add(linkTo(ReviewController.class).slash("store/" + memberId).withSelfRel());
         resource.add(new Link("/swagger-ui.html#/review-controller").withRel("profile"));
 

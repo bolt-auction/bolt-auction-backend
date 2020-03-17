@@ -32,15 +32,15 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity getCategory() {
-        CategoryListDto categoryListDto = new CategoryListDto();
+        CategoryListDto categoryList = new CategoryListDto();
 
         //get all category List
-        List<Category> categoryList = categoryService.getCategoryList();
+        List<Category> findCategoryList = categoryService.getCategoryList();
 
 
         //get all super category List
         List<Category> supCategoryList = new ArrayList<>();
-        for (Category category : categoryList) {
+        for (Category category : findCategoryList) {
             if (category.getSupCategory() == null) {
                 supCategoryList.add(category);
             }
@@ -53,7 +53,7 @@ public class CategoryController {
         supCategoryDtoList.forEach(supCategoryDto -> {
             //get sub category list
             List<Category> subCategoryList = new ArrayList<>();
-            for (Category category : categoryList) {
+            for (Category category : findCategoryList) {
                 if (category.getSupCategory() != null &&
                         category.getSupCategory().getId().equals(supCategoryDto.getId())) {
                     subCategoryList.add(category);
@@ -81,9 +81,9 @@ public class CategoryController {
         }).collect(Collectors.toList());
 
         // set category list dto
-        categoryListDto.setSupCategoryList(supCategoryEntityModelList);
+        categoryList.setSupCategoryList(supCategoryEntityModelList);
         // make category list dto entity model
-        Resource resource = new Resource(categoryListDto);
+        Resource resource = new Resource(categoryList);
         resource.add(new Link("/swagger-ui.html#/category-controller/getCategoryUsingGET").withRel("profile"));
 
         return ResponseEntity.ok(resource);

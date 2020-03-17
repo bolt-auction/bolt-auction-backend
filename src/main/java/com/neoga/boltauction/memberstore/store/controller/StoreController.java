@@ -45,9 +45,9 @@ public class StoreController {
 
         Members findMember = memberService.findMemberById(authService.getLoginInfo().getMemberId());
 
-        StoreDto storeDto = storeService.updateStore(findMember, description, memberName, image);
+        StoreDto store = storeService.updateStore(findMember, description, memberName, image);
 
-        Resource storeResource = new Resource(storeDto);
+        Resource storeResource = new Resource(store);
         storeResource.add(linkTo(StoreController.class).slash(findMember.getId()).withSelfRel());
         storeResource.add(new Link("/swagger-ui.html#/store-controller/updateStoreUsingPUT").withRel("profile"));
 
