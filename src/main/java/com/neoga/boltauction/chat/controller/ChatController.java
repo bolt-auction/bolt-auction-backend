@@ -1,5 +1,6 @@
 package com.neoga.boltauction.chat.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.neoga.boltauction.chat.domain.ChatMessage;
 import com.neoga.boltauction.chat.dto.SendMessageDto;
 import com.neoga.boltauction.chat.service.ChatMessageService;
@@ -56,6 +57,10 @@ public class ChatController {
     @MessageMapping("/chat.send.message.{chatRoomId}")
     public void sendMessage(@Payload SendMessageDto sendMessageDto, @DestinationVariable Long chatRoomId){
         log.info("recevied message : + " + sendMessageDto.getContent());
-        chatMessageService.sendMessage(chatRoomId, sendMessageDto);
+        try{
+            chatMessageService.sendMessage(chatRoomId, sendMessageDto);
+        }catch(JsonProcessingException e){
+            e.printStackTrace();
+        }
     }
 }

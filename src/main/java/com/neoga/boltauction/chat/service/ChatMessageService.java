@@ -1,5 +1,7 @@
 package com.neoga.boltauction.chat.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neoga.boltauction.chat.domain.ChatMessage;
 import com.neoga.boltauction.chat.domain.ChatRoom;
 import com.neoga.boltauction.chat.dto.SendMessageDto;
@@ -21,8 +23,9 @@ public class ChatMessageService {
     private final RabbitTemplate rabbitTemplate;
     private final ChatMessageRepository chatMessageRepository;
     private final ModelMapper modelMapper;
+    private final ObjectMapper objectMapper;
 
-    public void sendMessage(Long chatRoomId, SendMessageDto sendMessageDto){
+    public void sendMessage(Long chatRoomId, SendMessageDto sendMessageDto) throws JsonProcessingException {
         ChatRoom chatRoom = em.getReference(ChatRoom.class, chatRoomId);
         Members sender = em.getReference(Members.class,sendMessageDto.getSenderId());
 
@@ -32,7 +35,8 @@ public class ChatMessageService {
 
         ChatMessage newMessage = chatMessageRepository.save(chatMessage);
 
-        rabbitTemplate.convertAndSend("/topic/chatRoom."+ chatRoomId, newMessage);
+        String msg = objectMapper.writeValueAsString(newMessage);
+        rabbitTemplate.convertAndSend("amq.topic","chatRoom."+chatRoomId, msg);
     }
 
     public Page<ChatMessage> findMessageByChatRoom(Long chatRoomId, Pageable pageable){
