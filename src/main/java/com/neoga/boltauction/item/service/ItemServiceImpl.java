@@ -135,6 +135,8 @@ public class ItemServiceImpl implements ItemService {
     private ItemDto mapItemItemDto(Item item) {
         ItemDto itemDto = modelMapper.map(item, ItemDto.class);
 
+        itemDto.setSeller(item.getMembers());
+
         if (item.getImagePath() == null) {
             itemDto.setImagePath(null);
         } else {
