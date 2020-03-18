@@ -43,3 +43,4 @@ server:
 base:
   addr: localhost
   URL: http://${base.addr}:${server.port}
+

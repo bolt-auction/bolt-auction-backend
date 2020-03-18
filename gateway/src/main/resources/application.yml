@@ -1,3 +1,18 @@
 server:
-  port: 8080
+  port: 8000
 
+endpoints:
+  routes:
+    sensitive: false
+  trace:
+    sensitive: false
+
+ribbon:
+  eureka:
+    enabled: false
+
+
+eureka:
+  client:
+    service-url:
+      default: http://localhost:8761/eureka/

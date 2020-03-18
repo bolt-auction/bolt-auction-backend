@@ -16,7 +16,7 @@
     var subscription = null;
     var id = null;
     var pass = null;
-    ''
+    '';
     $(document).ready(function () {
         var callback = function (메세지) {
             // 서버로 부터 한 STOMP 메세지 받으먼 호출됨
@@ -25,7 +25,7 @@
             } else {
                 alert("빈 메세지");
             }
-        }
+        };
         var connectCallback = function () {
             //subscription = client.subscribe("/amq/queue/uid1", callback);//큐명을 지정한경우 시 사용
             subscription = stomClient.subscribe("/topic/chatRoom.1", callback);//exchanger를 지정한경우시 사용

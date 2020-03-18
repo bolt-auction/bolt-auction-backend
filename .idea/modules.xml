@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/platform/autionnara.iml" filepath="$PROJECT_DIR$/platform/autionnara.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/bolt-auction-backend.iml" filepath="$PROJECT_DIR$/.idea/bolt-auction-backend.iml" />
       <module fileurl="file://$PROJECT_DIR$/gateway/gateway.iml" filepath="$PROJECT_DIR$/gateway/gateway.iml" />
       <module fileurl="file://$PROJECT_DIR$/platform/platform.iml" filepath="$PROJECT_DIR$/platform/platform.iml" />
