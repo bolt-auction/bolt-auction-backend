@@ -1,4 +1,3 @@
-/*
 package com.neoga.gateway.config;
 
 import com.netflix.client.config.IClientConfig;
@@ -18,4 +17,3 @@ public class RibbonConfig {
   }
 
 }
-*/
