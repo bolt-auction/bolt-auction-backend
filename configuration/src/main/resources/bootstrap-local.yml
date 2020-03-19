@@ -1,0 +1,7 @@
+spring:
+  profile: local
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: classpath:/server-configs

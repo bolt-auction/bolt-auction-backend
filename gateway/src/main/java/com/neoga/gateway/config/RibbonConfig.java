@@ -8,7 +8,7 @@ public class RibbonConfig {
 
   @Bean
   public IPing ribbonPing(final IClientConfig config) {
-    return new PingUrl(false, "/health");
+    return new PingUrl(false, "/actuator/health");
   }
 
   @Bean

@@ -9,7 +9,7 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
 @EnableZuulProxy
 @EnableEurekaClient
-@RibbonClients(defaultConfiguration = RibbonConfig.class)
+//@RibbonClients(defaultConfiguration = RibbonConfig.class)
 @SpringBootApplication
 public class GatewayApplication {
     public static void main(String[] args) {
