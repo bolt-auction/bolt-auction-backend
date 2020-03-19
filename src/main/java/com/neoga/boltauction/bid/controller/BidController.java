@@ -55,7 +55,7 @@ public class BidController {
             throw new CItemEndException("상품이 종료되었습니다.");
 
         // 가격 비교
-        if (findItem.getStartPrice() > price || findItem.getCurrentPrice() >= price )
+        if (findItem.getStartPrice() > price || (findItem.getCurrentPrice() + findItem.getMinBidPrice()) > price)
             throw new CBidException("입찰 가격이 낮습니다.");
 
         BidDto bid = bidService.saveBid(itemId, price, memberId);
