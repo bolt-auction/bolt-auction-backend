@@ -3,16 +3,36 @@ server:
 
 zuul:
   ignoredServices: '*'
-  prefix: /api
+  prefix:
   routes:
     item:
-      path: /item/**
+      path: /api/item/**
       serviceId: platform
-      strip-prefix: false
-    random:
-      path: /random/**
+      stripPrefix: false
+    category:
+      path: /api/category/**
       serviceId: platform
-      strip-prefix: false
+      stripPrefix: false
+    review:
+      path: /api/review/**
+      serviceId: platform
+      stripPrefix: false
+    bid:
+      path: /api/bid/**
+      serviceId: platform
+      stripPrefix: false
+    member:
+      path: /api/member/**
+      serviceId: platform
+      stripPrefix: false
+    store:
+      path: /api/store/**
+      serviceId: platform
+      stripPrefix: false
+    order:
+      path: /api/order/**
+      serviceId: platform
+      stripPrefix: false
 
 
 endpoints:
@@ -25,3 +45,7 @@ eureka:
   client:
     service-url:
       default-zone: http://localhost:8761/eureka/
+
+#jwt
+jwt:
+  secret: govlepel@$&amp

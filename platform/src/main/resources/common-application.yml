@@ -65,4 +65,3 @@ eureka:
   client:
     service-url:
       default: http://localhost:8761/eureka/
-

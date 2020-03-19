@@ -40,7 +40,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/item")
+@RequestMapping(value = "/api/item")
 @Slf4j
 public class ItemController {
 
