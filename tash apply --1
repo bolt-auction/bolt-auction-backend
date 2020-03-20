@@ -1,0 +1,24 @@
+stash@{0}: On develop: !!GitHub_Desktop<develop>
+stash@{1}: On chat: !!GitHub_Desktop<feat/chat>
+stash@{2}: On chat: chat_loginerror
+stash@{3}: WIP on chat: ddfdbcf Delete 1560487083720.jpg
+stash@{4}: WIP on chat: ddfdbcf Delete 1560487083720.jpg
+stash@{5}: WIP on chat: ddfdbcf Delete 1560487083720.jpg
+stash@{6}: WIP on develop: 974a4f4 fix: file name error / Remove test file
+stash@{7}: WIP on develop: ddfdbcf Delete 1560487083720.jpg
+stash@{8}: WIP on chat: ddfdbcf Delete 1560487083720.jpg
+stash@{9}: WIP on develop: f44c09d Merge pull request #9 from ki1556ki/develop
+stash@{10}: WIP on aws: 7334112 fix: delete test code for aws
+stash@{11}: WIP on develop: e6250f7 refactor: Change LoginInfo attribute 'member_id' to 'meberId'
+stash@{12}: WIP on develop: b0963d8 Merge remote-tracking branch 'origin/develop' into develop
+stash@{13}: On login: Uncommitted changes before Checkout at 2020-02-12 오후 12:25
+stash@{14}: On item: Uncommitted changes before Checkout at 2020-02-12 오전 4:25
+stash@{15}: WIP on login: 7fc6e5c Update SwaggerConfiguration.java
+stash@{16}: WIP on login: 7fc6e5c Update SwaggerConfiguration.java
+stash@{17}: WIP on login: d0a3676 feat: add JwtAuthenticationFilter filter verify that it is a valid token
+stash@{18}: On login_kakao: connection_pool
+stash@{19}: WIP on login_kakao: 7a5464c feat: ADD service, controller for KAKAO Login but only return token which is string type in this version
+stash@{20}: WIP on develop: da73eaf feat : create review entity class
+stash@{21}: WIP on master: ef5cc9b Create README.md
+stash@{22}: On domain: !!GitHub_Desktop<feat/domain>
+stash@{23}: On master: Uncommitted changes before Checkout at 2020-01-29 오후 4:36
