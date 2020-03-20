@@ -159,7 +159,7 @@
             <artifactId>spring-cloud-netflix-hystrix</artifactId>
         </dependency>
     </dependencies>
-    
+
     <build>
         <plugins>
             <plugin>

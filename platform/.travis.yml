@@ -38,7 +38,7 @@ deploy:
     access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
     secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
     bucket: boltauction # S3 버킷
-    key: springboot-boltauction.zip 
+    key: springboot-boltauction.zip
     bundle_type: zip
     application: boltauction # 웹 콘솔에서 등록한 CodeDeploy 어플리케이션
     deployment_group: boltauction  # 웹 콘솔에서 등록한 CodeDeploy 배포 그룹
@@ -47,7 +47,6 @@ deploy:
     on:
       repo: bolt-auction/bolt-auction-backend
       branch: develop
-
 
 notifications:
   slack: auctionnara:bbI6hEve7YM2YlHDKpBbwE6m

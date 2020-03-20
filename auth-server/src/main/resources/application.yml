@@ -8,7 +8,7 @@ spring.profiles.include: server-secret
 
 #Server Setting
 server:
-  port: 8080
+  port: 8095
 
 #base URL
 base:
@@ -22,7 +22,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     password: 1234
-    url: 'jdbc:mysql://localhost:3306/auctionnara?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&characterSetResults=UTF-8&useSSL=true&serverTimezone=UTC '
+    url: 'jdbc:mysql://localhost:3306/auth?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&characterSetResults=UTF-8&useSSL=true&serverTimezone=UTC '
     username: root
   # JPA Setting
   jpa:
@@ -37,12 +37,9 @@ spring:
 
 #Server Setting
 server:
-  port: 8010
+  port: 8095
 
 #base URL
 base:
   addr: localhost
   URL: http://${base.addr}:${server.port}
-
-
-

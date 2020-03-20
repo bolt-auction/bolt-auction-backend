@@ -1,0 +1,37 @@
+spring:
+  main:
+    banner-mode: 'off'
+
+#kakao Login
+kakao:
+  clientId: 33cf22c44273a06d1ef702275f2a2c54
+  clientSecret: a0bbd7d93b2dfebebd5ef11adb5e3329
+  loginURL: https://kauth.kakao.com/oauth/authorize
+  profileURL: https://kapi.kakao.com/v2/user/me
+  redirectURI: /api/social/kakao
+  tokenURL: https://kauth.kakao.com/oauth/token
+
+# Security log level Setting
+logging:
+  level:
+    org:
+      hibernate: info
+      springframework:
+        security: debug
+
+#Service discovery Setting
+eureka:
+  client:
+    service-url:
+      default: http://localhost:8761/eureka/
+
+security:
+  oauth2:
+    resource:
+      jwt:
+        key-value: jwt_secret_key
+      client:
+        client-id: auth_id
+        client-secret: auth_secret
+
+

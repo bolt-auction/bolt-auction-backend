@@ -6,14 +6,14 @@ import org.springframework.context.annotation.Bean;
 
 public class RibbonConfig {
 
-  @Bean
-  public IPing ribbonPing(final IClientConfig config) {
-    return new PingUrl(false, "/actuator/health");
-  }
+    @Bean
+    public IPing ribbonPing(final IClientConfig config) {
+        return new PingUrl(false, "/actuator/health");
+    }
 
-  @Bean
-  public IRule ribbonRule(final IClientConfig config) {
-    return new AvailabilityFilteringRule();
-  }
+    @Bean
+    public IRule ribbonRule(final IClientConfig config) {
+        return new AvailabilityFilteringRule();
+    }
 
 }
