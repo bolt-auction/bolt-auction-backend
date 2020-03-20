@@ -1,0 +1,59 @@
+zuul:
+  ignoredServices: '*'
+  routes:
+    item:
+      path: /api/item/**
+      serviceId: platform
+      stripPrefix: false
+      sensitiveHeaders:
+    auth:
+      path: /api/auth/**
+      serviceId: platform
+      stripPrefix: false
+      sensitiveHeaders:
+    category:
+      path: /api/category/**
+      serviceId: platform
+      stripPrefix: false
+    review:
+      path: /api/review/**
+      serviceId: platform
+      stripPrefix: false
+      sensitiveHeaders:
+    bid:
+      path: /api/bid/**
+      serviceId: platform
+      stripPrefix: false
+      sensitiveHeaders:
+    member:
+      path: /api/member/**
+      serviceId: platform
+      stripPrefix: false
+      sensitiveHeaders:
+    store:
+      path: /api/store/**
+      serviceId: platform
+      stripPrefix: false
+      sensitiveHeaders:
+    order:
+      path: /api/order/**
+      serviceId: platform
+      stripPrefix: false
+      sensitiveHeaders:
+
+endpoints:
+  routes:
+    sensitive: false
+  trace:
+    sensitive: false
+
+eureka:
+  client:
+    service-url:
+      default-zone: http://${base.addr}:8761/eureka/
+
+
+ribbon:
+  MaxAutoRetries: 1
+  MaxAutoRetriesNextServer: 1
+  OkToRetryOnAllOperations: true

@@ -1,0 +1,31 @@
+spring:
+  profiles:
+    active: local
+
+---
+spring.profiles: server
+
+#Server Setting
+server:
+  port: 8000
+
+#base URL
+base:
+  addr: 18.190.79.25
+  URL: http://${base.addr}:${server.port}
+
+---
+spring:
+  profiles: local
+
+#Server Setting
+server:
+  port: 8000
+
+#base URL
+base:
+  addr: localhost
+  URL: http://${base.addr}:${server.port}
+
+
+
