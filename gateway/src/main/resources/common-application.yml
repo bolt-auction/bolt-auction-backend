@@ -51,3 +51,9 @@ eureka:
   client:
     service-url:
       default-zone: http://${base.addr}:8761/eureka/
+
+
+ribbon:
+  MaxAutoRetries: 1
+  MaxAutoRetriesNextServer: 1
+  OkToRetryOnAllOperations: true

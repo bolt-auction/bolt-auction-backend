@@ -65,3 +65,10 @@ eureka:
   client:
     service-url:
       default: http://${base.addr}:8761/eureka/
+
+#actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
