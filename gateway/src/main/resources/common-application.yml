@@ -40,6 +40,11 @@ zuul:
       serviceId: platform
       stripPrefix: false
       sensitiveHeaders:
+    chat:
+      path: /api/chat/**
+      serviceId: communication
+      stripPrefix: false
+      sensitiveHeaders:
 
 endpoints:
   routes:

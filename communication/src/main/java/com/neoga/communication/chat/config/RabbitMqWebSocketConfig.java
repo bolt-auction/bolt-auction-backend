@@ -1,4 +1,4 @@
-package com.neoga.platform.chat.config;
+package com.neoga.communication.chat.config;
 
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -44,6 +44,4 @@ public class RabbitMqWebSocketConfig implements WebSocketMessageBrokerConfigurer
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         return rabbitTemplate;
     }
-
-
 }
