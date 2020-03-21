@@ -4,7 +4,7 @@ spring:
 
 ---
 spring.profiles: server
-spring.profiles.include: server-secret
+spring.profiles.include: communication-secret
 
 #Server Setting
 server:
