@@ -19,7 +19,7 @@ before_deploy:
   - zip -r springboot-boltauction *
   - mkdir -p deploy
   - mv springboot-boltauction.zip deploy/springboot-boltauction.zip
-  -
+
 deploy:
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값

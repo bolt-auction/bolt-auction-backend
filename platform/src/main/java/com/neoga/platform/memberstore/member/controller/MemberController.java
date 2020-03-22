@@ -27,13 +27,12 @@ public class MemberController {
     @GetMapping()
     public ResponseEntity findMemberById() {
         Long memberId = authService.getLoginInfo().getMemberId();
-        Members findMember = memberService.findMemberById(memberId);
+        return getMemberResponseEntity(memberId);
+    }
 
-        Resource<Members> resource = new Resource(findMember);
-        resource.add(linkTo(MemberController.class).withSelfRel());
-        resource.add(new Link("/member-controller/findMemberByIdUsingPUT").withRel("profile"));
-
-        return ResponseEntity.ok().body(resource);
+    @GetMapping("{member-id}")
+    public ResponseEntity findMemberById(@PathVariable("member-id") Long memberId) {
+        return getMemberResponseEntity(memberId);
     }
 
     @ApiOperation(value = "회원가입", notes = "정보를 입력받아 회원가입 \n" +
@@ -62,5 +61,15 @@ public class MemberController {
         resource.add(new Link("/swagger-ui.html#/auth%20API/loginByProviderUsingPOST").withRel("profile"));
 
         return ResponseEntity.ok().build();
+    }
+
+    private ResponseEntity getMemberResponseEntity(@PathVariable("member-id") Long memberId) {
+        Members findMember = memberService.findMemberById(memberId);
+
+        Resource<Members> resource = new Resource(findMember);
+        resource.add(linkTo(MemberController.class).withSelfRel());
+        resource.add(new Link("/member-controller/findMemberByIdUsingPUT").withRel("profile"));
+
+        return ResponseEntity.ok().body(resource);
     }
 }
