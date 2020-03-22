@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface BidRepository extends JpaRepository<Bid, Long> {
-    List<Bid> findAllByItemOrderByPriceAsc(Item item);
+    List<Bid> findAllByItemOrderByPriceDesc(Item item);
 }
