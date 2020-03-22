@@ -36,7 +36,7 @@ public class ChatMessageService {
         ChatMessage newMessage = chatMessageRepository.save(chatMessage);
 
         String msg = objectMapper.writeValueAsString(newMessage);
-        rabbitTemplate.convertAndSend("amq.topic", "chatRoom." + chatRoomId, msg);
+        rabbitTemplate.convertAndSend("amq.topic", "/topic/chatRoom." + chatRoomId, msg);
     }
 
     public Page<ChatMessage> findMessageByChatRoom(Long chatRoomId, Pageable pageable) {
