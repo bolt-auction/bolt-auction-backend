@@ -33,7 +33,7 @@ public class ChatMessage {
     @JoinColumn(name = "chat_id")
     private ChatRoom chatRoom;
     @JsonSerialize(using = MemberSerializer.class)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "member_id")
     private Members sender;
 }
