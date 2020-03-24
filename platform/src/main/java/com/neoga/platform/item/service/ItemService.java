@@ -1,7 +1,7 @@
 package com.neoga.platform.item.service;
 
 import com.neoga.platform.item.dto.InsertItemDto;
-import com.neoga.platform.item.dto.ItemDto;
+import com.neoga.platform.item.dto.Item;
 import com.neoga.platform.item.dto.UpdateItemDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,17 +12,17 @@ import java.util.List;
 
 public interface ItemService {
 
-    ItemDto getItem(Long id);
+    Item getItem(Long id);
 
-    ItemDto deleteItem(Long id);
+    Item deleteItem(Long id);
 
-    Page<ItemDto> getItems(Long categoryId, Pageable pageable);
+    Page<Item> getItems(Long categoryId, Pageable pageable);
 
-    ItemDto saveItem(InsertItemDto itemDto, Long memberId, MultipartFile... images) throws IOException;
+    Item saveItem(InsertItemDto itemDto, Long memberId, MultipartFile... images) throws IOException;
 
-    ItemDto updateItem(Long id, UpdateItemDto updateItemDto, Long memberId, MultipartFile... images) throws IOException;
+    Item updateItem(Long id, UpdateItemDto updateItemDto, Long memberId, MultipartFile... images) throws IOException;
 
-    List<ItemDto> getItemsByMemberId(Long memberId);
+    List<Item> getItemsByMemberId(Long memberId);
 
-    Page<ItemDto> searchItem(String filter, String search, Pageable pageable);
+    Page<Item> searchItem(String filter, String search, Pageable pageable);
 }

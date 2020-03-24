@@ -2,7 +2,7 @@ package com.neoga.platform.item.controller;
 
 import com.neoga.platform.exception.custom.CItemNotFoundException;
 import com.neoga.platform.item.dto.InsertItemDto;
-import com.neoga.platform.item.dto.ItemDto;
+import com.neoga.platform.item.dto.Item;
 import com.neoga.platform.item.dto.UpdateItemDto;
 import com.neoga.platform.item.service.ItemService;
 import com.neoga.platform.memberstore.member.domain.Members;
@@ -14,7 +14,6 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -65,11 +64,11 @@ public class ItemController {
     })
     @GetMapping("/category/{category-id}")
     public ResponseEntity getItems(@PathVariable(name = "category-id") Long categoryId, @ApiIgnore Pageable pageable,
-                                   @ApiIgnore PagedResourcesAssembler<ItemDto> assembler) {
+                                   @ApiIgnore PagedResourcesAssembler<Item> assembler) {
         // 권한체크 추가
-        Page<ItemDto> itemPage = itemService.getItems(categoryId, pageable);
+        Page<Item> itemPage = itemService.getItems(categoryId, pageable);
 
-        PagedResources<Resource<ItemDto>> resources = assembler.toResource(itemPage);
+        PagedResources<Resource<Item>> resources = assembler.toResource(itemPage);
         resources.forEach(resource -> resource.add(linkTo(methodOn(ItemController.class).getItem(resource.getContent().getItemId())).withRel(ITEM_DETAIL)));
         resources.add(new Link("/swagger-ui.html#/item-controller/getItemsUsingGET").withRel(PROFILE));
 
@@ -84,7 +83,7 @@ public class ItemController {
         Long memberId = authService.getLoginInfo().getMemberId();
 
         // save item
-        ItemDto saveItem = itemService.saveItem(insertItemDto, memberId, images);
+        Item saveItem = itemService.saveItem(insertItemDto, memberId, images);
 
         ControllerLinkBuilder selfLinkBuilder = linkTo(ItemController.class).slash(saveItem.getItemId());
         URI createdUri = selfLinkBuilder.toUri();
@@ -103,7 +102,7 @@ public class ItemController {
     public ResponseEntity getItem(@PathVariable(name = "item-id") Long id) {
         // 권한 체크
 
-        ItemDto findItem = itemService.getItem(id);
+        Item findItem = itemService.getItem(id);
 
         Resource resource = new Resource(findItem);
         resource.add(linkTo(ItemController.class).slash(findItem.getItemId()).withSelfRel());
@@ -135,13 +134,13 @@ public class ItemController {
 
         Long memberId = authService.getLoginInfo().getMemberId();
         Members findMember = memberService.findMemberById(memberId);
-        ItemDto findItem = itemService.getItem(id);
+        Item findItem = itemService.getItem(id);
 
         if (!findItem.getSeller().getId().equals(findMember.getId())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        ItemDto updateItem = itemService.updateItem(id, updateItemDto, memberId, images);
+        Item updateItem = itemService.updateItem(id, updateItemDto, memberId, images);
 
         Resource resource = new Resource(updateItem);
         resource.add(linkTo(ItemController.class).slash(updateItem.getItemId()).withSelfRel());
@@ -165,11 +164,11 @@ public class ItemController {
                             "높은가격순 : currentPrice,desc\n")
     })
     @GetMapping
-    public ResponseEntity<PagedResources<Resource<ItemDto>>> searchItem(@RequestParam String filter, @RequestParam String keyword, @ApiIgnore Pageable pageable,
-                                                                        @ApiIgnore PagedResourcesAssembler<ItemDto> assembler) {
-        Page<ItemDto> itemPage = itemService.searchItem(filter, keyword, pageable);
+    public ResponseEntity<PagedResources<Resource<Item>>> searchItem(@RequestParam String filter, @RequestParam String keyword, @ApiIgnore Pageable pageable,
+                                                                     @ApiIgnore PagedResourcesAssembler<Item> assembler) {
+        Page<Item> itemPage = itemService.searchItem(filter, keyword, pageable);
 
-        PagedResources<Resource<ItemDto>> resources = assembler.toResource(itemPage, Resource::new);
+        PagedResources<Resource<Item>> resources = assembler.toResource(itemPage, Resource::new);
         resources.forEach(resource -> resource.add(linkTo(methodOn(ItemController.class).getItem(resource.getContent().getItemId())).withRel(ITEM_DETAIL)));
         resources.add(new Link("/swagger-ui.html#/item-controller/searchItemUsingGET").withRel(PROFILE));
 
@@ -178,11 +177,11 @@ public class ItemController {
 
     @GetMapping("/store/{member-id}")
     public ResponseEntity getStoreItems(@PathVariable(name = "member-id") Long memberId) {
-        List<ItemDto> itemList = itemService.getItemsByMemberId(memberId);
+        List<Item> itemList = itemService.getItemsByMemberId(memberId);
 
-        List<Resource> resourceList = itemList.stream().map(itemDto -> {
-            Resource resource = new Resource(itemDto);
-            resource.add(linkTo(ItemController.class).slash(itemDto.getItemId()).withSelfRel());
+        List<Resource> resourceList = itemList.stream().map(item -> {
+            Resource resource = new Resource(item);
+            resource.add(linkTo(ItemController.class).slash(item.getItemId()).withSelfRel());
             return resource;
         }).collect(Collectors.toList());
 

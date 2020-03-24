@@ -13,6 +13,7 @@ public class MemberSerializer extends JsonSerializer<Members> {
         jgen.writeStartObject();
         jgen.writeNumberField("memberId", members.getId());
         jgen.writeStringField("memberName", members.getName());
+        jgen.writeStringField("imagePath", members.getImagePath());
         jgen.writeEndObject();
     }
 }
