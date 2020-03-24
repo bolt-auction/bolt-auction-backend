@@ -3,7 +3,6 @@ package com.neoga.platform.item.domain;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.neoga.platform.category.domain.Category;
-import com.neoga.platform.category.util.CategorySerializer;
 import com.neoga.platform.memberstore.member.domain.Members;
 import com.neoga.platform.memberstore.util.MemberSerializer;
 import lombok.Getter;
@@ -12,8 +11,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.Future;
-import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 
 @Getter
@@ -27,13 +24,9 @@ public class Item {
     @JsonProperty("itemName")
     private String name;
     private String description;
-    @Positive
     private int quickPrice;
-    @Positive
     private int startPrice;
-    @Positive
     private int minBidPrice;
-    @Positive
     private int currentPrice;
     private boolean isSell = false;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -41,11 +34,9 @@ public class Item {
     @Column(updatable = false)
     private LocalDateTime createDt;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    @Future
     private LocalDateTime endDt;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
-    @JsonSerialize(using = CategorySerializer.class)
     private Category category;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
