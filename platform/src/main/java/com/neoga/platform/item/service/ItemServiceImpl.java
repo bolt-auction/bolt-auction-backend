@@ -5,8 +5,9 @@ import com.neoga.platform.category.repository.CategoryRepository;
 import com.neoga.platform.exception.custom.CCategoryNotFoundException;
 import com.neoga.platform.exception.custom.CItemNotFoundException;
 import com.neoga.platform.image.service.ImageService;
+import com.neoga.platform.item.domain.Item;
 import com.neoga.platform.item.dto.InsertItemDto;
-import com.neoga.platform.item.dto.Item;
+import com.neoga.platform.item.dto.ItemDto;
 import com.neoga.platform.item.dto.UpdateItemDto;
 import com.neoga.platform.item.repository.ItemRepository;
 import com.neoga.platform.memberstore.member.domain.Members;
@@ -37,9 +38,9 @@ public class ItemServiceImpl implements ItemService {
     private static final String NO_ITEM = "상품이 존재하지 않습니다.";
 
     @Override
-    public Item getItem(Long id) {
+    public ItemDto getItem(Long id) {
 
-        com.neoga.platform.item.domain.Item findItem;
+        Item findItem;
 
         // get item entity
         findItem = itemRepository.findById(id).orElseThrow(() -> new CItemNotFoundException(NO_ITEM));
@@ -48,17 +49,17 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item deleteItem(Long id) {
-        com.neoga.platform.item.domain.Item item = itemRepository.findById(id).orElseThrow(() -> new CItemNotFoundException(NO_ITEM));
+    public ItemDto deleteItem(Long id) {
+        Item item = itemRepository.findById(id).orElseThrow(() -> new CItemNotFoundException(NO_ITEM));
         itemRepository.delete(item);
 
         return mapItemItemDto(item);
     }
 
     @Override
-    public Page<Item> getItems(Long categoryId, Pageable pageable) {
+    public Page<ItemDto> getItems(Long categoryId, Pageable pageable) {
 
-        Page<com.neoga.platform.item.domain.Item> itemPage;
+        Page<Item> itemPage;
 
         // get item entity
         if (categoryId == NO_CATEGORY) {
@@ -74,21 +75,21 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item saveItem(InsertItemDto insertItemDto, Long memberId, MultipartFile... images) throws IOException {
+    public ItemDto saveItem(InsertItemDto insertItemDto, Long memberId, MultipartFile... images) throws IOException {
 
         // find store
         Members findMembers = memberRepository.getOne(memberId);
 
         // map insertItemDto -> item
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        com.neoga.platform.item.domain.Item item = modelMapper.map(insertItemDto, com.neoga.platform.item.domain.Item.class);
+        Item item = modelMapper.map(insertItemDto, Item.class);
         item.setCurrentPrice(insertItemDto.getStartPrice());
         item.setMembers(findMembers);
         Category findCategory = categoryRepository.findById(insertItemDto.getCategoryId()).orElseThrow(() -> new CCategoryNotFoundException("카테고리를 찾을 수 없습니다."));
         item.setCategory(findCategory);
         item.setBidCount(0);
 
-        com.neoga.platform.item.domain.Item saveItem = itemRepository.save(item);
+        Item saveItem = itemRepository.save(item);
 
         imageService.saveItemImages(saveItem, images);
 
@@ -96,12 +97,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item updateItem(Long id, UpdateItemDto updateItemDto, Long memberId, MultipartFile... images) throws IOException {
+    public ItemDto updateItem(Long id, UpdateItemDto updateItemDto, Long memberId, MultipartFile... images) throws IOException {
 
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
         // find Item
-        com.neoga.platform.item.domain.Item findItem = itemRepository.findById(id).orElseThrow(() -> new CItemNotFoundException(NO_ITEM));
+        Item findItem = itemRepository.findById(id).orElseThrow(() -> new CItemNotFoundException(NO_ITEM));
 
         modelMapper.map(updateItemDto, findItem);
         Category findCategory = categoryRepository.findById(updateItemDto.getCategoryId()).orElseThrow(() -> new CCategoryNotFoundException("카테고리를 찾을 수 없습니다."));
@@ -117,9 +118,9 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Page<Item> searchItem(String filter, String search, Pageable pageable) {
+    public Page<ItemDto> searchItem(String filter, String search, Pageable pageable) {
 
-        Page<com.neoga.platform.item.domain.Item> searchItems = null;
+        Page<Item> searchItems = null;
         if (filter.equals("name")) {
             searchItems = itemRepository.findAllByNameIsContaining(pageable, search);
         }
@@ -131,8 +132,8 @@ public class ItemServiceImpl implements ItemService {
         return itemRepository.findAllByMembers_Id(memberId);
     }
 
-    private Item mapItemItemDto(com.neoga.platform.item.domain.Item item) {
-        Item itemDto = modelMapper.map(item, Item.class);
+    private ItemDto mapItemItemDto(Item item) {
+        ItemDto itemDto = modelMapper.map(item, ItemDto.class);
 
         itemDto.setSeller(item.getMembers());
 
