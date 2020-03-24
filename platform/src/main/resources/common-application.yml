@@ -18,6 +18,17 @@ spring:
   servlet:
     multipart:
       enabled: true
+  #Quartz
+  quartz:
+    job-store-type: memory
+    properties:
+      org:
+        quartz:
+          jobStore:
+            class: org.quartz.simpl.RAMJobStore
+          threadPool:
+            threadCount: 5
+
 
 #kakao Login
 kakao:
@@ -72,3 +83,4 @@ management:
     web:
       exposure:
         include: "*"
+

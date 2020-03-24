@@ -34,9 +34,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .httpBasic().disable()
-                .cors() // 프론트 엔드 개발을 위한 설정 (추후 삭제)
+                    .cors() // 프론트 엔드 개발을 위한 설정 (추후 삭제)
                 .and()
-                .csrf().disable()
+                    .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()

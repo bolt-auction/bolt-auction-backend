@@ -42,6 +42,8 @@ public class RabbitMqWebSocketConfig implements WebSocketMessageBrokerConfigurer
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+
         return rabbitTemplate;
     }
+
 }
