@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -80,5 +81,16 @@ public class BidServiceImpl implements BidService {
         bidDto.setItemId(bid.getItem().getId());
 
         return bidDto;
+    }
+
+    @Override
+    public Optional<Bid> getMaxBidByItemId(Long itemId){
+        Item item = itemRepository.getOne(itemId);
+        List<Bid> bid = bidRepository.findAllByItemOrderByPriceDesc(item);
+
+        if(bid.isEmpty())
+            return Optional.empty();
+
+        return Optional.of(bid.get(0));
     }
 }

@@ -18,8 +18,7 @@ import javax.sql.DataSource;
 @RequiredArgsConstructor
 @Configuration
 public class SchelduleConfig {
-    @Autowired
-    private ApplicationContext applicationContext;
+    private final ApplicationContext applicationContext;
 
     @Bean
     public SpringBeanJobFactory springBeanJobFactory() {
@@ -31,11 +30,11 @@ public class SchelduleConfig {
     }
 
     @Bean
-    public SchedulerFactoryBean scheduler(Trigger trigger, JobDetail job, DataSource quartzDataSource) {
+    public SchedulerFactoryBean scheduler(Trigger trigger, JobDetail job, SpringBeanJobFactory springBeanJobFactory) {
         SchedulerFactoryBean schedulerFactory = new SchedulerFactoryBean();
 
         log.debug("Setting the Scheduler up");
-        schedulerFactory.setJobFactory(springBeanJobFactory());
+        schedulerFactory.setJobFactory(springBeanJobFactory);
         schedulerFactory.setJobDetails(job);
         schedulerFactory.setTriggers(trigger);
 
@@ -48,8 +47,6 @@ public class SchelduleConfig {
     public JobDetailFactoryBean jobDetail() {
         JobDetailFactoryBean jobDetailFactory = new JobDetailFactoryBean();
         jobDetailFactory.setJobClass(AuctionJob.class);
-        jobDetailFactory.setName("Qrtz_Job_Detail");
-        jobDetailFactory.setDescription("Invoke Job service...");
         jobDetailFactory.setDurability(true);
         return jobDetailFactory;
     }
@@ -59,7 +56,7 @@ public class SchelduleConfig {
         SimpleTriggerFactoryBean trigger = new SimpleTriggerFactoryBean();
         trigger.setJobDetail(job);
 
-        int frequencyInSec = 3;
+        int frequencyInSec = 60;
         log.info("Configuring trigger to fire every {} seconds", frequencyInSec);
 
         trigger.setRepeatInterval(frequencyInSec * 1000);
