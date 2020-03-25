@@ -34,4 +34,5 @@ public class ItemDto {
     @JsonSerialize(using = MemberSerializer.class)
     private Members seller;
     private Long bidCount;
+    private boolean isEnd;
 }
