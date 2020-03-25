@@ -28,7 +28,7 @@ public class Item {
     private int startPrice;
     private int minBidPrice;
     private int currentPrice;
-    private boolean isSell = false;
+    private boolean isEnd = false;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @CreationTimestamp
     @Column(updatable = false)

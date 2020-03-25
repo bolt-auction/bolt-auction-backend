@@ -22,7 +22,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     password: 1234
-    url: 'jdbc:mysql://localhost:3306/auctionnara?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&characterSetResults=UTF-8&useSSL=true&serverTimezone=UTC '
+    url: 'jdbc:mysql://localhost:3306/auctionnara?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&characterSetResults=UTF-8&useSSL=true&serverTimezone=Asia/Seoul '
     username: root
   # JPA Setting
   jpa:
@@ -43,6 +43,8 @@ server:
 base:
   addr: localhost
   URL: http://${base.addr}:${server.port}
+
+
 
 
 

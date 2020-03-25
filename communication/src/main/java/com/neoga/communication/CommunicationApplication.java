@@ -19,7 +19,7 @@ public class CommunicationApplication {
 
     @PostConstruct
     public void started() {
-        TimeZone.setDefault(TimeZone.getTimeZone("Asia/seoul"));
+        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
     }
 
     public static void main(String[] args) {

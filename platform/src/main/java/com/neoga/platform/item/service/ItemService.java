@@ -1,5 +1,6 @@
 package com.neoga.platform.item.service;
 
+import com.neoga.platform.item.domain.Item;
 import com.neoga.platform.item.dto.InsertItemDto;
 import com.neoga.platform.item.dto.ItemDto;
 import com.neoga.platform.item.dto.UpdateItemDto;
@@ -7,8 +8,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public interface ItemService {
 
@@ -25,4 +28,8 @@ public interface ItemService {
     List<ItemDto> getItemsByMemberId(Long memberId);
 
     Page<ItemDto> searchItem(String filter, String search, Pageable pageable);
+
+    List<Item> getItemInTimeOutAuction();
+
+    void setIsEnd(Long itemId, boolean isEnd);
 }

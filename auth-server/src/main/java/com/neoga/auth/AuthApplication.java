@@ -13,6 +13,11 @@ public class AuthApplication {
             + "classpath:common-application.yml,"
             + "classpath:application.yml";
 
+    @PostConstruct
+    public void started() {
+        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
+    }
+
     public static void main(String[] args) {
         new SpringApplicationBuilder(AuthApplication.class)
                 .properties(APPLICATION_LOCATIONS)

@@ -16,7 +16,7 @@ public class Item {
     private int startPrice;
     private int minBidPrice;
     private int currentPrice;
-    private boolean isSell = false;
+    private boolean isEnd = false;
     private LocalDateTime createDt;
     private LocalDateTime endDt;
     private Long categoryId;
