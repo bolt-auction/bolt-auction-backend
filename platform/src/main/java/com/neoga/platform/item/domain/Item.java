@@ -3,6 +3,7 @@ package com.neoga.platform.item.domain;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.neoga.platform.category.domain.Category;
+import com.neoga.platform.category.util.CategorySerializer;
 import com.neoga.platform.memberstore.member.domain.Members;
 import com.neoga.platform.memberstore.util.MemberSerializer;
 import lombok.Getter;
@@ -37,6 +38,7 @@ public class Item {
     private LocalDateTime endDt;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
+    @JsonSerialize(using = CategorySerializer.class)
     private Category category;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
