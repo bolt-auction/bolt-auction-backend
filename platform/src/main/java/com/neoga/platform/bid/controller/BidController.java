@@ -1,6 +1,7 @@
 package com.neoga.platform.bid.controller;
 
 import com.neoga.platform.bid.dto.BidDto;
+import com.neoga.platform.bid.dto.BidList;
 import com.neoga.platform.bid.service.BidService;
 import com.neoga.platform.exception.custom.CBidException;
 import com.neoga.platform.exception.custom.CItemEndException;
@@ -11,7 +12,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,11 +31,12 @@ public class BidController {
 
     @ApiOperation(value = "입찰 리스트 조회", notes = "해당 상품의 모든 입찰 조회")
     @GetMapping("/{item-id}")
-    public ResponseEntity getBidList(@PathVariable(name = "item-id") Long itemId) {
-        List<BidDto> bidList = bidService.getBidList(itemId);
-        Resources<BidDto> bidDtoResources = new Resources<>(bidList);
+    public BidList getBidList(@PathVariable(name = "item-id") Long itemId) {
+        List<BidDto> bidDtoList = bidService.getBidList(itemId);
+        BidList bidList = new BidList();
+        bidList.setBidList(bidDtoList);
 
-        return ResponseEntity.ok(bidDtoResources);
+        return bidList;
     }
 
     @ApiOperation(value = "입찰 등록", notes = "해당 상품에 입찰 등록")
