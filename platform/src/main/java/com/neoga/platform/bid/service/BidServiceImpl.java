@@ -32,7 +32,7 @@ public class BidServiceImpl implements BidService {
         Item findItem = itemRepository.findById(itemId)
                 .orElseThrow(() -> new CItemNotFoundException("상품이 존재하지 않습니다."));
 
-        List<Bid> findBidList = bidRepository.findAllByItemOrderByPriceAsc(findItem);
+        List<Bid> findBidList = bidRepository.findAllByItemOrderByPriceDesc(findItem);
 
         return findBidList.stream().map(this::mapBidBidDto).collect(Collectors.toList());
     }
