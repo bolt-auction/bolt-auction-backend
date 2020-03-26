@@ -41,7 +41,7 @@ public class SwaggerConfiguration {
 
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo)
-                .pathMapping("/")
+                .pathMapping("/api/**")
                 .apiInfo(ApiInfo.DEFAULT)
                 .forCodeGeneration(true)
                 .genericModelSubstitutes(ResponseEntity.class)
