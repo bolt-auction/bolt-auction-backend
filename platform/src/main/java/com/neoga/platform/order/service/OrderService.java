@@ -1,6 +1,7 @@
 package com.neoga.platform.order.service;
 
 import com.neoga.platform.chat.domain.ChatRoom;
+import com.neoga.platform.exception.custom.COrderNotFoundException;
 import com.neoga.platform.item.domain.Item;
 import com.neoga.platform.item.repository.ItemRepository;
 import com.neoga.platform.memberstore.member.domain.Members;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,5 +28,9 @@ public class OrderService {
         order.setPrice(price);
 
         orderRepository.save(order);
+    }
+
+    public Optional<Orders> getOrder(Long itemId){
+        return orderRepository.findByItem_Id(itemId);
     }
 }
