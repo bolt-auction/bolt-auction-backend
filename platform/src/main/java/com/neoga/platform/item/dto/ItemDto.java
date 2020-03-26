@@ -6,12 +6,14 @@ import com.neoga.platform.memberstore.member.domain.Members;
 import com.neoga.platform.memberstore.util.MemberSerializer;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.hateoas.core.Relation;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 
 @Data
+@Relation(collectionRelation = "itemList")
 public class ItemDto {
 
     private Long itemId;
