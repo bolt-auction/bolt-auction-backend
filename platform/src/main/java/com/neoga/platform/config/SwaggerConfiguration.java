@@ -19,7 +19,7 @@ import static springfox.documentation.builders.PathSelectors.regex;
 @EnableSwagger2
 public class SwaggerConfiguration {
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String DEFAULT_INCLUDE_PATTERN = "/.*";
+    public static final String DEFAULT_INCLUDE_PATTERN = "/api/.*";
 
     @Bean
     public Docket swaggerSpringfoxDocket() {
@@ -41,7 +41,7 @@ public class SwaggerConfiguration {
 
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo)
-                .pathMapping("/api/**")
+                .pathMapping("/")
                 .apiInfo(ApiInfo.DEFAULT)
                 .forCodeGeneration(true)
                 .genericModelSubstitutes(ResponseEntity.class)
