@@ -43,6 +43,7 @@ public class BidServiceImpl implements BidService {
         Bid bid = new Bid();
         Item item = itemRepository.getOne(itemId);
         item.setCurrentPrice(price);
+        item.setBidCount(item.getBidCount() + 1);
 
         bid.setItem(item);
         Members findMember = memberRepository.findById(memberId).orElseThrow(CMemberNotFoundException::new);
