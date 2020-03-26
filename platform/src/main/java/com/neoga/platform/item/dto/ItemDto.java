@@ -2,6 +2,7 @@ package com.neoga.platform.item.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.neoga.platform.category.domain.Category;
+import com.neoga.platform.category.util.CategorySerializer;
 import com.neoga.platform.memberstore.member.domain.Members;
 import com.neoga.platform.memberstore.util.MemberSerializer;
 import lombok.Data;
@@ -31,6 +32,7 @@ public class ItemDto {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @Future
     private LocalDateTime endDt;
+    @JsonSerialize(using = CategorySerializer.class)
     private Category category;
     private String[] imagePath;
     @JsonSerialize(using = MemberSerializer.class)
