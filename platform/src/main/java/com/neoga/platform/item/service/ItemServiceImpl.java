@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -125,8 +126,8 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List getItemsByMemberId(Long memberId) {
-        return itemRepository.findAllByMembers_Id(memberId);
+    public List<ItemDto> getItemsByMemberId(Long memberId) {
+        return itemRepository.findAllByMembers_Id(memberId).stream().map(item -> mapItemItemDto(item)).collect(Collectors.toList());
     }
 
     private ItemDto mapItemItemDto(Item item) {
