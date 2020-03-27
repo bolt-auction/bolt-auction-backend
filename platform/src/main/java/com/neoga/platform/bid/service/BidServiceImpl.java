@@ -69,7 +69,7 @@ public class BidServiceImpl implements BidService {
 
     private BidDto mapBidBidDto(Bid bid) {
         BidDto bidDto = modelMapper.map(bid, BidDto.class);
-        bidDto.setBidId(bid.getId());
+        bidDto.setId(bid.getId());
 
         Members members = bid.getMembers();
         Register register = new Register();
@@ -78,7 +78,6 @@ public class BidServiceImpl implements BidService {
         register.setMemberImagePath(members.getImagePath());
 
         bidDto.setMember(register);
-
         bidDto.setItemId(bid.getItem().getId());
 
         return bidDto;
