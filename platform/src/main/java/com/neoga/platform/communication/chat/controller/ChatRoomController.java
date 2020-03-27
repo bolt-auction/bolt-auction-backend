@@ -1,9 +1,9 @@
-package com.neoga.platform.chat.controller;
+package com.neoga.platform.communication.chat.controller;
 
 
-import com.neoga.platform.chat.domain.ChatRoom;
-import com.neoga.platform.chat.dto.CreateRoomRequestDto;
-import com.neoga.platform.chat.service.ChatRoomService;
+import com.neoga.platform.communication.chat.domain.ChatRoom;
+import com.neoga.platform.communication.chat.dto.CreateRoomRequestDto;
+import com.neoga.platform.communication.chat.service.ChatRoomService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;

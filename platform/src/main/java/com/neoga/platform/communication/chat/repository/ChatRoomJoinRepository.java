@@ -1,6 +1,6 @@
-package com.neoga.platform.chat.repository;
+package com.neoga.platform.communication.chat.repository;
 
-import com.neoga.platform.chat.domain.ChatRoomJoin;
+import com.neoga.platform.communication.chat.domain.ChatRoomJoin;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

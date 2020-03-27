@@ -1,9 +1,9 @@
-package com.neoga.platform.chat.controller;
+package com.neoga.platform.communication.chat.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.neoga.platform.chat.domain.ChatMessage;
-import com.neoga.platform.chat.dto.SendMessageDto;
-import com.neoga.platform.chat.service.ChatMessageService;
+import com.neoga.platform.communication.chat.domain.ChatMessage;
+import com.neoga.platform.communication.chat.dto.SendMessageDto;
+import com.neoga.platform.communication.chat.service.ChatMessageService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;

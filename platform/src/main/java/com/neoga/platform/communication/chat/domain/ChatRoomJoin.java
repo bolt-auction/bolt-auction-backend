@@ -1,4 +1,4 @@
-package com.neoga.platform.chat.domain;
+package com.neoga.platform.communication.chat.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.neoga.platform.memberstore.member.domain.Members;

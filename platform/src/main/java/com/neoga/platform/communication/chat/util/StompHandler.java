@@ -1,14 +1,4 @@
-package com.neoga.platform.chat.util;
-
-import com.neoga.platform.security.service.JwtTokenService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageChannel;
-import org.springframework.messaging.simp.stomp.StompCommand;
-import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
-import org.springframework.messaging.support.ChannelInterceptor;
-import org.springframework.stereotype.Component;
+package com.neoga.platform.communication.chat.util;
 
 /*
 @Slf4j

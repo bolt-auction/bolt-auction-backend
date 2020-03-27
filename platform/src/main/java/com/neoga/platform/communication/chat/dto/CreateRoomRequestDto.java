@@ -1,4 +1,4 @@
-package com.neoga.platform.chat.dto;
+package com.neoga.platform.communication.chat.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

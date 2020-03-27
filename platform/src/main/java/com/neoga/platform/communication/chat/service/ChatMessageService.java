@@ -1,11 +1,11 @@
-package com.neoga.platform.chat.service;
+package com.neoga.platform.communication.chat.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.neoga.platform.chat.domain.ChatMessage;
-import com.neoga.platform.chat.domain.ChatRoom;
-import com.neoga.platform.chat.dto.SendMessageDto;
-import com.neoga.platform.chat.repository.ChatMessageRepository;
+import com.neoga.platform.communication.chat.domain.ChatMessage;
+import com.neoga.platform.communication.chat.domain.ChatRoom;
+import com.neoga.platform.communication.chat.dto.SendMessageDto;
+import com.neoga.platform.communication.chat.repository.ChatMessageRepository;
 import com.neoga.platform.memberstore.member.domain.Members;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

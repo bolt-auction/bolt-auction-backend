@@ -1,5 +1,8 @@
 package com.neoga.platform.memberstore.review.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.neoga.platform.communication.notification.domain.NotifyType;
+import com.neoga.platform.communication.notification.service.NotificationService;
 import com.neoga.platform.memberstore.review.domain.Review;
 import com.neoga.platform.memberstore.review.dto.ReviewDto;
 import com.neoga.platform.memberstore.review.service.ReviewServiceImpl;
@@ -26,6 +29,7 @@ public class ReviewController {
 
     private final AuthService authService;
     private final ReviewServiceImpl reviewService;
+    private final NotificationService notificationService;
 
     @ApiOperation(value = "상점 리뷰조회")
     @ApiImplicitParam(name = "member-id", value = "상품 id", dataType = "long")
@@ -46,9 +50,11 @@ public class ReviewController {
             @ApiImplicitParam(name = "content", value = "리뷰 내용", dataType = "string")
     })
     @PostMapping("/store/{member-id}")
-    public ResponseEntity addReview(@PathVariable(name = "member-id") Long memberId, @RequestBody String content) {
+    public ResponseEntity addReview(@PathVariable(name = "member-id") Long memberId, @RequestBody String content) throws JsonProcessingException {
         Long currentMemberId = authService.getLoginInfo().getMemberId();
         ReviewDto review = reviewService.addReview(memberId, currentMemberId, content);
+
+        notificationService.sendToUser(NotifyType.REVIEW, review.getContent(), memberId);
 
         Resource resource = new Resource(review);
         resource.add(linkTo(ReviewController.class).slash("store/" + memberId).withSelfRel());

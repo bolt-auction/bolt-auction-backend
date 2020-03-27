@@ -1,10 +1,10 @@
-package com.neoga.platform.chat.service;
+package com.neoga.platform.communication.chat.service;
 
-import com.neoga.platform.chat.domain.ChatRoom;
-import com.neoga.platform.chat.domain.ChatRoomJoin;
-import com.neoga.platform.chat.dto.CreateRoomRequestDto;
-import com.neoga.platform.chat.repository.ChatRoomJoinRepository;
-import com.neoga.platform.chat.repository.ChatRoomRepository;
+import com.neoga.platform.communication.chat.domain.ChatRoom;
+import com.neoga.platform.communication.chat.domain.ChatRoomJoin;
+import com.neoga.platform.communication.chat.dto.CreateRoomRequestDto;
+import com.neoga.platform.communication.chat.repository.ChatRoomJoinRepository;
+import com.neoga.platform.communication.chat.repository.ChatRoomRepository;
 import com.neoga.platform.exception.custom.CMemberNotFoundException;
 import com.neoga.platform.item.domain.Item;
 import com.neoga.platform.memberstore.member.domain.Members;

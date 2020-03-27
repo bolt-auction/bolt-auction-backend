@@ -1,5 +1,8 @@
 package com.neoga.platform.memberstore.review.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.neoga.platform.communication.notification.domain.NotifyType;
+import com.neoga.platform.communication.notification.service.NotificationService;
 import com.neoga.platform.exception.custom.CReviewNotExistException;
 import com.neoga.platform.memberstore.member.domain.Members;
 import com.neoga.platform.memberstore.member.repository.MemberRepository;
@@ -23,8 +26,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final MemberRepository memberRepository;
 
     @Override
-    public ReviewDto addReview(Long memberId, Long registerId, String content) {
-
+    public ReviewDto addReview(Long memberId, Long registerId, String content){
         Members refMembers = memberRepository.getOne(memberId);
         Members refRegister = memberRepository.getOne(registerId);
 

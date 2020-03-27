@@ -1,8 +1,8 @@
-package com.neoga.platform.chat.domain;
+package com.neoga.platform.communication.chat.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.neoga.platform.chat.util.ChatRoomSerializer;
+import com.neoga.platform.communication.chat.util.ChatRoomSerializer;
 import com.neoga.platform.memberstore.member.domain.Members;
 import com.neoga.platform.memberstore.util.MemberSerializer;
 import lombok.*;

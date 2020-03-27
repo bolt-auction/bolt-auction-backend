@@ -1,9 +1,9 @@
-package com.neoga.platform.chat.util;
+package com.neoga.platform.communication.chat.util;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.neoga.platform.chat.domain.ChatRoom;
+import com.neoga.platform.communication.chat.domain.ChatRoom;
 
 import java.io.IOException;
 

@@ -1,7 +1,7 @@
-package com.neoga.platform.chat.repository;
+package com.neoga.platform.communication.chat.repository;
 
-import com.neoga.platform.chat.domain.ChatMessage;
-import com.neoga.platform.chat.domain.ChatRoom;
+import com.neoga.platform.communication.chat.domain.ChatMessage;
+import com.neoga.platform.communication.chat.domain.ChatRoom;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

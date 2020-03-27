@@ -1,4 +1,4 @@
-package com.neoga.platform.chat.config;
+package com.neoga.platform.communication.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
