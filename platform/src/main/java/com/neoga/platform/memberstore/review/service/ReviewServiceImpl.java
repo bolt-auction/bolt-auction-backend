@@ -3,6 +3,8 @@ package com.neoga.platform.memberstore.review.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.neoga.platform.communication.notification.domain.NotifyType;
 import com.neoga.platform.communication.notification.service.NotificationService;
+import com.neoga.platform.event.ReviewAddEvent;
+import com.neoga.platform.event.ReviewEventDispatcher;
 import com.neoga.platform.exception.custom.CReviewNotExistException;
 import com.neoga.platform.memberstore.member.domain.Members;
 import com.neoga.platform.memberstore.member.repository.MemberRepository;
@@ -11,12 +13,14 @@ import com.neoga.platform.memberstore.review.domain.Review;
 import com.neoga.platform.memberstore.review.dto.ReviewDto;
 import com.neoga.platform.memberstore.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
@@ -24,20 +28,28 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final ModelMapper modelMapper;
     private final MemberRepository memberRepository;
+    private final ReviewEventDispatcher reviewEventDispatcher;
 
     @Override
-    public ReviewDto addReview(Long memberId, Long registerId, String content){
+    public ReviewDto addReview(Long memberId, Long registerId, String content) throws JsonProcessingException {
         Members refMembers = memberRepository.getOne(memberId);
         Members refRegister = memberRepository.getOne(registerId);
 
-        Review review = new Review();
+        Review savedReview = reviewRepository.save(Review.builder()
+                .store(refMembers)
+                .register(refRegister)
+                .content(content).build());
 
-        review.setStore(refMembers);
-        review.setRegister(refRegister);
-        review.setContent(content);
-        reviewRepository.save(review);
+        reviewEventDispatcher.send(
+                memberId,
+                registerId,
+                content,
+                savedReview.getCreateDt()
+        );
 
-        return mapReviewReviewDto(review);
+        log.info("[review event] content: {}",content);
+
+        return mapReviewReviewDto(savedReview);
     }
 
     @Override

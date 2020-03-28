@@ -1,4 +1,4 @@
-package com.neoga.communication.chat.client;
+package com.neoga.communication.client;
 
 import com.neoga.communication.chat.dto.Members;
 import lombok.RequiredArgsConstructor;
@@ -19,3 +19,4 @@ public class MemberClient {
                 Members.class);
     }
 }
+

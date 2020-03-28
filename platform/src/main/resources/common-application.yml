@@ -85,3 +85,11 @@ management:
       exposure:
         include: "*"
 
+#RabbitMQ
+platform:
+  exchange: platform_exchange
+  notify:
+    key: platform.notify
+  review:
+    add:
+      key: platform.review
