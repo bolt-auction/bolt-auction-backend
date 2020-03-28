@@ -10,15 +10,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Members {
+public class MemberDto {
     private Long id;
-    private List<String> role;
-    private String uid;
-    private String passwd;
     private String name;
-    private LocalDateTime createDt;
-    private LocalDateTime changeDt;
-    private String provider;
-    private String description;
     private String imagePath;
 }

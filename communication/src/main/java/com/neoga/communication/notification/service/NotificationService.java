@@ -19,7 +19,6 @@ import javax.persistence.EntityManager;
 public class NotificationService {
     private final ObjectMapper objectMapper;
     private final EntityManager em;
-    private final SimpMessagingTemplate simpMessagingTemplate;
     private final RabbitTemplate rabbitTemplate;
 
     public void sendToUser(NotifyType type, String content, Long receiverId) throws JsonProcessingException {
