@@ -7,7 +7,7 @@ spring.profiles: server
 
 #Server Setting
 server:
-  port: 8000
+  port: 8090
 
 #base URL
 base:
@@ -20,7 +20,7 @@ spring:
 
 #Server Setting
 server:
-  port: 8000
+  port: 8090
 
 #base URL
 base:

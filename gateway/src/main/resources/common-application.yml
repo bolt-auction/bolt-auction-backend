@@ -70,3 +70,4 @@ ribbon:
   MaxAutoRetries: 1
   MaxAutoRetriesNextServer: 1
   OkToRetryOnAllOperations: true
+  ReadTimeout: 60000
