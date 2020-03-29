@@ -4,6 +4,7 @@ package com.neoga.platform.order.controller;
 import com.neoga.platform.exception.custom.COrderNotFoundException;
 import com.neoga.platform.item.dto.ItemDto;
 import com.neoga.platform.item.service.ItemService;
+import com.neoga.platform.order.domain.Orders;
 import com.neoga.platform.order.dto.OrderDto;
 import com.neoga.platform.order.service.OrderService;
 import com.neoga.platform.security.service.AuthService;
@@ -45,8 +46,9 @@ public class OrderController {
         return ResponseEntity.ok().body(resource);
     }
 
+    @ApiOperation(value = "즉시 낙찰", notes = "즉시낙찰가로 해당 상품 낙찰")
     @GetMapping("/quick/{item-id}")
-    public void quickOrder(@PathVariable("item-id") Long itemId) {
+    public ResponseEntity quickOrder(@PathVariable("item-id") Long itemId) {
         Long memberId = authService.getLoginInfo().getMemberId();
         ItemDto findItem = itemService.getItem(itemId);
         if (findItem.getSeller().getId().equals(memberId)) {
@@ -55,10 +57,8 @@ public class OrderController {
             throw new RuntimeException("종료된 상품입니다.");
         }
 
-        orderService.quickOrder(memberId, itemId);
+        OrderDto order = orderService.quickOrder(memberId, itemId);
 
-        //여기에 알림기능 추가
+        return ResponseEntity.ok(order);
     }
-
-
 }
