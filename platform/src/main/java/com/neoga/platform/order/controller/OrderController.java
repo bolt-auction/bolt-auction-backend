@@ -2,8 +2,11 @@ package com.neoga.platform.order.controller;
 
 
 import com.neoga.platform.exception.custom.COrderNotFoundException;
+import com.neoga.platform.item.dto.ItemDto;
+import com.neoga.platform.item.service.ItemService;
 import com.neoga.platform.order.dto.OrderDto;
 import com.neoga.platform.order.service.OrderService;
+import com.neoga.platform.security.service.AuthService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.Link;
@@ -21,6 +24,8 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 @RequestMapping("/api/order")
 public class OrderController {
     private final OrderService orderService;
+    private final AuthService authService;
+    private final ItemService itemService;
 
     @ApiOperation(value = "낙찰자 조회", notes = "itemId로 해당 상품 낙찰자 조회" +
             "404(NotFound) - itemId에 해당하는 낙찰자 정보없음")
@@ -39,4 +44,21 @@ public class OrderController {
 
         return ResponseEntity.ok().body(resource);
     }
+
+    @GetMapping("/quick/{item-id}")
+    public void quickOrder(@PathVariable("item-id") Long itemId) {
+        Long memberId = authService.getLoginInfo().getMemberId();
+        ItemDto findItem = itemService.getItem(itemId);
+        if (findItem.getSeller().getId().equals(memberId)) {
+            throw new RuntimeException("본인의 상품은 구매하실 수 없습니다.");
+        } else if (findItem.isEnd()) {
+            throw new RuntimeException("종료된 상품입니다.");
+        }
+
+        orderService.quickOrder(memberId, itemId);
+
+        //여기에 알림기능 추가
+    }
+
+
 }

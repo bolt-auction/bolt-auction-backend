@@ -1,9 +1,8 @@
 package com.neoga.platform.order.service;
 
-import com.neoga.platform.exception.custom.CItemNotFoundException;
 import com.neoga.platform.exception.custom.COrderNotFoundException;
 import com.neoga.platform.item.domain.Item;
-import com.neoga.platform.item.dto.ItemDto;
+import com.neoga.platform.item.repository.ItemRepository;
 import com.neoga.platform.memberstore.member.domain.Members;
 import com.neoga.platform.order.domain.Orders;
 import com.neoga.platform.order.dto.OrderDto;
@@ -14,8 +13,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.Order;
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,6 +21,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final EntityManager em;
     private final ModelMapper modelMapper;
+    private final ItemRepository itemRepository;
 
     public void saveOrder(Long memberId, Long itemId, int price){
         Orders order = new Orders();
@@ -45,5 +43,17 @@ public class OrderService {
         orderDto.setMemberId(order.getMembers().getId());
         orderDto.setItemId(order.getItem().getId());
         return orderDto;
+    }
+
+    public void quickOrder(Long memberId, Long itemId) {
+        Item item = itemRepository.getOne(itemId);
+        Orders order = new Orders();
+        order.setItem(item);
+        order.setMembers(item.getMembers());
+        order.setPrice(item.getQuickPrice());
+        item.setEnd(true);
+
+        itemRepository.save(item);
+        orderRepository.save(order);
     }
 }
