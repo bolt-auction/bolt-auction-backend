@@ -35,11 +35,6 @@ import springfox.documentation.annotations.ApiIgnore;
 @Slf4j
 public class ChatController {
     private final ChatMessageService chatMessageService;
-    private final MemberClient memberClient;
-    @GetMapping("/test")
-    MemberDto test(){
-        return memberClient.retrieveMemberById(3L);
-    }
 
     @ApiOperation(value = "과거 메시지 목록 조회", notes = "자신의 메시지 목록 반환, 파라미터로 페이징 처리가능")
     @ApiImplicitParams({
