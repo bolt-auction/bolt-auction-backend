@@ -9,14 +9,14 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
     Page<Item> findAllByNameIsContaining(Pageable pageable, String string);
 
     @Query(value = "select i from Item i " +
-            "where i.category.id=:categoryId or i.category.supCategory.id=:categoryId",
+            "where i.category.id=:categoryId or i.category.supCategory.id=:categoryId" +
+            " and i.isEnd=false",
             countQuery = "select count(i) from Item i"
     )
     Page<Item> findAllByCategory_IdEquals(Pageable pageable, Long categoryId);
