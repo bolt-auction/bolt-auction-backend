@@ -27,7 +27,7 @@ public class AuthService {
     private final KakaoService kakaoService;
 
     //로그인 정보를 받아 검증 후 jwt 토큰 생성 후 로그인 정보 반환
-    public LoginResponseDto login(LoginRequestDto loginRequest) throws CEmailLoginFailedException {
+    public LoginResponseDto login(LoginRequestDto loginRequest) {
         String uid = loginRequest.getUid();
         String passwd = loginRequest.getPasswd();
         Members findMember = memberRepository.findByUid(uid)
@@ -42,7 +42,7 @@ public class AuthService {
     }
 
     //소셜 accessToken이용하여 jwt 토큰 생성 후 로그인 정보 반환
-    public LoginResponseDto socialLogin(String socialAccessToken, String provider) throws CMemberNotFoundException {
+    public LoginResponseDto socialLogin(String socialAccessToken, String provider) {
         KakaoProfile profile = kakaoService.getKakaoProfile(socialAccessToken);
         Members findMember = memberRepository.findByUidAndProvider(String.valueOf(profile.getId()), provider)
                 .orElseThrow(() -> new CMemberNotFoundException("member not found : you need signup"));
@@ -56,22 +56,20 @@ public class AuthService {
     public LoginInfo getLoginInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Map<String, Object> detail = ((Map<String, Object>) authentication.getDetails());
-        LoginInfo logininfo = LoginInfo.builder()
+        return LoginInfo.builder()
                 .memberId(Long.valueOf(String.valueOf(detail.get("id"))))
                 .uid(String.valueOf(detail.get("uid")))
                 .name(String.valueOf(detail.get("name")))
                 .role((List) detail.get("authorities")).build();
-        return logininfo;
     }
 
 
     public LoginResponseDto loginResponseBuilder(String accessToken, Members findMember) {
-        LoginResponseDto loginResponse = LoginResponseDto.builder()
+        return LoginResponseDto.builder()
                 .memberId((findMember.getId()))
                 .uid(findMember.getUid())
                 .name(findMember.getName())
                 .tokenType("Bearer")
                 .accessToken(accessToken).build();
-        return loginResponse;
     }
 }

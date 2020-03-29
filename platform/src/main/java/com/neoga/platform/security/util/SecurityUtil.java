@@ -8,7 +8,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SecurityUtil {
-    public static Collection<? extends GrantedAuthority> authorities(List<String> roles) {
+
+    private SecurityUtil() {
+        throw new IllegalStateException("Utility class");
+    }
+
+    public static Collection<GrantedAuthority> authorities(List<String> roles) {
         return roles.stream()
                 .map(r -> new SimpleGrantedAuthority("ROLE_" + r))
                 .collect(Collectors.toList());

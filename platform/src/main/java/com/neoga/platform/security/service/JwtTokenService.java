@@ -73,9 +73,7 @@ public class JwtTokenService {
 
         if (header == null || !header.startsWith("Bearer "))
             return null;
-        String authToken = header.substring(7);
-
-        return authToken;
+        return header.substring(7);
     }
 
     // Jwt 토큰의 유효성 + 만료일자 확인

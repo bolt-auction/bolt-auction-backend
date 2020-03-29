@@ -18,11 +18,11 @@ public class ChatRoomJoinService {
     private final AuthService authService;
 
     //채팅방 참여
-    public void joinRoom(ChatRoom Room, Long memberId) {
+    public void joinRoom(ChatRoom room, Long memberId) {
         Members member = memberRepository.findById(memberId).orElseThrow(CMemberNotFoundException::new);
         ChatRoomJoin roomJoin = ChatRoomJoin.builder()
                 .participant(member)
-                .chatRoom(Room).build();
+                .chatRoom(room).build();
         chatjoinRepository.save(roomJoin);
     }
 }

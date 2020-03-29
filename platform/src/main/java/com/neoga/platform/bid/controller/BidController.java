@@ -6,7 +6,6 @@ import com.neoga.platform.exception.custom.CBidException;
 import com.neoga.platform.exception.custom.CItemEndException;
 import com.neoga.platform.item.dto.ItemDto;
 import com.neoga.platform.item.service.ItemService;
-import com.neoga.platform.memberstore.member.controller.MemberController;
 import com.neoga.platform.security.service.AuthService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

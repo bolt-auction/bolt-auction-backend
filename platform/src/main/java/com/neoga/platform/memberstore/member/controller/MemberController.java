@@ -22,6 +22,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 public class MemberController {
     private final MemberService memberService;
     private final AuthService authService;
+    private static final String PROFILE = "profile";
 
     @ApiOperation(value = "자신 정보조회")
     @GetMapping()
@@ -43,7 +44,7 @@ public class MemberController {
 
         Resource<LoginResponseDto> resource = new Resource(newMember);
         resource.add(linkTo(methodOn(MemberController.class).signup(signupRequest)).withSelfRel());
-        resource.add(new Link("/swagger-ui.html#/auth%20API/loginUsingPOST").withRel("profile"));
+        resource.add(new Link("/swagger-ui.html#/auth%20API/loginUsingPOST").withRel(PROFILE));
 
         return ResponseEntity.ok().body(resource);
     }
@@ -58,7 +59,7 @@ public class MemberController {
 
         Resource<LoginResponseDto> resource = new Resource(newMember);
         resource.add(linkTo(methodOn(MemberController.class).signupSocial(provider, accessToken, name)).withSelfRel());
-        resource.add(new Link("/swagger-ui.html#/auth%20API/loginByProviderUsingPOST").withRel("profile"));
+        resource.add(new Link("/swagger-ui.html#/auth%20API/loginByProviderUsingPOST").withRel(PROFILE));
 
         return ResponseEntity.ok().build();
     }
@@ -68,7 +69,7 @@ public class MemberController {
 
         Resource<Members> resource = new Resource(findMember);
         resource.add(linkTo(MemberController.class).withSelfRel());
-        resource.add(new Link("/member-controller/findMemberByIdUsingPUT").withRel("profile"));
+        resource.add(new Link("/member-controller/findMemberByIdUsingPUT").withRel(PROFILE));
 
         return ResponseEntity.ok().body(resource);
     }
