@@ -27,16 +27,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequestMapping("/api/chat/room")
 public class ChatRoomController {
     private final ChatRoomService chatRoomService;
-    private final ItemClient itemClient;
-    private final MemberClient memberClient;
-    @GetMapping("/test/{item-id}")
-    public ItemDto test(@PathVariable("item-id")Long itemId){
-        return itemClient.retrieveItemById(itemId);
-    }
-    @GetMapping("/test2/{item-id}")
-    public MemberDto test2(@PathVariable("item-id")Long itemId){
-        return memberClient.retrieveMemberById(itemId);
-    }
+
     @ApiOperation(value = "채팅방 목록 조회", notes = "자신의 채팅방 목록 반환, 파라미터로 페이징 처리가능")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "페이지 번호 (0..N)", dataType = "integer", paramType = "query", defaultValue = "0"),
