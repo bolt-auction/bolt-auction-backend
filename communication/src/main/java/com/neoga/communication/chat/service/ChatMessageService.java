@@ -10,6 +10,7 @@ import com.neoga.communication.chat.dto.SendMessageDto;
 import com.neoga.communication.chat.repository.ChatMessageRepository;
 import com.neoga.communication.client.MemberClient;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import java.util.function.Function;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class ChatMessageService {
@@ -51,13 +53,16 @@ public class ChatMessageService {
         Page<ChatMessageDto> chatMessageDtoPage = chatMessagePage.map(new Function<ChatMessage, ChatMessageDto>() {
             @Override
             public ChatMessageDto apply(ChatMessage chatMessage) {
+                MemberDto memberDto = memberClient.retrieveMemberById(chatMessage.getSenderId());
                 ChatMessageDto chatMessageDto = new ChatMessageDto();
+
                 modelMapper.map(chatMessage, ChatMessage.class);
                 chatMessageDto.setId(chatMessage.getId());
+                chatMessageDto.setContent(chatMessage.getContent());
                 chatMessageDto.setCreateDt(chatMessage.getCreateDt());
                 chatMessageDto.setChatRoom(chatMessage.getChatRoom());
-                MemberDto memberDto = memberClient.retrieveMemberById(chatMessage.getSenderId());
                 chatMessageDto.setSender(memberDto);
+
                 return chatMessageDto;
             }});
 

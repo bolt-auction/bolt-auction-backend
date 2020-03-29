@@ -3,8 +3,10 @@ package com.neoga.communication.chat.controller;
 
 
 import com.neoga.communication.chat.domain.ChatRoom;
-import com.neoga.communication.chat.dto.CreateRoomRequestDto;
+import com.neoga.communication.chat.dto.*;
 import com.neoga.communication.chat.service.ChatRoomService;
+import com.neoga.communication.client.ItemClient;
+import com.neoga.communication.client.MemberClient;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -25,7 +27,16 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequestMapping("/api/chat/room")
 public class ChatRoomController {
     private final ChatRoomService chatRoomService;
-
+    private final ItemClient itemClient;
+    private final MemberClient memberClient;
+    @GetMapping("/test/{item-id}")
+    public ItemDto test(@PathVariable("item-id")Long itemId){
+        return itemClient.retrieveItemById(itemId);
+    }
+    @GetMapping("/test2/{item-id}")
+    public MemberDto test2(@PathVariable("item-id")Long itemId){
+        return memberClient.retrieveMemberById(itemId);
+    }
     @ApiOperation(value = "채팅방 목록 조회", notes = "자신의 채팅방 목록 반환, 파라미터로 페이징 처리가능")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "페이지 번호 (0..N)", dataType = "integer", paramType = "query", defaultValue = "0"),
@@ -33,11 +44,12 @@ public class ChatRoomController {
             @ApiImplicitParam(name = "sort", allowMultiple = true, paramType = "query", value = "property(,asc|desc) 기본 내림차순")
     })
     @GetMapping
-    public ResponseEntity<PagedResources<Resource<ChatRoom>>> findRoomInMember(@ApiIgnore Pageable pageable,
-                                                                               @ApiIgnore PagedResourcesAssembler<ChatRoom> assembler) {
-        Page<ChatRoom> roomJoin = chatRoomService.findChatRoomList(pageable);
+    public ResponseEntity<PagedResources<Resource<ChatRoomDto>>> findRoomInMember(@ApiIgnore Pageable pageable,
+                                                                               @ApiIgnore PagedResourcesAssembler<ChatRoomDto> assembler) {
+        Page<ChatRoom> roomJoinList = chatRoomService.findChatRoomList(pageable);
+        Page<ChatRoomDto> roomJoinDtoList = chatRoomService.mapChatRoomIntoDtoPage(roomJoinList);
 
-        PagedResources<Resource<ChatRoom>> resources = assembler.toResource(roomJoin, Resource::new);
+        PagedResources<Resource<ChatRoomDto>> resources = assembler.toResource(roomJoinDtoList, i -> new Resource<>(i));
         resources.add(new Link("/swagger-ui.html#/chat-room-controller/findRoomInMemberUsingGET").withRel("profile"));
 
         return ResponseEntity.ok(resources);
