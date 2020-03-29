@@ -20,12 +20,10 @@ spring:
       enabled: true
   #Quartz
   quartz:
-    job-store-type: memory
+    scheduler-name: QuartzScheduler
     properties:
       org:
         quartz:
-          jobStore:
-            class: org.quartz.simpl.RAMJobStore
           threadPool:
             threadCount: 5
   hateoas:
@@ -93,3 +91,5 @@ platform:
   review:
     add:
       key: platform.review
+
+
