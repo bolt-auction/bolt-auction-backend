@@ -1,5 +1,6 @@
 package com.neoga.platform.order.service;
 
+import com.neoga.platform.exception.custom.CItemNotFoundException;
 import com.neoga.platform.exception.custom.COrderNotFoundException;
 import com.neoga.platform.item.domain.Item;
 import com.neoga.platform.item.repository.ItemRepository;
@@ -7,6 +8,7 @@ import com.neoga.platform.memberstore.member.domain.Members;
 import com.neoga.platform.order.domain.Orders;
 import com.neoga.platform.order.dto.OrderDto;
 import com.neoga.platform.order.repository.OrderRepository;
+import com.sun.org.apache.bcel.internal.generic.RETURN;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -23,13 +25,13 @@ public class OrderService {
     private final ModelMapper modelMapper;
     private final ItemRepository itemRepository;
 
-    public void saveOrder(Long memberId, Long itemId, int price){
+    public Orders saveOrder(Long memberId, Long itemId, int price){
         Orders order = new Orders();
         order.setItem(em.getReference(Item.class, itemId));
         order.setMembers(em.getReference(Members.class, memberId));
         order.setPrice(price);
 
-        orderRepository.save(order);
+        return orderRepository.save(order);
     }
 
     public OrderDto getOrder(Long itemId) throws COrderNotFoundException{
@@ -38,22 +40,18 @@ public class OrderService {
         return mapOrderDto(findOrder);
     }
 
+    public OrderDto quickOrder(Long memberId, Long itemId) {
+        Item item = itemRepository.findById(itemId).orElseThrow(()-> new CItemNotFoundException("해당 item이 존재하지 않습니다."));
+        item.setEnd(true);
+        itemRepository.save(item);
+        Orders saveOrder = saveOrder(memberId, itemId, item.getQuickPrice());
+        return mapOrderDto(saveOrder);
+    }
+
     public OrderDto mapOrderDto(Orders order) {
         OrderDto orderDto = modelMapper.map(order, OrderDto.class);
         orderDto.setMemberId(order.getMembers().getId());
         orderDto.setItemId(order.getItem().getId());
         return orderDto;
-    }
-
-    public void quickOrder(Long memberId, Long itemId) {
-        Item item = itemRepository.getOne(itemId);
-        Orders order = new Orders();
-        order.setItem(item);
-        order.setMembers(item.getMembers());
-        order.setPrice(item.getQuickPrice());
-        item.setEnd(true);
-
-        itemRepository.save(item);
-        orderRepository.save(order);
     }
 }
