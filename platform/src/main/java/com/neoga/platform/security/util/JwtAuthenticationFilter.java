@@ -1,6 +1,5 @@
 package com.neoga.platform.security.util;
 
-import com.neoga.platform.exception.custom.CJwtTokenMissingException;
 import com.neoga.platform.security.service.JwtTokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -24,7 +23,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException, CJwtTokenMissingException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         String token = jwtTokenService.resolveToken((HttpServletRequest) request);
         log.info("jwtfilter : get Token = {}", token);
         if (token != null & jwtTokenService.validateToken(token)) {

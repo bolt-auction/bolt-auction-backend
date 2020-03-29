@@ -1,14 +1,11 @@
 package com.neoga.platform.order.domain;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.neoga.platform.item.domain.Item;
 import com.neoga.platform.item.util.ItemIdSerializer;
 import com.neoga.platform.memberstore.member.domain.Members;
 import com.neoga.platform.memberstore.util.MemberIdSerializer;
-import com.neoga.platform.memberstore.util.MemberSerializer;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
