@@ -13,8 +13,10 @@ public class CategorySerializer extends JsonSerializer<Category> {
         jsonGenerator.writeStartObject();
         jsonGenerator.writeNumberField("id", category.getId());
         jsonGenerator.writeStringField("name", category.getName());
-        jsonGenerator.writeNumberField("supCategoryId", category.getSupCategory().getId());
-        jsonGenerator.writeStringField("supCategoryName", category.getSupCategory().getName());
+        if(category.getSupCategory() != null) {
+            jsonGenerator.writeNumberField("supCategoryId", category.getSupCategory().getId());
+            jsonGenerator.writeStringField("supCategoryName", category.getSupCategory().getName());
+        }
         jsonGenerator.writeEndObject();
     }
 }
