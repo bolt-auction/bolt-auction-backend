@@ -61,7 +61,7 @@ public class ItemServiceImpl implements ItemService {
 
         // get item entity
         if (categoryId == NO_CATEGORY) {
-            itemPage = itemRepository.findAll(pageable);
+            itemPage = itemRepository.findAllItems(pageable);
         } else if (categoryId >= FIRST_CATEGORY && categoryId <= LAST_CATEGORY) {
             itemPage = itemRepository.findAllByCategory_IdEquals(pageable, categoryId);
         } else {
