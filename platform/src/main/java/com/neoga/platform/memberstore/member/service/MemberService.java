@@ -21,11 +21,11 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final KakaoService kakaoService;
 
-    public Members findMemberById(Long member_id) {
-        return memberRepository.findById(member_id).get();
+    public Members findMemberById(Long memberId) {
+        return memberRepository.getOne(memberId);
     }
 
-    public Members saveMember(SignupRequestDto signupRequest) throws CExistUidSignUpException {
+    public Members saveMember(SignupRequestDto signupRequest) {
         //이메일 중복확인
         Optional<Members> existsMember = memberRepository.findByUid(signupRequest.getUid());
         if (existsMember.isPresent()) {
@@ -45,19 +45,17 @@ public class MemberService {
         return newMember;
     }
 
-    public Members saveSocialMember(String provider, String accessToken, String name) throws CAlreadySignUpException {
+    public Members saveSocialMember(String provider, String accessToken, String name) {
         KakaoProfile profile = kakaoService.getKakaoProfile(accessToken);
         Optional<Members> member = memberRepository.findByUidAndProvider(String.valueOf(profile.getId()), provider);
         if (member.isPresent())
             throw new CAlreadySignUpException();
 
-        Members newMember = memberRepository.save(Members.builder()
+        return memberRepository.save(Members.builder()
                 .uid(String.valueOf(profile.getId()))
                 .provider(provider)
                 .name(name)
                 .role(Collections.singletonList("USER"))
                 .build());
-
-        return newMember;
     }
 }

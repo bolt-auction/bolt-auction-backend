@@ -8,7 +8,6 @@ import com.neoga.platform.memberstore.member.domain.Members;
 import com.neoga.platform.order.domain.Orders;
 import com.neoga.platform.order.dto.OrderDto;
 import com.neoga.platform.order.repository.OrderRepository;
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -34,7 +33,7 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
-    public OrderDto getOrder(Long itemId) throws COrderNotFoundException{
+    public OrderDto getOrder(Long itemId) {
         Orders findOrder = orderRepository.findByItem_Id(itemId)
                 .orElseThrow(() -> new COrderNotFoundException("해당 itemid에 대한 낙찰기록이 없습니다."));
         return mapOrderDto(findOrder);

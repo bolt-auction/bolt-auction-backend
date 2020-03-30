@@ -2,7 +2,6 @@ package com.neoga.communication.chat.config;
 
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +18,7 @@ public class RabbitMqWebSocketConfig implements WebSocketMessageBrokerConfigurer
     private String relayHost;
     @Value("${rabbitmq.relay.port}")
     private int relayPort;
+    private static final String ADMIN = "admin";
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
@@ -32,18 +32,16 @@ public class RabbitMqWebSocketConfig implements WebSocketMessageBrokerConfigurer
                 .setRelayPort(relayPort)
                 .setUserDestinationBroadcast("/topic/unresolved.user.dest")
                 .setUserRegistryBroadcast("/topic/registry.broadcast")
-                .setClientLogin("admin")
-                .setClientPasscode("admin")
-                .setSystemLogin("admin")
-                .setSystemPasscode("admin");
+                .setClientLogin(ADMIN)
+                .setClientPasscode(ADMIN)
+                .setSystemLogin(ADMIN)
+                .setSystemPasscode(ADMIN);
         registry.setApplicationDestinationPrefixes("/app");
     }
 
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-
-        return rabbitTemplate;
+        return new RabbitTemplate(connectionFactory);
     }
 
 }

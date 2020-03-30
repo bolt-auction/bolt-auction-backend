@@ -1,10 +1,10 @@
 package com.neoga.platform.order.controller;
 
 
+import com.neoga.platform.exception.custom.CQuickOrderException;
 import com.neoga.platform.exception.custom.COrderNotFoundException;
 import com.neoga.platform.item.dto.ItemDto;
 import com.neoga.platform.item.service.ItemService;
-import com.neoga.platform.order.domain.Orders;
 import com.neoga.platform.order.dto.OrderDto;
 import com.neoga.platform.order.service.OrderService;
 import com.neoga.platform.security.service.AuthService;
@@ -52,9 +52,9 @@ public class OrderController {
         Long memberId = authService.getLoginInfo().getMemberId();
         ItemDto findItem = itemService.getItem(itemId);
         if (findItem.getSeller().getId().equals(memberId)) {
-            throw new RuntimeException("본인의 상품은 구매하실 수 없습니다.");
+            throw new CQuickOrderException("본인의 상품은 구매하실 수 없습니다.");
         } else if (findItem.isEnd()) {
-            throw new RuntimeException("종료된 상품입니다.");
+            throw new CQuickOrderException("종료된 상품입니다.");
         }
 
         OrderDto order = orderService.quickOrder(memberId, itemId);

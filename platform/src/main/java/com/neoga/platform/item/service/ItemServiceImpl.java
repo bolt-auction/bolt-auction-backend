@@ -121,13 +121,15 @@ public class ItemServiceImpl implements ItemService {
         Page<Item> searchItems = null;
         if (filter.equals("name")) {
             searchItems = itemRepository.findAllByNameIsContaining(pageable, search);
+        } else {
+            return null;
         }
         return searchItems.map(this::mapItemItemDto);
     }
 
     @Override
     public List<ItemDto> getItemsByMemberId(Long memberId) {
-        return itemRepository.findAllByMembers_Id(memberId).stream().map(item -> mapItemItemDto(item)).collect(Collectors.toList());
+        return itemRepository.findAllByMembers_Id(memberId).stream().map(this::mapItemItemDto).collect(Collectors.toList());
     }
 
     private ItemDto mapItemItemDto(Item item) {
@@ -150,7 +152,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     public void setIsEnd(Long itemId, boolean isEnd){
-        Item item = itemRepository.findById(itemId).get();
+        Item item = itemRepository.getOne(itemId);
         item.setEnd(isEnd);
         itemRepository.save(item);
     }

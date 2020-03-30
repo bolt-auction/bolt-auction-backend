@@ -48,7 +48,7 @@ public class ChatController {
                                                                                  @ApiIgnore PagedResourcesAssembler<ChatMessage> assembler) {
         Page<ChatMessage> messageList = chatMessageService.findMessageByChatRoom(chatRoomId, pageable);
 
-        PagedResources<Resource<ChatMessage>> resources = assembler.toResource(messageList, i -> new Resource<>(i));
+        PagedResources<Resource<ChatMessage>> resources = assembler.toResource(messageList, Resource::new);
         resources.add(new Link("/swagger-ui.html#/chat-room-controller/").withRel("profile"));
 
         return ResponseEntity.ok(resources);

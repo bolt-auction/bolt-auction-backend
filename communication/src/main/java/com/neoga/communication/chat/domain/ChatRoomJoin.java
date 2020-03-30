@@ -1,7 +1,6 @@
 package com.neoga.communication.chat.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.neoga.communication.chat.dto.Members;
 import lombok.*;
 
 import javax.persistence.*;
