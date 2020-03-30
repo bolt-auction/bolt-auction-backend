@@ -28,10 +28,9 @@ public class ReviewEventDispatcher {
                 createDt
         );
 
-        String msg = objectMapper.writeValueAsString(reviewAddEvent);
         rabbitTemplate.convertAndSend(
                 platformExchange,
                 platformSolvedRoutingKey,
-                msg);
+                reviewAddEvent);
     }
 }

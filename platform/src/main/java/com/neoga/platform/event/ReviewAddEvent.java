@@ -1,5 +1,6 @@
 package com.neoga.platform.event;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 
 import java.io.Serializable;
