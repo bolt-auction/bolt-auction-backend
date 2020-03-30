@@ -22,7 +22,7 @@ public class MemberService {
     private final KakaoService kakaoService;
 
     public Members findMemberById(Long memberId) {
-        return memberRepository.getOne(memberId);
+        return memberRepository.findById(memberId).get();
     }
 
     public Members saveMember(SignupRequestDto signupRequest) {
