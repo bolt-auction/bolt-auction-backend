@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -47,7 +48,7 @@ public class OrderController {
     }
 
     @ApiOperation(value = "즉시 낙찰", notes = "즉시낙찰가로 해당 상품 낙찰")
-    @GetMapping("/quick/{item-id}")
+    @PostMapping("/quick/{item-id}")
     public ResponseEntity quickOrder(@PathVariable("item-id") Long itemId) {
         Long memberId = authService.getLoginInfo().getMemberId();
         ItemDto findItem = itemService.getItem(itemId);
