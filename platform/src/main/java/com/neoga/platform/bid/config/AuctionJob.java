@@ -2,9 +2,13 @@ package com.neoga.platform.bid.config;
 
 import com.neoga.platform.bid.domain.Bid;
 import com.neoga.platform.bid.service.BidService;
+import com.neoga.platform.event.AuctionEventDispatcher;
 import com.neoga.platform.item.domain.Item;
 import com.neoga.platform.item.service.ItemService;
+import com.neoga.platform.order.domain.Orders;
 import com.neoga.platform.order.service.OrderService;
+import com.netflix.discovery.converters.Auto;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -23,7 +27,10 @@ public class AuctionJob implements Job {
     private BidService bidService;
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private AuctionEventDispatcher auctionEventDispatcher;
 
+    @SneakyThrows
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         log.info("------------auction job start : {}", LocalDateTime.now());
@@ -40,9 +47,15 @@ public class AuctionJob implements Job {
                         item.getId(),
                         maxBid.get().getPrice());
 
-                orderService.saveOrder(maxBid.get().getMembers().getId(),
+                Orders saveOrder = orderService.saveOrder(maxBid.get().getMembers().getId(),
                         item.getId(),
                         maxBid.get().getPrice());
+
+                auctionEventDispatcher.send(saveOrder.getMembers().getId(),
+                        item.getMembers().getId(),
+                        saveOrder.getItem().getId(),
+                        saveOrder.getPrice(),
+                        saveOrder.getCreateDt());
             }
         }
     }

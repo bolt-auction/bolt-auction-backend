@@ -91,5 +91,6 @@ platform:
   review:
     add:
       key: platform.review
-
-
+  auction:
+    end:
+      key: platform.auction

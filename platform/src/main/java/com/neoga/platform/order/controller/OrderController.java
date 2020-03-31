@@ -1,6 +1,8 @@
 package com.neoga.platform.order.controller;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.neoga.platform.event.AuctionEventDispatcher;
 import com.neoga.platform.exception.custom.CQuickOrderException;
 import com.neoga.platform.exception.custom.COrderNotFoundException;
 import com.neoga.platform.item.dto.ItemDto;
@@ -28,6 +30,7 @@ public class OrderController {
     private final OrderService orderService;
     private final AuthService authService;
     private final ItemService itemService;
+    private final AuctionEventDispatcher auctionEventDispatcher;
 
     @ApiOperation(value = "낙찰자 조회", notes = "itemId로 해당 상품 낙찰자 조회" +
             "404(NotFound) - itemId에 해당하는 낙찰자 정보없음")
@@ -49,7 +52,7 @@ public class OrderController {
 
     @ApiOperation(value = "즉시 낙찰", notes = "즉시낙찰가로 해당 상품 낙찰")
     @PostMapping("/quick/{item-id}")
-    public ResponseEntity quickOrder(@PathVariable("item-id") Long itemId) {
+    public ResponseEntity quickOrder(@PathVariable("item-id") Long itemId) throws JsonProcessingException {
         Long memberId = authService.getLoginInfo().getMemberId();
         ItemDto findItem = itemService.getItem(itemId);
         if (findItem.getSeller().getId().equals(memberId)) {
@@ -59,6 +62,12 @@ public class OrderController {
         }
 
         OrderDto order = orderService.quickOrder(memberId, itemId);
+
+        auctionEventDispatcher.send(order.getMemberId(),
+                findItem.getSeller().getId(),
+                order.getItemId(),
+                order.getPrice(),
+                order.getCreateDt());
 
         return ResponseEntity.ok(order);
     }
