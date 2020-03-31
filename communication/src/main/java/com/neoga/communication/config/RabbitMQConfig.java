@@ -53,8 +53,8 @@ public class RabbitMQConfig{
     public CachingConnectionFactory connectionFactory(){
         CachingConnectionFactory connectionFactory =
                 new CachingConnectionFactory(relayHost);
-        connectionFactory.setUsername("admin");
-        connectionFactory.setPassword("admin");
+        connectionFactory.setUsername("guest");
+        connectionFactory.setPassword("guest");
         connectionFactory.setPort(5672);
         return connectionFactory;
     }

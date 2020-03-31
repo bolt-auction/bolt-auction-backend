@@ -15,13 +15,13 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class EventHandler {
+public class ReviewEventHandler {
     private final NotificationService notificationService;
     private final ObjectMapper objectMapper;
 
     @RabbitListener(queues = "${platform.queue}")
     void handleReviewAdd(final ReviewAddEvent reviewEvent) throws IOException {
-        log.info("Review Add Event 수신: {}", reviewEvent.getContent());
+        log.info("[Review Add Event 수신] {}", reviewEvent.getContent());
 
         try {
             notificationService.sendToUser(

@@ -1,5 +1,5 @@
 package com.neoga.communication.notification.domain;
 
 public enum NotifyType {
-    CHAT, REVIEW
+    CHAT, REVIEW, AUCTION_END
 }
