@@ -17,6 +17,10 @@ base:
 
 platformHost: http://${base.addr}:8020
 
+rabbitmq:
+  uid: admin
+  passwd: admin
+
 ---
 spring:
   profiles: local
@@ -48,5 +52,8 @@ base:
 
 platformHost: http://${base.addr}:8020
 
+rabbitmq:
+  uid: guest
+  passwd: guest
 
 

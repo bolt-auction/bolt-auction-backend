@@ -18,6 +18,10 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig{
     @Value("${base.addr}")
     private String relayHost;
+    @Value("${rabbitmq.uid}")
+    private String rabbitUid;
+    @Value("${rabbitmq.passwd}")
+    private String rabbitPasswd;
 
     @Bean
     public TopicExchange platformExchange(@Value("${platform.exchange}") final String exchangeName) {
@@ -53,8 +57,8 @@ public class RabbitMQConfig{
     public CachingConnectionFactory connectionFactory(){
         CachingConnectionFactory connectionFactory =
                 new CachingConnectionFactory(relayHost);
-        connectionFactory.setUsername("guest");
-        connectionFactory.setPassword("guest");
+        connectionFactory.setUsername(rabbitUid);
+        connectionFactory.setPassword(rabbitPasswd);
         connectionFactory.setPort(5672);
         return connectionFactory;
     }

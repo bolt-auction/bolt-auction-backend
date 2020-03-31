@@ -15,6 +15,7 @@ base:
   addr: 18.190.79.25
   URL: http://${base.addr}:${server.port}
 
+
 ---
 spring:
   profiles: local
@@ -47,6 +48,7 @@ server:
 base:
   addr: localhost
   URL: http://${base.addr}:${server.port}
+
 
 
 
