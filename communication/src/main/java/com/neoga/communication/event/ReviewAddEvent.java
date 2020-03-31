@@ -21,5 +21,4 @@ public class ReviewAddEvent implements Serializable {
     private Long receiverId;
     private Long registerId;
     private String content;
-    private LocalDateTime createDt;
 }
