@@ -11,11 +11,14 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 public class RabbitMqWebSocketConfig implements WebSocketMessageBrokerConfigurer {
-
     @Value("${base.addr}")
     private String relayHost;
     @Value("${rabbitmq.relay.port}")
     private int relayPort;
+    @Value("${rabbitmq.uid}")
+    private String rabbitUid;
+    @Value("${rabbitmq.passwd}")
+    private String rabbitPasswd;
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
@@ -25,14 +28,14 @@ public class RabbitMqWebSocketConfig implements WebSocketMessageBrokerConfigurer
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.enableStompBrokerRelay("/queue/", "/topic/")
-                .setRelayHost("18.190.79.25")
+                .setRelayHost(relayHost)
                 .setRelayPort(relayPort)
                 .setUserDestinationBroadcast("/topic/unresolved.user.dest")
                 .setUserRegistryBroadcast("/topic/registry.broadcast")
-                .setClientLogin("admin")
-                .setClientPasscode("admin")
-                .setSystemLogin("admin")
-                .setSystemPasscode("admin");
+                .setClientLogin(rabbitUid)
+                .setClientPasscode(rabbitPasswd)
+                .setSystemLogin(rabbitUid)
+                .setSystemPasscode(rabbitPasswd);
         registry.setApplicationDestinationPrefixes("/app");
     }
 
