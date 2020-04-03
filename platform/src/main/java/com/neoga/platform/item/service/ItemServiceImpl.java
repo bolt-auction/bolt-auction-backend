@@ -152,7 +152,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     public void setIsEnd(Long itemId, boolean isEnd){
-        Item item = itemRepository.getOne(itemId);
+        Item item = itemRepository.findById(itemId).orElseThrow(()-> new CItemNotFoundException("해당 item이 존재하지 않습니다."));
         item.setEnd(isEnd);
         itemRepository.save(item);
     }
