@@ -12,9 +12,9 @@ import com.neoga.communication.client.MemberClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -25,7 +25,7 @@ import java.util.function.Function;
 @Service
 public class ChatMessageService {
     private final EntityManager em;
-    private final RabbitTemplate rabbitTemplate;
+    private final SimpMessagingTemplate simpMessagingTemplate;
     private final MemberClient memberClient;
     private final ChatMessageRepository chatMessageRepository;
     private final ModelMapper modelMapper;
@@ -41,7 +41,7 @@ public class ChatMessageService {
         ChatMessage newMessage = chatMessageRepository.save(chatMessage);
 
         String msg = objectMapper.writeValueAsString(newMessage);
-        rabbitTemplate.convertAndSend("amq.topic", "chatRoom." + chatRoomId, msg);
+        simpMessagingTemplate.convertAndSend("/topic/chatRoom." + chatRoomId, msg);
     }
 
     public Page<ChatMessage> findMessageByChatRoom(Long chatRoomId, Pageable pageable) {
