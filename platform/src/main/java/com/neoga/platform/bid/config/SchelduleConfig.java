@@ -60,8 +60,8 @@ public class SchelduleConfig {
         SimpleTriggerFactoryBean trigger = new SimpleTriggerFactoryBean();
         trigger.setJobDetail(job);
 
-        long frequencyInSec = 60;
-        log.info("Configuring trigger to fire every {} seconds", frequencyInSec);
+        long frequencyInSec = 300;
+        log.info("Configuring trigger to fire every {}", frequencyInSec);
 
         trigger.setRepeatInterval(frequencyInSec * 1000);
         trigger.setRepeatCount(SimpleTrigger.REPEAT_INDEFINITELY);
