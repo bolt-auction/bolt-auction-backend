@@ -10,6 +10,7 @@ import com.neoga.platform.security.service.AuthService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/bid")
+@RequestMapping(value="/api/bid", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
 public class BidController {
 
     private final BidService bidService;

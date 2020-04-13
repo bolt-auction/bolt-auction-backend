@@ -13,6 +13,7 @@ import com.neoga.platform.security.service.AuthService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,7 +26,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/api/order")
+@RequestMapping(value="/api/order", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
 public class OrderController {
     private final OrderService orderService;
     private final AuthService authService;

@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 
 @RequiredArgsConstructor
-@RequestMapping
+@RequestMapping(produces = MediaTypes.HAL_JSON_UTF8_VALUE)
 @RestController
 @Slf4j
 public class ChatController {
