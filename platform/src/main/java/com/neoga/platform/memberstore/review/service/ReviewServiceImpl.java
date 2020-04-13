@@ -1,9 +1,6 @@
 package com.neoga.platform.memberstore.review.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.neoga.platform.communication.notification.domain.NotifyType;
-import com.neoga.platform.communication.notification.service.NotificationService;
-import com.neoga.platform.event.ReviewAddEvent;
 import com.neoga.platform.event.ReviewEventDispatcher;
 import com.neoga.platform.exception.custom.CReviewNotExistException;
 import com.neoga.platform.memberstore.member.domain.Members;
