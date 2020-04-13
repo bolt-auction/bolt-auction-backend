@@ -32,8 +32,8 @@ public class ChatRoomController {
             @ApiImplicitParam(name = "sort", allowMultiple = true, paramType = "query", value = "property(,asc|desc) 기본 내림차순")
     })
     @GetMapping
-    public ResponseEntity<PagedResources<Resource<ChatRoom>>> findRoomInMember(@ApiIgnore Pageable pageable,
-                                                                               @ApiIgnore PagedResourcesAssembler<ChatRoom> assembler) {
+    public ResponseEntity findRoomInMember(@ApiIgnore Pageable pageable,
+                                           @ApiIgnore PagedResourcesAssembler<ChatRoom> assembler) {
         Page<ChatRoom> roomJoin = chatRoomService.findChatRoomList(pageable);
 
         PagedResources<Resource<ChatRoom>> resources = assembler.toResource(roomJoin, Resource::new);

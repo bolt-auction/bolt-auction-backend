@@ -162,8 +162,8 @@ public class ItemController {
                             "높은가격순 : currentPrice,desc\n")
     })
     @GetMapping
-    public ResponseEntity<PagedResources<Resource<ItemDto>>> searchItem(@RequestParam String filter, @RequestParam String keyword, @ApiIgnore Pageable pageable,
-                                                                        @ApiIgnore PagedResourcesAssembler<ItemDto> assembler) {
+    public ResponseEntity searchItem(@RequestParam String filter, @RequestParam String keyword, @ApiIgnore Pageable pageable,
+                                     @ApiIgnore PagedResourcesAssembler<ItemDto> assembler) {
         Page<ItemDto> itemPage = itemService.searchItem(filter, keyword, pageable);
 
         PagedResources<Resource<ItemDto>> resources = assembler.toResource(itemPage, Resource::new);

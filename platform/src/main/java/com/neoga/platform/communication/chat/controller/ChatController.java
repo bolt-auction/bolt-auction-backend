@@ -43,9 +43,9 @@ public class ChatController {
                     value = "property(,asc|desc) 기본 내림차순")
     })
     @GetMapping("/api/chat/message")
-    public ResponseEntity<PagedResources<Resource<ChatMessage>>> listOldMessages(@RequestParam Long chatRoomId,
-                                                                                 @ApiIgnore Pageable pageable,
-                                                                                 @ApiIgnore PagedResourcesAssembler<ChatMessage> assembler) {
+    public ResponseEntity listOldMessages(@RequestParam Long chatRoomId,
+                                          @ApiIgnore Pageable pageable,
+                                          @ApiIgnore PagedResourcesAssembler<ChatMessage> assembler) {
         Page<ChatMessage> messageList = chatMessageService.findMessageByChatRoom(chatRoomId, pageable);
 
         PagedResources<Resource<ChatMessage>> resources = assembler.toResource(messageList, Resource::new);

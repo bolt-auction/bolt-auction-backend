@@ -1,7 +1,6 @@
 package com.neoga.communication.chat.controller;
 
 
-
 import com.neoga.communication.chat.domain.ChatRoom;
 import com.neoga.communication.chat.dto.*;
 import com.neoga.communication.chat.service.ChatRoomService;
@@ -24,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 @RequiredArgsConstructor
-@RequestMapping(value="/api/chat/room", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
+@RequestMapping(value = "/api/chat/room", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
 @RestController
 public class ChatRoomController {
     private final ChatRoomService chatRoomService;
@@ -36,8 +35,8 @@ public class ChatRoomController {
             @ApiImplicitParam(name = "sort", allowMultiple = true, paramType = "query", value = "property(,asc|desc) 기본 내림차순")
     })
     @GetMapping
-    public ResponseEntity<PagedResources<Resource<ChatRoomDto>>> findRoomInMember(@ApiIgnore Pageable pageable,
-                                                                               @ApiIgnore PagedResourcesAssembler<ChatRoomDto> assembler) {
+    public ResponseEntity findRoomInMember(@ApiIgnore Pageable pageable,
+                                           @ApiIgnore PagedResourcesAssembler<ChatRoomDto> assembler) {
         Page<ChatRoom> roomJoinList = chatRoomService.findChatRoomList(pageable);
         Page<ChatRoomDto> roomJoinDtoList = chatRoomService.mapChatRoomIntoDtoPage(roomJoinList);
 
