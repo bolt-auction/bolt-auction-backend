@@ -1,9 +1,10 @@
-HELP.md
+../service-registry/HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
 !**/src/test/**
-.idea/
+
+aws.yml
 
 ### STS ###
 .apt_generated
@@ -30,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+/src/main/resources/aws.yml
+
+tash apply --1
