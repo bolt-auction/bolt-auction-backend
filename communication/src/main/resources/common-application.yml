@@ -49,4 +49,15 @@ management:
       exposure:
         include: "*"
 
+## RabbitMQ 설정
+platform:
+  queue: platform_communication_queue
+  exchange: platform_exchange
+  notify:
+    key: platform.notify
+  anything:
+    routing-key: platform.*
 
+lombok:
+  anyConstructor:
+    addConstructorProperties: true

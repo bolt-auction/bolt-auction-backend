@@ -20,17 +20,16 @@ spring:
       enabled: true
   #Quartz
   quartz:
-    job-store-type: memory
+    scheduler-name: QuartzScheduler
     properties:
       org:
         quartz:
-          jobStore:
-            class: org.quartz.simpl.RAMJobStore
           threadPool:
             threadCount: 5
+  hateoas:
+    use-hal-as-default-json-media-type: false
 
-
-#kakao Login
+  #kakao Login
 kakao:
   clientId: 33cf22c44273a06d1ef702275f2a2c54
   clientSecret: a0bbd7d93b2dfebebd5ef11adb5e3329
@@ -84,3 +83,14 @@ management:
       exposure:
         include: "*"
 
+#RabbitMQ
+platform:
+  exchange: platform_exchange
+  notify:
+    key: platform.notify
+  review:
+    add:
+      key: platform.review
+  auction:
+    end:
+      key: platform.auction

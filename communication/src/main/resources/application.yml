@@ -15,7 +15,11 @@ base:
   addr: 18.190.79.25
   URL: http://${base.addr}:${server.port}
 
-platformHost: http://${base.addr}:8080
+platformHost: http://${base.addr}:8060
+
+rabbitmq:
+  uid: admin
+  passwd: admin
 
 ---
 spring:
@@ -46,7 +50,10 @@ base:
   addr: localhost
   URL: http://${base.addr}:${server.port}
 
-platformHost: http://${base.addr}:8010
+platformHost: http://${base.addr}:8060
 
+rabbitmq:
+  uid: guest
+  passwd: guest
 
 

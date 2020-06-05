@@ -1,5 +1,7 @@
 package com.neoga.platform.memberstore.review.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.neoga.platform.event.ReviewEventDispatcher;
 import com.neoga.platform.memberstore.review.domain.Review;
 import com.neoga.platform.memberstore.review.dto.ReviewDto;
 import com.neoga.platform.memberstore.review.service.ReviewServiceImpl;
@@ -9,6 +11,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
@@ -21,7 +24,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/review")
+@RequestMapping(value="/api/review", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
 public class ReviewController {
 
     private final AuthService authService;
@@ -46,9 +49,10 @@ public class ReviewController {
             @ApiImplicitParam(name = "content", value = "리뷰 내용", dataType = "string")
     })
     @PostMapping("/store/{member-id}")
-    public ResponseEntity addReview(@PathVariable(name = "member-id") Long memberId, @RequestBody String content) {
+    public ResponseEntity addReview(@PathVariable(name = "member-id") Long memberId, @RequestBody String content) throws JsonProcessingException {
         Long currentMemberId = authService.getLoginInfo().getMemberId();
         ReviewDto review = reviewService.addReview(memberId, currentMemberId, content);
+
 
         Resource resource = new Resource(review);
         resource.add(linkTo(ReviewController.class).slash("store/" + memberId).withSelfRel());

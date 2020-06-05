@@ -1,8 +1,7 @@
 package com.neoga.platform.memberstore.review.domain;
 
 import com.neoga.platform.memberstore.member.domain.Members;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -11,6 +10,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Review {
 

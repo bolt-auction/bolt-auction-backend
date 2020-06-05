@@ -4,6 +4,7 @@ import com.neoga.platform.bid.domain.Bid;
 import com.neoga.platform.bid.dto.BidDto;
 import com.neoga.platform.bid.dto.Register;
 import com.neoga.platform.bid.repository.BidRepository;
+import com.neoga.platform.event.AuctionEventDispatcher;
 import com.neoga.platform.exception.custom.CItemNotFoundException;
 import com.neoga.platform.exception.custom.CMemberNotFoundException;
 import com.neoga.platform.item.domain.Item;

@@ -1,11 +1,9 @@
 package com.neoga.communication.security.service;
 
-import com.neoga.communication.chat.dto.Members;
 import com.neoga.communication.security.util.SecurityUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -45,7 +45,16 @@ zuul:
       serviceId: communication
       stripPrefix: false
       sensitiveHeaders:
-
+    socket:
+      path: /app/**
+      serviceId: communication
+      stripPrefix: false
+      sensitiveHeaders:
+    stomp:
+      path: /ws-stomp/**
+      serviceId: communication
+      stripPrefix: false
+      sensitiveHeaders:
 endpoints:
   routes:
     sensitive: false
@@ -57,8 +66,8 @@ eureka:
     service-url:
       default-zone: http://${base.addr}:8761/eureka/
 
-
 ribbon:
   MaxAutoRetries: 1
   MaxAutoRetriesNextServer: 1
   OkToRetryOnAllOperations: true
+  ReadTimeout: 60000

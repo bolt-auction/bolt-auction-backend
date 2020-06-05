@@ -17,10 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.PagedResources;
-import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.Resources;
+import org.springframework.hateoas.*;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +36,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/api/item")
+@RequestMapping(value = "/api/item", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
 @Slf4j
 public class ItemController {
 
@@ -165,8 +162,8 @@ public class ItemController {
                             "높은가격순 : currentPrice,desc\n")
     })
     @GetMapping
-    public ResponseEntity<PagedResources<Resource<ItemDto>>> searchItem(@RequestParam String filter, @RequestParam String keyword, @ApiIgnore Pageable pageable,
-                                                                        @ApiIgnore PagedResourcesAssembler<ItemDto> assembler) {
+    public ResponseEntity searchItem(@RequestParam String filter, @RequestParam String keyword, @ApiIgnore Pageable pageable,
+                                     @ApiIgnore PagedResourcesAssembler<ItemDto> assembler) {
         Page<ItemDto> itemPage = itemService.searchItem(filter, keyword, pageable);
 
         PagedResources<Resource<ItemDto>> resources = assembler.toResource(itemPage, Resource::new);

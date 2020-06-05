@@ -8,12 +8,13 @@ spring.profiles.include: server-secret
 
 #Server Setting
 server:
-  port: 8080
+  port: 8020
 
 #base URL
 base:
   addr: 18.190.79.25
   URL: http://${base.addr}:${server.port}
+
 
 ---
 spring:
@@ -41,12 +42,13 @@ spring:
 
 #Server Setting
 server:
-  port: 8010
+  port: 8020
 
 #base URL
 base:
   addr: localhost
   URL: http://${base.addr}:${server.port}
+
 
 
 

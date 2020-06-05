@@ -2,8 +2,11 @@ package com.neoga.communication.chat.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.neoga.communication.chat.domain.ChatMessage;
+import com.neoga.communication.chat.dto.ChatMessageDto;
+import com.neoga.communication.chat.dto.MemberDto;
 import com.neoga.communication.chat.dto.SendMessageDto;
 import com.neoga.communication.chat.service.ChatMessageService;
+import com.neoga.communication.client.MemberClient;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -13,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +31,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 
 @RequiredArgsConstructor
-@RequestMapping
+@RequestMapping(produces = MediaTypes.HAL_JSON_UTF8_VALUE)
 @RestController
 @Slf4j
 public class ChatController {
@@ -43,12 +47,13 @@ public class ChatController {
                     value = "property(,asc|desc) 기본 내림차순")
     })
     @GetMapping("/api/chat/message")
-    public ResponseEntity<PagedResources<Resource<ChatMessage>>> listOldMessages(@RequestParam Long chatRoomId,
-                                                                                 @ApiIgnore Pageable pageable,
-                                                                                 @ApiIgnore PagedResourcesAssembler<ChatMessage> assembler) {
+    public ResponseEntity listOldMessages(@RequestParam Long chatRoomId,
+                                          @ApiIgnore Pageable pageable,
+                                          @ApiIgnore PagedResourcesAssembler<ChatMessageDto> assembler) {
         Page<ChatMessage> messageList = chatMessageService.findMessageByChatRoom(chatRoomId, pageable);
+        Page<ChatMessageDto> messageDtoList = chatMessageService.mapChatIntoDtoPage(messageList);
 
-        PagedResources<Resource<ChatMessage>> resources = assembler.toResource(messageList, Resource::new);
+        PagedResources<Resource<ChatMessageDto>> resources = assembler.toResource(messageDtoList, i -> new Resource<>(i));
         resources.add(new Link("/swagger-ui.html#/chat-room-controller/").withRel("profile"));
 
         return ResponseEntity.ok(resources);
