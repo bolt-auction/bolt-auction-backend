@@ -24,7 +24,7 @@
 
 </br>
 
-## PART 
+## :blue_book: PART 
 
 
 #### 👨‍💻 Backend
@@ -50,5 +50,33 @@
 <img src="https://user-images.githubusercontent.com/46397442/92992999-a6da2580-f529-11ea-9ca9-6f8df43da584.png" width="20%"/>
 
 </p>
+
+</br>
+
+## :orange_book: Architecture
+<p align="center">
+<img src="https://user-images.githubusercontent.com/46397442/92993149-94142080-f52a-11ea-83a1-aca7355c6630.png" width="80%"/>
+</p>
+
+</br>
+
+## :closed_book: 경매 flow
+<p align="center">
+<img src="https://user-images.githubusercontent.com/46397442/92993202-c02fa180-f52a-11ea-810a-abfd7c554dd1.png" width="80%"/>
+</p>
+
+</br>
+
+## :calendar: Communication Tool
+
+<p align="center">
+  
+  - notion (Project management)
+<img src="https://user-images.githubusercontent.com/46397442/92993248-fb31d500-f52a-11ea-9855-1051de824bd8.png" width="70%"/>
+
+  - swagger (API Document)
+<img src="https://user-images.githubusercontent.com/46397442/92993252-06850080-f52b-11ea-89bc-cbea41ec5873.png" width="40%"/>
+</p>
+
 
 </br>
