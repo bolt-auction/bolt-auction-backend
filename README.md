@@ -55,15 +55,23 @@
 
 ## :orange_book: Architecture
 <p align="center">
-<img src="https://user-images.githubusercontent.com/46397442/92993149-94142080-f52a-11ea-83a1-aca7355c6630.png" width="80%"/>
+<img src="https://user-images.githubusercontent.com/46397442/92993149-94142080-f52a-11ea-83a1-aca7355c6630.png" width="88%"/>
 </p>
 
 </br>
 
 ## :closed_book: 경매 flow
 <p align="center">
-<img src="https://user-images.githubusercontent.com/46397442/92993202-c02fa180-f52a-11ea-810a-abfd7c554dd1.png" width="80%"/>
+<img src="https://user-images.githubusercontent.com/46397442/92993202-c02fa180-f52a-11ea-810a-abfd7c554dd1.png" width="100%"/>
 </p>
+
+</br>
+
+## :rocket: Server Port 
+- Communication server : 8070
+- Platform server : 8020
+- Gateway : 8060
+- Service registry : 8761
 
 </br>
 
