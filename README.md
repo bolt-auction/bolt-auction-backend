@@ -44,10 +44,10 @@
   
 - platform server
 
-<img src="https://user-images.githubusercontent.com/46397442/93004293-9012ed80-f580-11ea-8be0-ce6286dc0bd1.png" width="95%"/>
+<img src="https://user-images.githubusercontent.com/46397442/93004293-9012ed80-f580-11ea-8be0-ce6286dc0bd1.png" width="80%"/>
 
 - communication server
-<img src="https://user-images.githubusercontent.com/46397442/93004296-930dde00-f580-11ea-9836-84871ead4147.png" width="50%"/>
+<img src="https://user-images.githubusercontent.com/46397442/93004296-930dde00-f580-11ea-9836-84871ead4147.png" width="40%"/>
 
 </p>
 
