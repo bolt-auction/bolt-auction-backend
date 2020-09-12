@@ -71,10 +71,10 @@
 
 <p align="center">
   
-  - notion (Project management)
-<img src="https://user-images.githubusercontent.com/46397442/92993248-fb31d500-f52a-11ea-9855-1051de824bd8.png" width="70%"/>
-
-  - swagger (API Document)
+  :ledger: Project management **by Notion** </br>
+<img src="https://user-images.githubusercontent.com/46397442/92993248-fb31d500-f52a-11ea-9855-1051de824bd8.png" width="90%"/>
+</br>
+  :ledger: API Document **by swagger** </br>
 <img src="https://user-images.githubusercontent.com/46397442/92993252-06850080-f52b-11ea-89bc-cbea41ec5873.png" width="40%"/>
 </p>
 
