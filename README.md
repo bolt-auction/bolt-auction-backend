@@ -62,7 +62,7 @@
 
 ## :closed_book: 경매 flow
 <p align="center">
-<img src="https://user-images.githubusercontent.com/46397442/92993202-c02fa180-f52a-11ea-810a-abfd7c554dd1.png" width="100%"/>
+<img src="https://user-images.githubusercontent.com/46397442/94346464-c3b54380-0067-11eb-9046-2c2472ab8c1e.png" width="100%"/>
 </p>
 
 </br>
